@@ -1,0 +1,143 @@
+<div class="container">
+    <div class="menu">
+        <ul class="list-menu">
+                <li>
+                    <a href="#">
+                    <div class="not"></div>
+                    <img src="../../assets/timcauthu.png">
+                    <label>Tìm cầu thủ</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                            <div class="not"></div>
+                    <img src="../../assets/map.png">
+                    <label>Tìm đội bóng</label>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                            <div class="not"></div>
+                    <img src="../../assets/doibong.png">
+                    <label>Đội bóng</label>
+                    </a>
+                </li>
+            <li>
+                <a href="#">
+                        <div class="not"></div>
+                    <img src="../../assets/thongtincanhan.png">
+                <label>Thông tin cá nhân</label>
+                </a>
+            </li>
+            <li>
+                    <a href="#">
+                            <div class="not"></div>
+                        <img  src="../../assets/dangxuat.png">
+                    <label>Đăng xuất</label>
+                    </a>
+                </li>
+        </ul>
+    </div>
+    <div class="map">
+        <agm-map [longitude] = "longitude" [latitude] = "latitude" (mapClick) = "locationChosen($event)">
+            <agm-marker [longitude] = "longitude" [latitude] = "latitude">
+
+            </agm-marker>
+        </agm-map>
+    </div>
+    <div class="top-teams">
+            <ul class="list-team">
+                <li>
+                <div class="img-container">
+                    <a href="#">
+                        <img src="../../assets/logo01.png">
+                    </a>            
+                </div>
+                <div class="name-container">
+                    <p id="name">
+                        Manchester UNITED
+                    </p>
+                    <span id="stat">Online</span>
+                </div>
+                </li>
+                <li>
+                    <div class="img-container">
+                        <a href="#">
+                            <img src="../../assets/logo02.png">
+                        </a>            
+                    </div>
+                    <div class="name-container">
+                        <p id="name">
+                            Manchester UNITED
+                        </p>
+                        <span id="stat">Online</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="img-container">
+                        <a href="#">
+                            <img src="../../assets/logo03.jpg">
+                        </a>            
+                    </div>
+                    <div class="name-container">
+                        <p id="name">
+                            Manchester UNITED
+                        </p>
+                        <span id="stat">Online</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="img-container">
+                        <a href="#">
+                            <img src="../../assets/logo04.png">
+                        </a>            
+                    </div>
+                    <div class="name-container">
+                        <p id="name">
+                            Manchester UNITED
+                        </p>
+                        <span id="stat">Online</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="img-container">
+                        <a href="#">
+                            <img src="../../assets/logo05.png">
+                        </a>            
+                    </div>
+                    <div class="name-container">
+                        <p id="name">
+                            Manchester UNITED
+                        </p>
+                        <span id="stat">Online</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="img-container">
+                        <a href="#">
+                            <img src="../../assets/logo06.png">
+                        </a>            
+                    </div>
+                    <div class="name-container">
+                        <p id="name">
+                            Manchester UNITED
+                        </p>
+                        <span id="stat">Online</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="img-container">
+                        <a href="#">
+                            <img src="../../assets/logo07.png">
+                        </a>            
+                    </div>
+                    <div class="name-container">
+                        <p id="name">
+                            Manchester UNITED
+                        </p>
+                        <span id="stat">Online</span>
+                    </div>
+                </li>
+            </ul>
+    </div>
+</div>

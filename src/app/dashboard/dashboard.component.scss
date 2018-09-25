@@ -1,0 +1,129 @@
+:host{
+    width: 100%;
+    height: 100%;
+    .container{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        background:#e2e1de;
+        .menu{
+            width: 8%;
+            background: #464440 ;
+            position: fixed;
+            height: 100%;
+            color: white;
+            ul{
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                height: 100%;
+               
+                li{
+                    height: 12%;
+                    border-top:1px solid #737373;
+                    background:#333;
+                    cursor: pointer;
+                    transition: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+                    a{
+                        display: block;
+                        height:100%;
+                        text-align: center;
+                        line-height: 2em;
+                        text-decoration: none;
+                        color: white;
+                        .not{
+                            display: block;
+                            height: 15%;
+                        }
+                        img{
+                            display: block;
+                            margin:0px auto;
+                        }
+                        label{
+                            font-family: 'Open Sans', sans-serif;
+                            font-size: 0.78em;
+                            cursor: pointer;
+                        }
+                    }
+                }
+                li:hover{
+                    background: #da2c2c;
+                }
+            }
+        }
+        .map{
+            flex-grow: 1;
+            margin-right: 5px;
+            margin-left: 8%;
+            background: #f1f1f1;
+            agm-map{
+                height: 100%;
+            }
+        }
+        .top-teams{
+            max-width: 22%;
+            max-height: 100%;
+            padding: 1.1%;
+            font-family: 'Open Sans', sans-serif;
+            background: white;
+            overflow: hidden;
+            ul{
+                max-height: 100%;
+                border-radius: 15px;
+                border: 3px solid #b1a6a6;
+                background: white;
+                box-shadow: 4px 4px 6px rgba(10,16,20,.24), 0 0 2px rgba(10,16,20,.12);
+                padding: 15px;
+                li{       
+                    border-bottom: 1px solid #333;
+                    list-style: none;
+                    display: flex;
+                    flex-flow: row;
+                    height: 10% ;
+                    padding: 5px;
+                    .img-container{
+                        width: 25%;
+                        a{
+                            display: block;
+                            img{
+                                width: 100%;
+                                height: 100%;
+                            }
+                        }
+                    }
+                    .name-container{
+                        display: flex;
+                        flex-direction: column;
+                        flex-grow: 2;
+                        padding-left: 9%;
+                        padding-top: 2%;
+                        color: #333;
+                        p{
+                            font-size: 1.1em;
+                        }
+                        span{
+                            display: inline-flex;
+                        }
+                        span::before{
+                            content: " ";
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 50%;
+                            background: green;
+                            align-self: center;
+                            margin-right: 5px;
+                        }
+                    }
+                }
+                li:last-child{
+                    border-bottom: none!important;
+                    padding-bottom: 0px!important;
+                }
+                li:first-child{
+                    padding-top: 0px!important;
+                }
+            }
+        }
+    }
+}
