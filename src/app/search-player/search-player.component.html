@@ -1,0 +1,39 @@
+<div class="container">
+  <app-menu [listMenu] = "listMenu"></app-menu>
+  <div class="search">
+    <div class="search-section">
+      <div class="search-input">
+        <img src="../../assets/search.png">
+        <input type="text" name="name" placeholder="Nhập tên/mã cầu thủ cần tìm">
+      </div>
+      <div class="search-filter">
+        <div class="left">
+          <p>Tỉnh/Thành phố</p>
+          <select>
+            <option>
+              Thành phố hiện tại
+            </option>
+          </select>
+          <p>Quận/Huyện</p>
+          <select>
+            <option>
+              Quận huyện hiện tại
+            </option>
+          </select>
+        </div>
+        <div class="right">
+          <p>Độ tuổi trung bình</p>
+          <select>
+            <option>
+              Độ tuổi trung bình
+            </option>
+          </select>
+          <button class="search-btn">Tìm</button>
+        </div>
+      </div>
+    </div>
+    <div class="list-player">
+      <app-player [listPlayerResult] = "listPlayerResult"></app-player>
+    </div>
+  </div>
+</div>

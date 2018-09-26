@@ -6,13 +6,17 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AgmCoreModule } from '@agm/core';
 import { MenuComponent } from './menu/menu.component';
+import { SearchPlayerComponent } from './search-player/search-player.component';
+import { PlayerComponent } from './player/player.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    MenuComponent
+    MenuComponent,
+    SearchPlayerComponent,
+    PlayerComponent
   ],
   imports: [
     BrowserModule,

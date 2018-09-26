@@ -9,96 +9,18 @@
     </div>
     <div class="top-teams">
             <ul class="list-team">
-                <li>
+                <li *ngFor ="let team of listTopTeams">
                 <div class="img-container">
                     <a href="#">
-                        <img src="../../assets/logo01.png">
+                        <img src="{{ team.imgUrl }}">
                     </a>            
                 </div>
                 <div class="name-container">
                     <p id="name">
-                        Manchester UNITED
+                        {{ team.name }}
                     </p>
-                    <span id="stat">Online</span>
+                    <span class="{{ team.status ? 'online' : 'offline' }}">{{ team.status ? 'Online' : 'Offline' }}</span>
                 </div>
-                </li>
-                <li>
-                    <div class="img-container">
-                        <a href="#">
-                            <img src="../../assets/logo02.png">
-                        </a>            
-                    </div>
-                    <div class="name-container">
-                        <p id="name">
-                            Manchester UNITED
-                        </p>
-                        <span id="stat">Online</span>
-                    </div>
-                </li>
-                <li>
-                    <div class="img-container">
-                        <a href="#">
-                            <img src="../../assets/logo03.jpg">
-                        </a>            
-                    </div>
-                    <div class="name-container">
-                        <p id="name">
-                            Manchester UNITED
-                        </p>
-                        <span id="stat">Online</span>
-                    </div>
-                </li>
-                <li>
-                    <div class="img-container">
-                        <a href="#">
-                            <img src="../../assets/logo04.png">
-                        </a>            
-                    </div>
-                    <div class="name-container">
-                        <p id="name">
-                            Manchester UNITED
-                        </p>
-                        <span id="stat">Online</span>
-                    </div>
-                </li>
-                <li>
-                    <div class="img-container">
-                        <a href="#">
-                            <img src="../../assets/logo05.png">
-                        </a>            
-                    </div>
-                    <div class="name-container">
-                        <p id="name">
-                            Manchester UNITED
-                        </p>
-                        <span id="stat">Online</span>
-                    </div>
-                </li>
-                <li>
-                    <div class="img-container">
-                        <a href="#">
-                            <img src="../../assets/logo06.png">
-                        </a>            
-                    </div>
-                    <div class="name-container">
-                        <p id="name">
-                            Manchester UNITED
-                        </p>
-                        <span id="stat">Online</span>
-                    </div>
-                </li>
-                <li>
-                    <div class="img-container">
-                        <a href="#">
-                            <img src="../../assets/logo07.png">
-                        </a>            
-                    </div>
-                    <div class="name-container">
-                        <p id="name">
-                            Manchester UNITED
-                        </p>
-                        <span id="stat">Online</span>
-                    </div>
                 </li>
             </ul>
     </div>
