@@ -9,6 +9,9 @@ import { MenuComponent } from './menu/menu.component';
 import { SearchPlayerComponent } from './search-player/search-player.component';
 import { FormsModule } from '@angular/forms';
 import { FilterPipe } from './pipes/filter.pipe';
+import { PlayerDetailComponent } from './player-detail/player-detail.component';
+import { SearchTeamComponent } from './search-team/search-team.component';
+import { TeamDetailComponent } from './team-detail/team-detail.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -16,7 +19,10 @@ import { FilterPipe } from './pipes/filter.pipe';
     DashboardComponent,
     MenuComponent,
     SearchPlayerComponent,
-    FilterPipe
+    FilterPipe,
+    PlayerDetailComponent,
+    SearchTeamComponent,
+    TeamDetailComponent
   ],
   imports: [
     BrowserModule,

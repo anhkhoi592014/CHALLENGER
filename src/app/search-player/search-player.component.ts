@@ -34,25 +34,31 @@ export class SearchPlayerComponent implements OnInit {
     } 
   ];
   listMenu : IMenu[] = [
-    { title : 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
-    { title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' },
-    { title : 'Đội bóng',imgUrl : '../../assets/doibong.png' },
-    { title : 'Thông tin cá nhân',imgUrl : '../../assets/thongtincanhan.png' },
-    { title : 'Đăng xuất',imgUrl : '../../assets/dangxuat.png' },
+    { id:1, title : 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
+    { id:2,title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' },
+    { id:3,title : 'Đội bóng',imgUrl : '../../assets/doibong.png' },
+    { id:4,title : 'Thông tin cá nhân',imgUrl : '../../assets/thongtincanhan.png' },
+    { id:5,title : 'Đăng xuất',imgUrl : '../../assets/dangxuat.png' },
   ];
+  selectedMenu : number = 1;
   
   listPlayerResult: IPlayer[]= [
     {name : 'Nguyễn Văn Tèo',imgUrl : '../../assets/player01.png',position: 'Thủ môn',status : true ,cityId: 28  ,ward : "Quận Gò Vấp",age : 20},
-    {name : 'Vương Vũ Anh Khôi',imgUrl : '../../assets/player02.png',position: 'Tiền đạo', status : false ,cityId: 28 ,ward : "Quận 12", age: 32}
+    {name : 'Vương Vũ Anh Khôi',imgUrl : '../../assets/player02.png',position: 'Tiền đạo', status : false ,cityId: 28 ,ward : "Quận 12", age: 32},
+    {name : 'Paul Pogba',imgUrl : '../../assets/player03.png',position: 'Tiền vệ', status : true ,cityId: 24 ,ward : "Quận Cầu Giấy", age: 25}
+  
   ];
   playerFocusing : IPlayer = this.listPlayerResult[0];
   
   filterPlayer: string = "";
+
   ngOnInit() {
   }
+  
   changeSelection(ply: IPlayer){
     this.playerFocusing = ply;
   }
+
   changeCity(val: number){
      (val == 28) ? (this.listWard = this.listWardData.find(x => x.id == 28).listWard) : 
                   (this.listWard = this.listWardData.find(x => x.id == 24).listWard);
@@ -60,7 +66,6 @@ export class SearchPlayerComponent implements OnInit {
   findPlayer(city?: number,ward?: String,age?: string){
     (!this.isCloned)? (this.listPlayerClone = this.listPlayerResult): (this.listPlayerResult = this.listPlayerClone);
     if(city && ward && age){
-      
       this.listPlayerResult = this.listPlayerResult.filter(player => 
         player.cityId == city && 
         player.ward == ward && 

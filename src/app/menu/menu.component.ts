@@ -8,6 +8,7 @@ import { IMenu } from '../interfaces/IMenu';
 })
 export class MenuComponent implements OnInit {
   @Input() listMenu: IMenu[];
+  @Input() selectedMenu : number;
   constructor() { }
 
   ngOnInit() {

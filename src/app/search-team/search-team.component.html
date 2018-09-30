@@ -1,0 +1,73 @@
+<div class="container">
+    <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
+    <div class="search">
+        <div class="search-section">
+        <div class="search-input">
+            <img src="../../assets/search.png">
+            <input type="text" name="name" placeholder="Nhập tên/mã đội cần tìm" [(ngModel)] = "filterPlayer" (keyup)="searchFilter? resetFilter() : '';">
+        </div>
+        <div class="search-filter">
+            <div class="left">
+            <div class="form-select">
+                <select name="" id="" (change)="changeCity(city.value)" #city>
+                <option value="" disabled="disabled" selected="selected">Chọn Tỉnh/Thành phố</option>
+                <option value="28">TP.Hồ Chí Minh</option>
+                <option value="24">Hà Nội</option>
+                </select>
+            </div>
+            <div class="form-select">
+                <select name="" id="ward" #ward>
+                <option value="" disabled="disabled" selected="selected">Chọn Quận/Huyện</option>
+                <option *ngFor="let ward of listWard">
+                    {{ ward }}
+                </option>
+                </select>
+            </div>
+            </div>
+            <div class="right">
+            <div class="form-select">
+                <select name="" id="" #age>
+                <option value="" disabled="disabled" selected="selected">Chọn độ tuổi trung bình</option>
+                <option value="20">15 -> 25</option>
+                <option value="30">25 -> 35</option>
+                <option value="40">35 -> 45</option>
+                <option value="50">45 -> 55</option>
+                <option value="60">55 -> 65</option>
+                </select>
+            </div>
+            <button class="search-btn" (click) = "findPlayer(city.value,ward.value,age.value);">Tìm</button>
+            </div>
+        </div>
+        </div>
+        <div class="list-player">
+            <div class="box" *ngFor="let team of listTeamsResult | filter : filterPlayer" (mouseenter)="changeSelection(team);">
+                <div class="player-container">
+                <div class="img-container">
+                    <img src="{{ team.imgUrl }}">
+                </div>
+                <div class="player-content">
+                    <p>{{ team.name }}</p>
+                    <span class="{{ team.status ? 'online' : 'offline' }}">{{ team.status ? 'Online' : 'Offline' }}</span>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="info">
+        <div class="player-img-section">
+        <div class="img-wrapper">
+            <img src="{{ teamFocusing.imgUrl }}">
+        </div>
+        </div>
+        <div class="player-info-section">
+        <div class="row"><p>Tên đội bóng: </p>{{ teamFocusing.name }}</div>
+        <div class="row"><p>Mã đội: </p>{{ teamFocusing.position }}</div>
+        <div class="row"><p>Tỉnh/Thành phố: </p>{{ teamFocusing.ward }}</div>
+        <div class="row"><p>Quận/Huyện: </p>{{ teamFocusing.height }}</div>
+        <div class="row"><p>Điểm: </p>{{ teamFocusing.weight }}</div>
+        <div class="row">
+        <p>Mô tả</p>
+        </div>
+        </div>
+    </div>
+</div>    
