@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IMenu } from '../interfaces/IMenu';
+import * as Chart from 'chart.js'
 
 @Component({
   selector: 'app-team-detail',
@@ -15,9 +16,26 @@ export class TeamDetailComponent implements OnInit {
     { id:5,title : 'Quay lại',imgUrl : '../../assets/dangxuat.png' },
   ];
   selectedMenu : number = 1;
+  PieChart:any;
+  data:any = {
+    labels: ["Win(%)", "Lose(%)"],
+    datasets: [{
+      fill: true, 
+      backgroundColor: [
+        '#81CE97',
+        '#E5E5E5'
+      ],
+      data: [55,45]
+    }]
+  };
   constructor() { }
-
   ngOnInit() {
+    setTimeout(() => {   
+    this.PieChart = new Chart('pieChart',{
+      type:'pie',
+      data:this.data,
+      options: {}
+    });
+    }, 300);
   }
-
 }
