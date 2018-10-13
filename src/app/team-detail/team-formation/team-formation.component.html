@@ -1,0 +1,42 @@
+<div class="container">
+  <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
+  <div class="content">
+    <div class="box-wrapper">
+        <div class="box">
+            <div class="formation">
+              <button>Đội hình chính</button>
+              <button>Đội hình phụ</button>
+            </div>
+            <div class="formation-wrapper">
+              <div class="members">
+                <div class="list-member">
+                  <ul class="list-members">
+                    <li *ngFor="let player of listPlayer" (click) = "choicePlayer(player.id)" [ngClass]="( player.id == playerChoiced) ? 'clicked' : ''">
+                      <p>{{player.name}}</p>
+                    </li>
+                  </ul>
+                </div>
+                <div class="slide-wrapper">
+                  <div *ngFor = "let player of listPlayer" [ngClass]="['slide',(player.id == playerChoiced)? 'top': '']" >
+                    <div class="img-container">
+                        <div class="img-wrapper">
+                          <img src="{{ player.imgUrl }}"/>
+                        </div>
+                      </div>
+                      <div class="info">
+                        <p>Quê quán : </p>  
+                        <p>Tuổi : </p>
+                        <p>Chiều cao : </p>
+                        <p>Cân nặng : </p>
+                        <p>Vị trí : </p>
+                        <p>Mô tả  : </p>
+                        <p></p>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>

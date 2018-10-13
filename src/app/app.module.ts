@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -8,10 +9,49 @@ import { AgmCoreModule } from '@agm/core';
 import { MenuComponent } from './menu/menu.component';
 import { SearchPlayerComponent } from './search-player/search-player.component';
 import { FormsModule } from '@angular/forms';
+import { RouterModule, Routes} from '@angular/router';
 import { FilterPipe } from './pipes/filter.pipe';
 import { PlayerDetailComponent } from './player-detail/player-detail.component';
 import { SearchTeamComponent } from './search-team/search-team.component';
 import { TeamDetailComponent } from './team-detail/team-detail.component';
+import { TeamHistoryMatchComponent } from './team-history-match/team-history-match.component';
+import { HistoryMatchComponent } from './team-history-match/history-match.component';
+import { TeamFormationComponent } from './team-detail/team-formation/team-formation.component';
+import { AuthenGuard } from './core/guards/authen.guard';
+import { HttpClientModule }    from '@angular/common/http';
+import { LoggedGuard } from './core/guards/logged.guard';
+const appRoute:Routes = [
+  {
+    path:'login',
+    component: LoginComponent,
+    canActivate: [LoggedGuard]
+  },
+  {
+    path:'',
+    redirectTo : '/dashboard',
+    pathMatch:'full',
+  },
+  {
+    path:'dashboard',
+    component:DashboardComponent,
+    canActivate: [AuthenGuard]
+  },
+  {
+    path:'search-player',
+    component:SearchPlayerComponent,
+    canActivate: [AuthenGuard]
+  },
+  {
+    path:'search-team',
+    component:SearchTeamComponent,
+    canActivate: [AuthenGuard]
+  },
+  {
+    path:'player-details',
+    component:PlayerDetailComponent,
+    canActivate: [AuthenGuard]
+  }
+]
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,16 +62,22 @@ import { TeamDetailComponent } from './team-detail/team-detail.component';
     FilterPipe,
     PlayerDetailComponent,
     SearchTeamComponent,
-    TeamDetailComponent
+    TeamDetailComponent,
+    TeamHistoryMatchComponent,
+    HistoryMatchComponent,
+    TeamFormationComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
+    HttpClientModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAezERfylXQGWKbOyR9XV5aJb_FTZQkApI'
-    })
+    }),
+    RouterModule.forRoot(appRoute)
   ],
-  providers: [],
+  providers: [AuthenGuard,LoggedGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

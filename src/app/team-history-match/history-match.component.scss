@@ -1,0 +1,266 @@
+.box{
+    width: 90%;
+    height: auto;
+    padding-bottom: 1%;
+    margin-bottom:2%; 
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    .banner{         
+        width: 100%;
+        height: 31%;
+        display: flex;
+        justify-content: space-around;
+        flex-flow: column;
+        padding: 10px 0px;
+        border-radius: 13px;
+        background: #dad7d7;
+        -webkit-box-shadow: 0 10px 6px -6px #777;
+        -moz-box-shadow: 0 10px 6px -6px #777;
+             box-shadow: 0 10px 6px -6px #777;
+        .banner-content{
+            width: 90%;
+            align-self: center;
+            display: flex;
+            flex-flow: row;
+            justify-content: space-around;
+            .team1,.team2{
+                width: 30%;
+                display: flex;
+                flex-flow: column;
+                text-align: center;
+                justify-content: space-evenly;
+                .img-container{
+                    width: 40%;
+                    align-self: center;
+                }
+                p{
+                    font-weight: bold;
+                }
+            }
+            .img-container{
+                width: 13%;
+                img{
+                    width: 100%;
+                }
+            }
+            .versus{        
+                display: flex;
+                flex-flow: column;
+                justify-content: space-between;
+                p{
+                    font-family: 'Charmonman', cursive;
+                    font-weight: bold;
+                }
+                p,.img-container,button{
+                    align-self: center;
+                }
+                .img-container{
+                    width: 15%;
+                    img{
+                        width: 100%;
+                    }
+                }
+                button{
+                    width: 40%;
+                    padding: 0.9em 0px;
+                    font-weight: inherit;
+                    border: none;
+                    background: #f34444;
+                    color: white;
+                    cursor: pointer; 
+                    transition: 0.15s;
+                }
+                button:hover{
+                    background:#333;
+                }
+            }
+        }
+    }
+    .info{
+        margin-top: 2px;
+        transition: 0.5s;
+        overflow: hidden;
+        box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+        .menu-container{
+            height: 50px;
+            ul{
+                list-style: none;
+                height: 100%;
+                line-height: 50px;
+                background: #333;
+                li{   
+                    display: inline-block;
+                    height: 100%;
+                    width: 110px;
+                    text-align: center;
+                    color: white;
+                    border-right: 1px solid white;
+                    cursor: pointer;
+                    border-bottom: 1px solid white;
+                    a{
+                        display: inline-block;
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                li.show{
+                    font-weight: inherit;
+                    border: none;
+                    background: #f34444;
+                    color: white;
+                    cursor: pointer; 
+                    transition: 0.15s;
+                }
+            }
+        }
+        .details-wrapper{
+            min-height: 285px;
+            position: relative;
+
+            .overview{  
+                display: flex;
+                flex-flow: column;
+                justify-content: space-around;
+                position: absolute;
+                top: 0;
+                left:0;
+                height: 100%;
+                width: 100%;
+                h2{
+                    width: 98%;
+                    margin: 0px auto;
+                }
+                .row{
+                    display: flex;
+                    justify-content: space-between;
+                    flex-flow: row;
+                    ul{
+                        width: 40%;
+                        list-style: none;
+                        display: flex;
+                        height: 40px;
+                        justify-content: flex-end;
+                        line-height: 40px;
+                        -ms-grid-row-align: center;
+                        align-self: center;
+                        li{
+                            display: inline-block;
+                            height: 100%;
+                            width: 30%;
+                            text-align: center;
+                            border:1px solid #333;
+                            margin-left: 2px;
+                        }
+                    }
+                    ul#team2{
+                        justify-content: flex-start;
+                    }
+                    .img-container{
+                        width: 5%;
+                        img{
+                            width: 100%;
+                        }
+                    }
+                }
+                .score-row{
+                    display: flex;
+                    flex-flow: row;
+                    justify-content: space-between;
+                    height: 4em;
+                    .t1-score,.t2-score{
+                        width: 40%;
+                        p{
+                            display: inline-block;
+                            width: 30%;
+                            height: 100%;
+                            text-align: center;
+                            line-height: 4em;
+                            border:1px solid #333;
+                        }
+                    }
+                    .t1-score{
+                        text-align: right;
+                        
+                    }
+                    .blank{
+                        width: 5%;
+                    }
+                    .t2-score{
+                        text-align: left;
+                    }
+                }
+                .action-row{
+                    display: flex;
+                    flex-flow: row;
+                    height: 25%;
+                    width: 90%;
+                    margin: 0px auto;
+                    justify-content: space-between;
+                    .timenlocation{
+                        height: 100%;
+                        line-height: 40px;
+                        width: 70%;
+                        align-self: center;
+                        p>span{
+                            font-weight: bold;
+                            display: inline-block;
+                            width: 17%;
+                        }
+                    }
+                    .action{
+                        display: flex;
+                        -ms-grid-row-align: center;
+                        align-self: center;
+                        height: 100%;
+                        width: 15%;
+                        button{
+                            height: 60%;
+                            align-self: flex-end;
+                            width: 100%;
+                            padding: 0.9em 0px;
+                            font-weight: inherit;
+                            border: none;
+                            background: #f34444;
+                            color: white;
+                            cursor: pointer; 
+                            transition: 0.15s;                                
+                        }
+                    }
+                }
+                z-index: 1;
+                background:white;
+            }
+            .note{
+                width: 100%;
+                height: 100%;
+                position: absolute;
+                top: 0;
+                left:0;
+                z-index: 2;
+                background: white;
+                .note-wrapper{
+                    width: 97%;
+                    height: 100%;
+                    margin: 10px auto;
+                    display: flex;
+                    flex-flow: column;
+                    font-family: 'Roboto Slab', serif;
+                    h2{
+                        height: 15%;
+                    }
+                    textarea{           
+                        width: 95%;
+                        height: 70%;
+                        font-size: 1.5em;
+                        padding: 10px 20px;
+                        margin: 0px auto;
+                    }
+                }
+            }
+        }
+    }
+    .info.show{
+        min-height: 350px;
+    }
+}

@@ -1,6 +1,6 @@
 <div class="menu">
   <ul class="list-menu">
-          <li *ngFor="let item of listMenu" [ngClass] = "(item.id == selectedMenu)? 'selected' : ''">
+          <li *ngFor="let item of listMenu" [ngClass] = "(item.id == selectedMenu)? 'selected' : ''" (click) = "clickMenu(item.code);">
               <a>
               <div class="not"></div>
               <img src="{{ item.imgUrl }}">

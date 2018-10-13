@@ -1,4 +1,5 @@
 export interface IPlayer {
+    id?: number;
     name : String;
     position?: String;
     age?: number;

@@ -1,4 +1,4 @@
-<div class="container">
+  <div class="container">
   <div class="left">
       <h1>CHALLENGER</h1>
     <div class="images">
@@ -14,16 +14,16 @@
       <h1>Sign In</h1>
       <form action="#" method="POST" id="login">
         <div class="input">
-          <input type="text" placeholder="Username" name="username">
+          <input type="text" placeholder="Username" name="username" [(ngModel)] = "model.username">
         </div>
         <div class="input">
-            <input type="password" placeholder="Password" name="password">
+            <input type="password" placeholder="Password" name="password" [(ngModel)] = "model.password">
         </div>
         <div class="input">
             <a href="#" id="f-password">forgot your password ?</a>
         </div>
         <div class="input">
-          <button type="submit" id="login-btn">
+          <button type="submit" id="login-btn" (click)="login();">
             <p>LOGIN</p>
           </button>
         </div>

@@ -1,0 +1,85 @@
+<div class="box">
+    <div class="banner">
+        <div class="banner-content">
+          <div class="team1">
+            <div class="img-container">
+              <img src="../../assets/logo01.png"/>
+            </div>
+            <p>Manchester United</p>
+          </div>
+          <div class="versus">
+            <p>16/07/2017</p>
+            <div class="img-container">
+                <img src="../../assets/vs.png" />                    
+            </div>
+            <input type="hidden">
+            <button (click)= "toggleDetail()">Xem chi tiết</button>
+          </div>
+          <div class="team2">
+            <div class="img-container">
+              <img src="../../assets/logo02.png"/>
+            </div>
+            <p>Hutech United</p>
+          </div>
+        </div>
+    </div>
+    <div [@toggleDetail] = "(DetailShow) ? 'show' : 'hide'" class="info">
+      <div class="menu-container">
+        <ul class="menus">
+          <li (click)="toggleNote('ov')" class="item" [ngClass]="['item',(isOVShow)? 'show': '']">
+            <a>Tổng quan</a>
+          </li>
+          <li (click)="toggleNote('note')" [ngClass]="['item',(isNoteShow)? 'show': '']">
+            <a>Ghi chú</a>
+          </li>
+        </ul>
+      </div>
+      <div class="details-wrapper">
+        <div class="overview" [@hideShow] = "isOVShow ? 'show' : 'hide'" >
+          <h2>Kết quả trận đấu</h2>
+          <div class="row">
+            <ul id="team1">
+              <li>Thắng</li>
+              <li>Hòa</li>
+              <li>Thua</li>
+            </ul>
+            <div class="img-container">
+              <img src="../../assets/winner2.png"/>
+            </div>
+            <ul id="team2">
+              <li>Thắng</li>
+              <li>Hòa</li>
+              <li>Thua</li>
+            </ul>
+          </div>
+          <div class="score-row">
+            <div class="t1-score">
+              <p>3</p>
+            </div>
+            <div class="blank"></div>
+            <div class="t2-score">
+              <p>0</p>
+            </div>
+          </div>
+          <div class="action-row">
+            <div class="timenlocation">
+              <p><span>Thời gian: </span> 20/10/1995</p> 
+              <p><span>Địa điểm : </span>San bong abc 123123</p>
+            </div>
+            <div class="action">
+              <button>Update</button>
+            </div>
+          </div>
+        </div>
+        <div [@hideShow] = "isNoteShow ? 'show' : 'hide'" class="note">
+          <div class="note-wrapper">
+            <h2>Mô tả</h2>
+            <textarea name="note">
+
+            </textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+          

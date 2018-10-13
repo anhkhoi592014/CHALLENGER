@@ -34,11 +34,11 @@ export class SearchPlayerComponent implements OnInit {
     } 
   ];
   listMenu : IMenu[] = [
-    { id:1, title : 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
-    { id:2,title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' },
-    { id:3,title : 'Đội bóng',imgUrl : '../../assets/doibong.png' },
-    { id:4,title : 'Thông tin cá nhân',imgUrl : '../../assets/thongtincanhan.png' },
-    { id:5,title : 'Đăng xuất',imgUrl : '../../assets/dangxuat.png' },
+    {id:1,code:'tct', title : 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
+    {id:2,code:'tdb', title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' },
+    {id:3,code:'db', title : 'Đội bóng',imgUrl : '../../assets/doibong.png' },
+    {id:4,code:'ttcn', title : 'Thông tin cá nhân',imgUrl : '../../assets/thongtincanhan.png' },
+    {id:5,code:'dx', title : 'Đăng xuất',imgUrl : '../../assets/dangxuat.png' },
   ];
   selectedMenu : number = 1;
   

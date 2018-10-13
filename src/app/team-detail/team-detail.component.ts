@@ -10,7 +10,7 @@ import * as Chart from 'chart.js'
 export class TeamDetailComponent implements OnInit {
   listMenu : IMenu[] = [
     { id:1, title : 'Thông tin đội',imgUrl : '../../assets/timcauthu.png' },
-    { id:2,title : 'Lịch sữ trận đấu',imgUrl : '../../assets/map.png' },
+    { id:2,title : 'Lịch sữ đấu',imgUrl : '../../assets/map.png' },
     { id:3,title : 'Đội hình',imgUrl : '../../assets/doibong.png' },
     { id:4,title : 'Quản lý đội',imgUrl : '../../assets/thongtincanhan.png' },
     { id:5,title : 'Quay lại',imgUrl : '../../assets/dangxuat.png' },
@@ -22,8 +22,8 @@ export class TeamDetailComponent implements OnInit {
     datasets: [{
       fill: true, 
       backgroundColor: [
-        '#81CE97',
-        '#E5E5E5'
+        'brown',
+        '#81CE97'
       ],
       data: [55,45]
     }]

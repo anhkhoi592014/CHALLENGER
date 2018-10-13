@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Charmonman|Krub|Oswald|Roboto+Slab');
+:host,.container{
+    width: 100%;
+    height: 100%;
+}
+.container{
+    font-family: 'Open Sans', sans-serif;
+    .content{
+        min-height: 100%;
+        padding-left: 8%;        
+        display: flex;  
+        flex-direction: column;
+        .wrapper{
+            display: flex;
+            width: 90%;
+            align-self: center;
+            min-height: 90%;
+            padding: 2em;
+            flex-flow: column;
+            
+        }        
+    }
+}

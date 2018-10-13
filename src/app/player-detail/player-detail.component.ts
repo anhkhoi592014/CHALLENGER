@@ -10,7 +10,7 @@ import { IPlayer } from '../interfaces/IPlayer';
 export class PlayerDetailComponent implements OnInit {
   
   listMenu : IMenu[] = [
-    { id: 1, title : 'Quay Lại',imgUrl : '../../assets/left-arrow.png' },
+    { id: 1,code:'back', title : 'Quay Lại',imgUrl : '../../assets/left-arrow.png' },
   ];
   selectedMenu :number = 1;
   //@Input() player : IPlayer;
