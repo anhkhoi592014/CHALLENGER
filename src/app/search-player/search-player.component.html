@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container"    >
   <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
   <div class="search">
     <div class="search-section">
@@ -41,13 +41,13 @@
     </div>
     <div class="list-player">
         <div class="box" *ngFor="let player of listPlayerResult | filter : filterPlayer" (mouseenter)="changeSelection(player);">
-            <div class="player-container">
+            <div class="player-container" (click) = "viewDetail(player.id)">
               <div class="img-container">
-                <img src="{{ player.imgUrl }}">
+                <img src="{{ player.ImgUrl }}">
               </div>
               <div class="player-content">
-                <p>{{ player.name }}</p>
-                <span class="{{ player.status ? 'online' : 'offline' }}">{{ player.status ? 'Online' : 'Offline' }}</span>
+                <p>{{ player.Fullname }}</p>
+                <span class="{{ player.status == 1 ? 'online' : 'offline' }}">{{ player.status == 1 ? 'Online' : 'Offline' }}</span>
               </div>
             </div>
           </div>
@@ -56,17 +56,17 @@
   <div class="info">
     <div class="player-img-section">
       <div class="img-wrapper">
-        <img src="{{ playerFocusing.imgUrl }}">
+        <img src="{{ playerFocusing.ImgUrl }}">
       </div>
     </div>
     <div class="player-info-section">
-      <div class="row"><p>Tên cầu thủ: </p>{{ playerFocusing.name }}</div>
-      <div class="row"><p>Vị trí: </p>{{ playerFocusing.position }}</div>
-      <div class="row"><p>Tuổi: </p>{{ playerFocusing.age }}</div>
-      <div class="row"><p>Tỉnh/Thành phố: </p>{{ playerFocusing.cityId }}</div>
-      <div class="row"><p>Quận/Huyện: </p>{{ playerFocusing.ward }}</div>
-      <div class="row"><p>Chiều cao: </p>{{ playerFocusing.height }}</div>
-      <div class="row"><p>Cân nặng: </p>{{ playerFocusing.weight }}</div>
+      <div class="row"><p>Tên cầu thủ: </p>{{ playerFocusing.Fullname }}</div>
+      <div class="row"><p>Vị trí: </p>{{ playerFocusing.MainPosition }}</div>
+      <div class="row"><p>Tuổi: </p>{{ playerFocusing.Age }}</div>
+      <div class="row"><p>Tỉnh/Thành phố: </p>{{ playerCity }}</div>
+      <div class="row"><p>Quận/Huyện: </p>{{ playerFocusing.Ward }}</div>
+      <div class="row"><p>Chiều cao: </p>{{ playerFocusing.Height }}</div>
+      <div class="row"><p>Cân nặng: </p>{{ playerFocusing.Weight }}</div>
     </div>
   </div>
 </div>

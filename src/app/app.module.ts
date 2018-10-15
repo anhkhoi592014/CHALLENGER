@@ -20,6 +20,7 @@ import { TeamFormationComponent } from './team-detail/team-formation/team-format
 import { AuthenGuard } from './core/guards/authen.guard';
 import { HttpClientModule }    from '@angular/common/http';
 import { LoggedGuard } from './core/guards/logged.guard';
+import { AccountService } from './core/services/account.service';
 const appRoute:Routes = [
   {
     path:'login',
@@ -77,7 +78,7 @@ const appRoute:Routes = [
     }),
     RouterModule.forRoot(appRoute)
   ],
-  providers: [AuthenGuard,LoggedGuard],
+  providers: [AuthenGuard,LoggedGuard,AccountService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

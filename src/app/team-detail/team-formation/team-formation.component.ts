@@ -17,9 +17,6 @@ export class TeamFormationComponent implements OnInit {
   }
   
   listPlayer: IPlayer[]= [
-    {id:1 ,name : 'Nguyễn Văn Tèo',imgUrl : '../../../assets/player01.png',position: 'Thủ môn',status : true ,cityId: 28  ,ward : "Quận Gò Vấp",age : 20},
-    {id:2 ,name : 'Vương Vũ Anh Khôi',imgUrl : '../../../assets/player02.png',position: 'Tiền đạo', status : false ,cityId: 28 ,ward : "Quận 12", age: 32},
-    {id:3 ,name : 'Paul Pogba',imgUrl : '../../../assets/player03.png',position: 'Tiền vệ', status : true ,cityId: 24 ,ward : "Quận Cầu Giấy", age: 25}
   ];
 
   

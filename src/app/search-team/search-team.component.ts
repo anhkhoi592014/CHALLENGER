@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IMenu } from '../interfaces/IMenu';
 import { ITeam } from '../interfaces/ITeam';
 import { IPlayer } from '../interfaces/IPlayer';
+import { AccountService } from '../core/services/account.service';
 
 @Component({
   selector: 'app-search-team',
@@ -10,8 +11,9 @@ import { IPlayer } from '../interfaces/IPlayer';
 })
 export class SearchTeamComponent implements OnInit {
 
-  constructor() { }
-
+  listTeamsResult : ITeam[] =[
+    {id : 1, Fullname : "asdasd", ImgUrl : "../../assets/logo01.png"}
+  ];
   listWard :String[] = [];
   filterPlayer: string = "";
   searchFilter : Boolean = false;
@@ -46,17 +48,23 @@ export class SearchTeamComponent implements OnInit {
           'Huyện Đan Phượng','Huyện Chương Mỹ','Huyện Ba Vì']
     } 
   ];
-  listTeamsResult : ITeam[] = [
-    {id : 1,name: "Manchester UNITED",imgUrl: "../../assets/logo01.png",status: true},
-    {id : 2,name: "Hutech UNITED",imgUrl: "../../assets/logo02.png",status: false},
-    {id : 3,name: "CNTT UNITED",imgUrl: "../../assets/logo0.png",status: true}
-  ];
 
-  teamFocusing : IPlayer = this.listTeamsResult[0];
+  teamFocusing : ITeam = this.listTeamsResult[0];
   filterTeam: string = "";
-  ngOnInit() {
-  }
 
+  constructor(
+    private accountService: AccountService
+  ) { }
+
+  ngOnInit() {
+    this.accountService.Teams.subscribe(res => {
+      this.listTeamsResult = res;
+    })
+    this.accountService.getTeamsFromServer();
+  }
+  test(){
+    console.log(this.listTeamsResult);
+  }
   changeCity(val: number){
     (val == 28) ? (this.listWard = this.listWardData.find(x => x.id == 28).listWard) : 
                  (this.listWard = this.listWardData.find(x => x.id == 24).listWard);

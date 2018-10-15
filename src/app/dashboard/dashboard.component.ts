@@ -18,13 +18,13 @@ export class DashboardComponent implements OnInit {
     {id:5,code:'dx', title : 'Đăng xuất',imgUrl : '../../assets/dangxuat.png' },
   ];
   listTopTeams : ITeam[] = [
-    { id:1, name : 'Manchester UNITED',imgUrl : '../../assets/logo01.png',status : true},
-    { id:2, name : 'TruongChinh UNITED',imgUrl : '../../assets/logo02.png',status : true},
-    { id:3, name : 'Hutech UNITED',imgUrl : '../../assets/logo03.jpg',status : false},
-    { id:4, name : 'Dubai UNITED',imgUrl : '../../assets/logo04.png',status : true},
-    { id:5, name : 'asdasdasd UNITED',imgUrl : '../../assets/logo05.png',status : false},
-    { id:6, name : 'Manchester City',imgUrl : '../../assets/logo06.png',status : true},
-    { id:7, name : 'Manchester UNITED',imgUrl : '../../assets/logo07.png',status : true},
+    { id:1, Fullname : 'Manchester UNITED',ImgUrl : '../../assets/logo01.png',Status : true},
+    { id:2, Fullname : 'TruongChinh UNITED',ImgUrl : '../../assets/logo02.png',Status : true},
+    { id:3, Fullname : 'Hutech UNITED',ImgUrl : '../../assets/logo03.jpg',Status : false},
+    { id:4, Fullname : 'Dubai UNITED',ImgUrl : '../../assets/logo04.png',Status : true},
+    { id:5, Fullname : 'asdasdasd UNITED',ImgUrl : '../../assets/logo05.png',Status : false},
+    { id:6, Fullname : 'Manchester City',ImgUrl : '../../assets/logo06.png',Status : true},
+    { id:7, Fullname : 'Manchester UNITED',ImgUrl : '../../assets/logo07.png',Status : true},
   ];
 
   longitude = 106.699878;

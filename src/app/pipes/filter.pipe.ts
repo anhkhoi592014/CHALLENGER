@@ -27,8 +27,8 @@ export class FilterPipe implements PipeTransform {
     
         return str;
     }
-    transform(players: IPlayer[], ...args: any[]): any {
+    transform(players: any[], ...args: any[]): any {
         const keyword = args[0];
-        return players.filter(p => this.cleanAccents(p.name.toLowerCase()).includes(this.cleanAccents(keyword.toLowerCase())));
+        return players.filter(p => this.cleanAccents(p.Fullname.toLowerCase()).includes(this.cleanAccents(keyword.toLowerCase())));
     }
 }

@@ -1,6 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { IMenu } from '../interfaces/IMenu';
 import { IPlayer } from '../interfaces/IPlayer';
+import { AccountService } from '../core/services/account.service';
+import { SystemConstants } from '../core/common/system.constants';
+import { IPower } from '../interfaces/ipower';
 
 @Component({
   selector: 'app-player-detail',
@@ -14,35 +17,45 @@ export class PlayerDetailComponent implements OnInit {
   ];
   selectedMenu :number = 1;
   //@Input() player : IPlayer;
-  player : IPlayer =
-  {
-    name : 'Nguyễn Văn Tèo',
-    imgUrl : '../../assets/player01.png',
-    position: 'Thủ môn',
-    status : true ,
-    cityId: 28  ,
-    ward : "Quận Gò Vấp",
-    age : 20 ,
-    height: "1m9",
-    weight: 70,
-    facebook: "anhkhoi592014@gmail.com",
-    sucmanh: 40,
-    tocdo: 80,
-    kheoleo: 100,
-    tatbong: 50,
-    dutdiem: 65,
-    chuyenngan: 87,
-    sutxa: 20,
-    danhdau: 20,
-    chonvitri: 100
-  };
-
-  constructor() { }
+  player : IPlayer;
+  powersData : IPower[] = [];
+  listPowers : IPower[] = [];
+  extraPowers : IPower[] = [];
+  isMPView: boolean = true;
+  constructor(
+    private accountServices : AccountService
+  ) { }
 
   ngOnInit() {
+    // Lấy dữ liệu 
+    this.accountServices.Users.subscribe(res => {
+      this.player = <IPlayer>res;
+    });
+    this.accountServices.Powers.subscribe(res => {
+      this.powersData = res;
+      this.listPowers = res.filter(e => e.TypeCode == "MP");
+    });
+    // Xem thong tin ca nhan nguoi la
+    if(!localStorage.getItem("SELF_DETAIL")){
+      this.accountServices.getUserById(localStorage.getItem(SystemConstants.ViewDetailUserId));
+      this.accountServices.getUserPowers(localStorage.getItem(SystemConstants.ViewDetailUserId));
+      localStorage.removeItem("SELF_DETAIL");
+    }else{
+      // Xem thong tin ca nhan user
+      this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
+      this.accountServices.getUserPowers(localStorage.getItem(SystemConstants.CURRENT_USER));
+    }
+      // Delay progress bar
+    setTimeout(() => this.setProgressbar(), 1000);
+  } 
+  log(){
+    console.log(this.player); 
+  }
+  changePositionView(po : String){
+    po == "MP" ? this.isMPView = true : this.isMPView = false; 
+    this.listPowers = this.powersData.filter(e => e.TypeCode == po);
     setTimeout(() => this.setProgressbar(), 200);
   }
-   
   setProgressbar() :void{
     var after = document.getElementsByClassName('after') as HTMLCollectionOf<HTMLElement>;
     for(var i = 0 ; i < after.length ; i++){

@@ -22,8 +22,7 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
   }
-  clickMenu(code:string){
-    console.log(code);
+  clickMenu(code:string){ 
     if(code == 'dx'){
       this.authenService.logout();
       this.router.navigate([UrlConstants.LOGIN]);
@@ -38,6 +37,7 @@ export class MenuComponent implements OnInit {
       this.router.navigate([UrlConstants.SEARCH_TEAM]);
     }
     else if(code == 'ttcn'){
+      localStorage.setItem("SELF_DETAIL","YES")
       this.router.navigate([UrlConstants.PLAYER_DETAILS]);
     }
   }

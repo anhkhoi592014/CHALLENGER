@@ -28,7 +28,8 @@ export class AuthenService {
         // Đăng nhập thành công
         if(res){
           localStorage.removeItem(SystemConstants.CURRENT_USER);
-          localStorage.setItem(SystemConstants.CURRENT_USER,res['id']);
+          localStorage.setItem(SystemConstants.CURRENT_USER,<string>res);
+          localStorage.setItem(SystemConstants.ViewDetailUserId , <string>res);
           return true;
         }
       }

@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="listTeamsResult.length > 0">
     <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
     <div class="search">
         <div class="search-section">
@@ -43,11 +43,11 @@
             <div class="box" *ngFor="let team of listTeamsResult | filter : filterPlayer" (mouseenter)="changeSelection(team);">
                 <div class="player-container">
                 <div class="img-container">
-                    <img src="{{ team.imgUrl }}">
+                    <img src="{{ team.ImgUrl }}">
                 </div>
                 <div class="player-content">
-                    <p>{{ team.name }}</p>
-                    <span class="{{ team.status ? 'online' : 'offline' }}">{{ team.status ? 'Online' : 'Offline' }}</span>
+                    <p>{{ team.Fullname }}</p>
+                    <span class="{{ team.Status ? 'online' : 'offline' }}">{{ team.Status ? 'Online' : 'Offline' }}</span>
                 </div>
                 </div>
             </div>
@@ -56,17 +56,18 @@
     <div class="info">
         <div class="player-img-section">
         <div class="img-wrapper">
-            <img src="{{ teamFocusing.imgUrl }}">
+            <img src="{{ teamFocusing.ImgUrl }}">
         </div>
         </div>
         <div class="player-info-section">
-        <div class="row"><p>Tên đội bóng: </p>{{ teamFocusing.name }}</div>
-        <div class="row"><p>Mã đội: </p>{{ teamFocusing.position }}</div>
-        <div class="row"><p>Tỉnh/Thành phố: </p>{{ teamFocusing.ward }}</div>
-        <div class="row"><p>Quận/Huyện: </p>{{ teamFocusing.height }}</div>
-        <div class="row"><p>Điểm: </p>{{ teamFocusing.weight }}</div>
+        <div class="row"><p>Tên đội bóng: </p>{{ teamFocusing.Fullname }}</div>
+        <div class="row"><p>Mã đội: </p>{{ teamFocusing.TeamCode }}</div>
+        <div class="row"><p>Tỉnh/Thành phố: </p>{{ teamFocusing.CityId }}</div>
+        <div class="row"><p>Quận/Huyện: </p>{{ teamFocusing.Ward }}</div>
+        <div class="row"><p>Điểm: </p>{{ teamFocusing.TotalScore }}</div>
         <div class="row">
         <p>Mô tả</p>
+        <button (click)="test()">Click me</button>
         </div>
         </div>
     </div>

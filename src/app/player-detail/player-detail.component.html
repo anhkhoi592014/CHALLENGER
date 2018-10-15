@@ -5,64 +5,38 @@
       <div class="box">
         <div class="img-box">
           <div class="img-container">
-              <img src="../../assets/player02.png">
+              <img src="{{ player.ImgUrl }}">
           </div>
+          <button (click)="log()">test</button>
         </div>
         <div class="content-box">
           <div class="info">
-              <p><span>Tên cầu thủ: </span>{{ player.name }}</p>
-              <p><span>Vị trí thường đá: </span>{{ player.position }}</p>
-              <p><span>Tuổi: </span>{{ player.age }}</p>
-              <p><span>Chiều cao: </span>{{ player.height }}</p>
-              <p><span>Cân nặng: </span>{{ player.weight }}</p>
-              <p><span>Facebook: </span>{{ player.facebook }}</p>    
+              <p><span>Tên cầu thủ: </span>{{ player.Fullname }}</p>
+              <p><span>Vị trí thường đá: </span>{{ player.MainPosition }} - {{ player.ExtraPosition }}</p>
+              <p><span>Tuổi: </span>{{ player.Age }}</p>
+              <p><span>Chiều cao: </span>{{ player.Height }}</p>
+              <p><span>Cân nặng: </span>{{ player.Weight }}</p>
+              <p><span>Email: </span>{{ player.Email }}</p>    
           </div>
           </div>
       </div>
     </div>
     <div class="power-section">
       <h2>Các chỉ số cầu thủ: </h2>
+      <ul>
+        <li [ngClass] = "isMPView ? 'active' : ''" (click) ="changePositionView('MP')">Thủ môn</li>
+        <li [ngClass] = "!isMPView ? 'active' : ''" (click) ="changePositionView('EP')">Tiền đạo</li>
+      </ul>
       <div class="row">
         <div class="left">
-            <div class="line-power">
-              <span>Sức mạnh: </span>
+            <div class="line-power" *ngFor = "let power of listPowers">
+              <span>{{power.PowerName}}: </span>
               <div class="progressbar">
-                  <div class="after" data-percent="50"></div>
+                  <div class="after" attr.data-percent="{{power.self_point}}"></div>
               </div>
-            </div>
-            <div class="line-power">
-              <span>Tốc độ: </span>
-              <div class="progressbar">
-                <div class="after" data-percent="70"></div>
-              </div>
-            </div>
-            <div class="line-power">
-              <span>Khéo léo: </span>
-              <div class="progressbar">
-                <div class="after" data-percent="100"></div>
-              </div>
-            </div>
-            <div class="line-power">
-              <span>Tạt bóng: </span>
-              <div class="progressbar">
-                <div class="after" data-percent="20"></div>
-              </div>
-            </div>
-            <div class="line-power">
-              <span>Dứt điểm: </span> 
-                <div class="progressbar">
-                    <div class="after" data-percent="90"></div>
-                  </div>
             </div>
         </div>
-        <div class="right">
-          <p><span>Chuyền ngắn: </span></p>
-          <p><span>Sút xa: </span></p>
-          <p><span>Dứt điểm: </span></p>
-          <p><span>Đánh đầu: </span></p>
-          <p><span>Chọn vị trí: </span></p>
-        </div>
-      </div>
+      </div>  
     </div>
     <div class="team-section">
       <h2>Các đội bóng hiện tham gia: </h2>
