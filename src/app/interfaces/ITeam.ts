@@ -1,7 +1,8 @@
 export interface ITeam {
-    id: number;
-    Fullname: String;
-    ImgUrl: String;
+    id?: number;
+    TeamCode?:String;
+    Fullname?: String;
+    ImgUrl?: String;
     WinRate?: number;
     TotalScore?: number;
     TotalMatch?: number;

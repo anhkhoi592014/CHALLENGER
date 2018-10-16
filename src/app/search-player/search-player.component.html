@@ -1,4 +1,4 @@
-<div class="container"    >
+<div class="container">
   <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
   <div class="search">
     <div class="search-section">
@@ -39,7 +39,7 @@
         </div>
       </div>
     </div>
-    <div class="list-player">
+    <div class="list-player" *ngIf="listPlayerResult.length > 0">
         <div class="box" *ngFor="let player of listPlayerResult | filter : filterPlayer" (mouseenter)="changeSelection(player);">
             <div class="player-container" (click) = "viewDetail(player.id)">
               <div class="img-container">
@@ -53,7 +53,7 @@
           </div>
     </div>
   </div>
-  <div class="info">
+  <div class="info" *ngIf="playerFocusing.ImgUrl">
     <div class="player-img-section">
       <div class="img-wrapper">
         <img src="{{ playerFocusing.ImgUrl }}">

@@ -21,6 +21,8 @@ import { AuthenGuard } from './core/guards/authen.guard';
 import { HttpClientModule }    from '@angular/common/http';
 import { LoggedGuard } from './core/guards/logged.guard';
 import { AccountService } from './core/services/account.service';
+import { PlayerEditComponent } from './player-detail/player-edit/player-edit.component';
+import { PlayerViewComponent } from './player-detail/player-view/player-view.component';
 const appRoute:Routes = [
   {
     path:'login',
@@ -50,7 +52,38 @@ const appRoute:Routes = [
   {
     path:'player-details',
     component:PlayerDetailComponent,
-    canActivate: [AuthenGuard]
+    canActivate: [AuthenGuard],
+    children: [
+      {
+        path:'',
+        component: PlayerViewComponent,
+        pathMatch: 'full',
+        canActivate: [AuthenGuard]
+      },{
+        path:'view',
+        component: PlayerViewComponent,
+        pathMatch: 'full',
+        canActivate: [AuthenGuard]
+      }
+      ,{
+        path:'edit',
+        component: PlayerEditComponent,
+        canActivate: [AuthenGuard]
+      }
+    ]
+  },
+  {
+    path:'player-details/:id',
+    component:PlayerDetailComponent,
+    canActivate: [AuthenGuard],
+    children: [
+      {
+        path:'',
+        component: PlayerViewComponent,
+        pathMatch: 'full',
+        canActivate: [AuthenGuard]
+      }
+    ]
   }
 ]
 @NgModule({
@@ -66,7 +99,9 @@ const appRoute:Routes = [
     TeamDetailComponent,
     TeamHistoryMatchComponent,
     HistoryMatchComponent,
-    TeamFormationComponent
+    TeamFormationComponent,
+    PlayerEditComponent,
+    PlayerViewComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,47 @@
+<div class="content">
+    <div class="info-section">
+      <div class="box">
+        <div class="img-box">
+          <div class="img-container">
+              <img src="{{ player.ImgUrl }}">
+          </div>
+          <button (click)="log()">test</button>
+        </div>
+        <div class="content-box">
+          <div class="info">
+              <p><span>Tên cầu thủ: </span>{{ player.Fullname }}</p>
+              <p><span>Vị trí thường đá: </span>{{ player.MainPosition }} - {{ player.ExtraPosition }}</p>
+              <p><span>Tuổi: </span>{{ player.Age }}</p>
+              <p><span>Chiều cao: </span>{{ player.Height }}</p>
+              <p><span>Cân nặng: </span>{{ player.Weight }}</p>
+              <p><span>Email: </span>{{ player.Email }}</p>    
+          </div>
+          </div>
+      </div>
+    </div>
+    <div class="power-section">
+      <h2>Các chỉ số cầu thủ: </h2>
+      <ul>
+        <li [ngClass] = "isMPView ? 'active' : ''" (click) ="changePositionView('MP')">Thủ môn</li>
+        <li [ngClass] = "!isMPView ? 'active' : ''" (click) ="changePositionView('EP')">Tiền đạo</li>
+      </ul>
+      <div class="row">
+        <div class="left">
+            <div class="line-power" *ngFor = "let power of listPowers">
+              <span>{{power.PowerName}}: </span>
+              <div class="progressbar">
+                  <div class="after" attr.data-percent="{{power.self_point}}"></div>
+              </div>
+            </div>
+        </div>
+      </div>  
+    </div>
+    <div class="team-section">
+      <h2>Các đội bóng hiện tham gia: </h2>
+      <div class="row" *ngIf = "listTeams.length > 0">
+        <div class="img-container" *ngFor = "let team of listTeams">
+          <img src="{{ team.ImgUrl }}">
+        </div>
+      </div>
+    </div>  
+  </div>

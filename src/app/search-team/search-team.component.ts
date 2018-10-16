@@ -11,9 +11,7 @@ import { AccountService } from '../core/services/account.service';
 })
 export class SearchTeamComponent implements OnInit {
 
-  listTeamsResult : ITeam[] =[
-    {id : 1, Fullname : "asdasd", ImgUrl : "../../assets/logo01.png"}
-  ];
+  listTeamsResult : ITeam[] =[];
   listWard :String[] = [];
   filterPlayer: string = "";
   searchFilter : Boolean = false;
@@ -21,8 +19,11 @@ export class SearchTeamComponent implements OnInit {
   listTeamClone :ITeam[] = [];
 
   listMenu : IMenu[] = [
-    {id:1,code:'tct', title : 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
-    {id:2,code:'tdb', title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' },
+    {id:1,code:'dashboard', title : 'Dashboard',imgUrl : '../../assets/mapView.png' },
+    {id:2,code:'tk', title : 'Tìm kiếm',imgUrl : '../../assets/loop.png',subMenu :[
+      { code:'tct' ,title: 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
+      { code:'tdb',title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' }
+    ]},
     {id:3,code:'db', title : 'Đội bóng',imgUrl : '../../assets/doibong.png' },
     {id:4,code:'ttcn', title : 'Thông tin cá nhân',imgUrl : '../../assets/thongtincanhan.png' },
     {id:5,code:'dx', title : 'Đăng xuất',imgUrl : '../../assets/dangxuat.png' },
@@ -30,7 +31,7 @@ export class SearchTeamComponent implements OnInit {
   selectedMenu :number = 2;
   listWardData = [
     { 
-      id: 28 , listWard: ['Quận 1','Quận 2','Quận 3','Quận 4','Quận 5',
+      id: 28 ,name:'TP.Hồ Chí Minh', listWard: ['Quận 1','Quận 2','Quận 3','Quận 4','Quận 5',
             'Quận 6','Quận 7','Quận 8','Quận 9','Quận 10',
             'Quận 11','Quận 12','Quận Tân Bình','Quận Tân Phú',
             'Quận Phú Nhuận','Quận Gò Vấp','Quận Bình Thạnh',
@@ -39,7 +40,7 @@ export class SearchTeamComponent implements OnInit {
             'Huyện Cần Giờ']
     },
     { 
-      id: 24 , listWard: ['Quận Thanh Xuân','Quận Tây Hồ','Quận Nam Từ Liêm','Quận Long Biên',
+      id: 24 ,name: 'Hà Nội', listWard: ['Quận Thanh Xuân','Quận Tây Hồ','Quận Nam Từ Liêm','Quận Long Biên',
           'Quận Hoàng Mai','Quận Hoàn Kiếm','Quận Hai Bà Trưng','Quận Hà Đông',
           'Quận Đống Đa','Quận Cầu Giấy','Quận Bắc Từ Liêm','Quận Ba Đình',
           'Thị xã Sơn Tây','Huyện Ưng Hòa','Huyện Thường Tín','Huyện Thanh Trì','Huyện Thanh Oai',
@@ -48,8 +49,8 @@ export class SearchTeamComponent implements OnInit {
           'Huyện Đan Phượng','Huyện Chương Mỹ','Huyện Ba Vì']
     } 
   ];
-
-  teamFocusing : ITeam = this.listTeamsResult[0];
+  teamFocusing : ITeam = {};
+  teamCity: String = "";
   filterTeam: string = "";
 
   constructor(
@@ -72,5 +73,9 @@ export class SearchTeamComponent implements OnInit {
 
   changeSelection(team: ITeam){
     this.teamFocusing = team;
+    if(this.listWardData.filter(city => city.id == this.teamFocusing.CityId)[0])
+    {
+      this.teamCity = this.listWardData.filter(city => city.id == this.teamFocusing.CityId)[0].name; 
+    }
   }
 }

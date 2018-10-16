@@ -8,6 +8,7 @@
         flex-direction: row;
         background:#e2e1de;
         .map{
+            z-index: 1;
             flex-grow: 1;
             margin-right: 5px;
             margin-left: 8%;

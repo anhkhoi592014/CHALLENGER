@@ -36,22 +36,20 @@ export class SearchPlayerComponent implements OnInit {
     } 
   ];
   listMenu : IMenu[] = [
-    {id:1,code:'tct', title : 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
-    {id:2,code:'tdb', title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' },
+    {id:1,code:'dashboard', title : 'Dashboard',imgUrl : '../../assets/mapView.png' },
+    {id:2,code:'tk', title : 'Tìm kiếm',imgUrl : '../../assets/loop.png',subMenu :[
+      { code:'tct' ,title: 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
+      { code:'tdb',title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' }
+    ]},
     {id:3,code:'db', title : 'Đội bóng',imgUrl : '../../assets/doibong.png' },
     {id:4,code:'ttcn', title : 'Thông tin cá nhân',imgUrl : '../../assets/thongtincanhan.png' },
     {id:5,code:'dx', title : 'Đăng xuất',imgUrl : '../../assets/dangxuat.png' },
   ];
-  selectedMenu : number = 1;
+  selectedMenu : number = 2;
   
-  listPlayerResult: IPlayer[]= [
-    {Fullname : 'Nguyễn Văn Tèo',ImgUrl : '../../assets/player01.png',MainPosition: 'Thủ môn',Status : 1,CityId: 28  ,Ward : "Quận Gò Vấp",Age : 20},
-    {Fullname : 'Vương Vũ Anh Khôi',ImgUrl : '../../assets/player02.png',MainPosition: 'Tiền đạo', Status : 0,CityId: 28 ,Ward : "Quận 12", Age: 32},
-    {Fullname : 'Paul Pogba',ImgUrl : '../../assets/player03.png',MainPosition: 'Tiền vệ', Status : 0,CityId: 24 ,Ward : "Quận Cầu Giấy", Age: 25}
-  ];
-  playerFocusing : IPlayer = this.listPlayerResult[0];
-  playerCity : String = this.listWardData.filter(city => city.id == this.playerFocusing.CityId)[0].name;
-  
+  listPlayerResult: IPlayer[]= [];
+  playerFocusing: IPlayer = {};
+  playerCity: String = "";
   filterPlayer: string = "";
 
   listPlayers : IPlayer[];
@@ -95,8 +93,6 @@ export class SearchPlayerComponent implements OnInit {
     this.listPlayerResult = this.listPlayerClone;
   }
   viewDetail(id :any){
-    localStorage.removeItem("SELF_DETAIL");
-    localStorage.setItem(SystemConstants.ViewDetailUserId,<string>id);
-    this.router.navigate([UrlConstants.PLAYER_DETAILS]);
+    this.router.navigate([UrlConstants.PLAYER_DETAILS + '/' + id]);
   }
 }

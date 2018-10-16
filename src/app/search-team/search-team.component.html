@@ -1,4 +1,4 @@
-<div class="container" *ngIf="listTeamsResult.length > 0">
+<div class="container">
     <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
     <div class="search">
         <div class="search-section">
@@ -39,7 +39,7 @@
             </div>
         </div>
         </div>
-        <div class="list-player">
+        <div class="list-player" *ngIf="listTeamsResult.length > 0">
             <div class="box" *ngFor="let team of listTeamsResult | filter : filterPlayer" (mouseenter)="changeSelection(team);">
                 <div class="player-container">
                 <div class="img-container">
@@ -53,7 +53,7 @@
             </div>
         </div>
     </div>
-    <div class="info">
+    <div class="info"  *ngIf="teamFocusing.ImgUrl">
         <div class="player-img-section">
         <div class="img-wrapper">
             <img src="{{ teamFocusing.ImgUrl }}">
@@ -62,7 +62,7 @@
         <div class="player-info-section">
         <div class="row"><p>Tên đội bóng: </p>{{ teamFocusing.Fullname }}</div>
         <div class="row"><p>Mã đội: </p>{{ teamFocusing.TeamCode }}</div>
-        <div class="row"><p>Tỉnh/Thành phố: </p>{{ teamFocusing.CityId }}</div>
+        <div class="row"><p>Tỉnh/Thành phố: </p>{{ teamCity }}</div>
         <div class="row"><p>Quận/Huyện: </p>{{ teamFocusing.Ward }}</div>
         <div class="row"><p>Điểm: </p>{{ teamFocusing.TotalScore }}</div>
         <div class="row">

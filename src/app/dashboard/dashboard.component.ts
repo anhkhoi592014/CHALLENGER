@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IMenu } from '../interfaces/IMenu';
 import { ITeam } from '../interfaces/ITeam';
+import { Title } from '@angular/platform-browser';
+import { ISubMenu } from '../interfaces/ISubMenu';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,12 +13,16 @@ export class DashboardComponent implements OnInit {
 
   constructor() { }
   listMenu : IMenu[] = [
-    {id:1,code:'tct', title : 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
-    {id:2,code:'tdb', title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' },
+    {id:1,code:'dashboard', title : 'Dashboard',imgUrl : '../../assets/mapView.png' },
+    {id:2,code:'tk', title : 'Tìm kiếm',imgUrl : '../../assets/loop.png',subMenu :[
+      { code:'tct' ,title: 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
+      { code:'tdb',title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' }
+    ]},
     {id:3,code:'db', title : 'Đội bóng',imgUrl : '../../assets/doibong.png' },
     {id:4,code:'ttcn', title : 'Thông tin cá nhân',imgUrl : '../../assets/thongtincanhan.png' },
     {id:5,code:'dx', title : 'Đăng xuất',imgUrl : '../../assets/dangxuat.png' },
   ];
+  selectedMenu : number = 1;
   listTopTeams : ITeam[] = [
     { id:1, Fullname : 'Manchester UNITED',ImgUrl : '../../assets/logo01.png',Status : true},
     { id:2, Fullname : 'TruongChinh UNITED',ImgUrl : '../../assets/logo02.png',Status : true},

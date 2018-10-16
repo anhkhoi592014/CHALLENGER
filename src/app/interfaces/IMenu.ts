@@ -3,4 +3,5 @@ export interface IMenu {
     code?:string;
     title: String;
     imgUrl: String;
+    subMenu?: Object[];
 }

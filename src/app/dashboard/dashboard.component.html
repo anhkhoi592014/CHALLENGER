@@ -1,5 +1,5 @@
 <div class="container">
-    <app-menu [listMenu]= "listMenu"></app-menu>
+    <app-menu [listMenu]= "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
     <div class="map">
         <agm-map [longitude] = "longitude" [latitude] = "latitude" (mapClick) = "locationChosen($event)">
             <agm-marker [longitude] = "longitude" [latitude] = "latitude">

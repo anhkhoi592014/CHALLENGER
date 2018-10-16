@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import {Location} from '@angular/common';
 import { UrlConstants } from '../core/common/url.constants';
 import { AuthenService } from '../core/services/authen.service';
+import { ISubMenu } from '../interfaces/ISubMenu';
 
 @Component({
   selector: 'app-menu',
@@ -28,7 +29,7 @@ export class MenuComponent implements OnInit {
       this.router.navigate([UrlConstants.LOGIN]);
     }
     else if(code =='back'){
-      this.location.back();
+      this.router.navigate([UrlConstants.DASHBOARD]);
     }
     else if(code == 'tct'){
       this.router.navigate([UrlConstants.SEARCH_PLAYER]);
@@ -37,8 +38,14 @@ export class MenuComponent implements OnInit {
       this.router.navigate([UrlConstants.SEARCH_TEAM]);
     }
     else if(code == 'ttcn'){
-      localStorage.setItem("SELF_DETAIL","YES")
       this.router.navigate([UrlConstants.PLAYER_DETAILS]);
+    }else if(code =='dashboard'){
+      this.router.navigate([UrlConstants.DASHBOARD]);
+    }else if(code =='csttcn'){
+      this.router.navigate([UrlConstants.EDIT_PLAYER_DETAILS]);
     }
+  }
+  hoverMenuItem(code: String){
+    
   }
 }
