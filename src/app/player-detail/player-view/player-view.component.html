@@ -1,4 +1,10 @@
+<app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
+<div class="header" style="background:url('../../assets/headerbg.jpg')"> 
+  <div class="overlay"></div>
+  <h1>Thông tin cá nhân</h1>
+</div>
 <div class="content">
+    <loading-spinner *ngIf="spinnerLoading"></loading-spinner>
     <div class="info-section">
       <div class="box">
         <div class="img-box">
@@ -44,4 +50,10 @@
         </div>
       </div>
     </div>  
+    <div class="description-section">
+      <h2>Mô tả: </h2>
+      <div class="description">
+        {{player.Description}}
+      </div>
+    </div>
   </div>

@@ -4,7 +4,10 @@ import { IPlayer } from '../interfaces/IPlayer';
 import { AccountService } from '../core/services/account.service';
 import { SystemConstants } from '../core/common/system.constants';
 import { Router } from '@angular/router';
-import { UrlConstants } from '../core/common/url.constants';
+import { UrlConstants } from '../core/common/url.constants';  
+import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
+import { timeInterval } from 'rxjs/operators';
+import { timeout } from 'q';
 @Component({
   selector: 'app-search-player',
   templateUrl: './search-player.component.html',
@@ -50,26 +53,29 @@ export class SearchPlayerComponent implements OnInit {
   listPlayerResult: IPlayer[]= [];
   playerFocusing: IPlayer = {};
   playerCity: String = "";
+  playerAge: number = null;
   filterPlayer: string = "";
 
   listPlayers : IPlayer[];
+  showSpinner : boolean = true;
   constructor(
     private accountServices : AccountService,
-    private router: Router
+    private router: Router,
+    
   ) { }
   ngOnInit() {
-    this.accountServices.Users.subscribe(data => {
-      this.listPlayerResult = data;
-    });
+    setTimeout(() => {
+      this.accountServices.Users.subscribe(data => {
+        this.listPlayerResult = data;
+        this.showSpinner = false;
+      });
     this.accountServices.getUsersFromServer();
+    }, 1000);
   }
   
   changeSelection(ply: IPlayer){
     this.playerFocusing = ply;
-    if(this.listWardData.filter(city => city.id == this.playerFocusing.CityId)[0])
-    {
-      this.playerCity = this.listWardData.filter(city => city.id == this.playerFocusing.CityId)[0].name; 
-    }
+    this.playerAge = (new Date().getFullYear() - new Date(ply.DateOfBirth).getFullYear());
   }
 
   changeCity(val: number){
@@ -80,12 +86,12 @@ export class SearchPlayerComponent implements OnInit {
     (!this.isCloned)? (this.listPlayerClone = this.listPlayerResult): (this.listPlayerResult = this.listPlayerClone);
     if(city && ward && age){
       this.listPlayerResult = this.listPlayerResult.filter(player => 
-        player.CityId == city && 
-        player.Ward == ward && 
-        player.Age >= parseInt(age) - 5  &&
-        player.Age <= parseInt(age) + 5
+        player.City == this.listWardData.filter(item => item.id == city)[0]['name'] && 
+        player.Ward == ward &&
+        (new Date().getFullYear() - new Date(player.DateOfBirth).getFullYear()) >= parseInt(age) - 5  &&
+        (new Date().getFullYear() - new Date(player.DateOfBirth).getFullYear()) <= parseInt(age) + 5
         );
-    }                                           
+    }                                         
     this.searchFilter = true;
     this.isCloned = true;
   }

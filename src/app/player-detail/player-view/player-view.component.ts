@@ -20,26 +20,40 @@ export class PlayerViewComponent implements OnInit {
   listTeams: ITeam[] = [];
   isMPView: boolean = true;
   userId: number = 0;
+  spinnerLoading: boolean = true;
+  listMenu : IMenu[] = [
+    { id: 1,code:'ttcn', title: 'Thông tin cá nhân',imgUrl : '../../assets/viewdetails.png' },
+    { id: 2,code:'editpf' ,title: 'Chỉnh sữa',imgUrl : '../../assets/editprofies.png'},
+    { id: 3,code: 'editcscn' ,title: 'Chỉ số cầu thủ',imgUrl : '../../assets/timcauthu.png' },
+    { id: 4,code:'dmk', title: 'Đổi mật khẩu',imgUrl : '../../assets/password.png'},
+    { id: 5,code:'back', title : 'Quay Lại',imgUrl : '../../assets/left-arrow.png' }
+  ];
+  selectedMenu: number = 1;
   constructor(
     private accountServices : AccountService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) { 
     this.route.params.subscribe(param => {
-      this.userId = param['id'];
-    });
+      (param['id'] && (param['id'] != localStorage.getItem(SystemConstants.CURRENT_USER)))? 
+      this.listMenu = [{ id: 3,code:'back', title : 'Quay Lại',imgUrl : '../../assets/left-arrow.png' }] : '';
+      this.userId = param['id'];  
+    })
   }
 
   ngOnInit() {
     // Lấy dữ liệu 
     this.accountServices.Users.subscribe(res => {
       this.player = <IPlayer>res;
+      this.spinnerLoading = false;
     });
     this.accountServices.Powers.subscribe(res => {
       this.powersData = res;
       this.listPowers = res.filter(e => e.TypeCode == "MP");
+      this.spinnerLoading = false;
     });
     this.accountServices.Teams.subscribe(res => {
       this.listTeams = <ITeam[]>res;
+      this.spinnerLoading = false;
     })
     // Xem thong tin ca nhan nguoi la
     if(this.userId){
@@ -56,7 +70,7 @@ export class PlayerViewComponent implements OnInit {
     setTimeout(() => this.setProgressbar(), 1000);
   } 
   log(){
-    console.log(this.listTeams); 
+    console.log(this.listPowers); 
   }
   changePositionView(po : String){
     po == "MP" ? this.isMPView = true : this.isMPView = false; 

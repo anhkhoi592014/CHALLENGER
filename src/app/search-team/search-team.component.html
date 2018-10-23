@@ -39,7 +39,8 @@
             </div>
         </div>
         </div>
-        <div class="list-player" *ngIf="listTeamsResult.length > 0">
+        <div class="list-player">
+            <loading-spinner *ngIf="showSpinner"></loading-spinner>
             <div class="box" *ngFor="let team of listTeamsResult | filter : filterPlayer" (mouseenter)="changeSelection(team);">
                 <div class="player-container">
                 <div class="img-container">

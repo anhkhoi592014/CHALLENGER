@@ -1,0 +1,120 @@
+<app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
+<div class="wrapper">
+  <div class="header" style="background:url('../../assets/headerbg.jpg')"> 
+    <div class="overlay"></div>
+    <h1>Chỉnh sữa thông tin cá nhân</h1>
+  </div>
+  <loading-spinner *ngIf="showSpinner"></loading-spinner>
+  <form #editInfoForm="ngForm" *ngIf="!showSpinner">
+      <div class="profile">
+          <div class="left">
+            <div class="box">
+              <div class="img-container">
+                <img src="{{ imgUrl }}">
+              </div>
+              <input type="file" (change)="onFileSelected($event)" accept=".png,.jpg,.jpeg">
+              <button type="button" (click)="uploadFile()">Upload</button>
+            </div>
+          </div>
+          <div class="right">
+            <div class="row">
+              <div class="item">
+                <p>Mã tài khoản : </p>
+                <input type="text" value="{{ player.UserCode }}" disabled>    
+              </div>
+              <div class="item">
+                <p>Username :</p>
+                <input type="text" value="{{ player.Username }}" disabled>    
+              </div>
+            </div>
+            <div class="row long">
+              <div class="item">
+                <p>Họ và tên: </p>
+                <input type="text" id="fullname" name="fullname" 
+                [(ngModel)]="player.Fullname" value="{{ player.Fullname }}">
+              </div>
+            </div>
+            <div class="row long">
+              <div class="item">
+                <p>Email:</p>
+                <input type="text" id="email" name="email" 
+                [(ngModel)]="player.Email" value="{{ player.Email }}">
+              </div>
+            </div>
+            <div class="row">
+              <div class="item">
+                <p>Ngày sinh: </p>
+                <input type="date" id="dob" name="dob"
+                [(ngModel)]="dateOfBirth" value="{{ dateOfBirth }}" (change)="changeDOB();">
+              </div>
+            </div>
+            <div class="row three">
+                <div class="item">
+                  <p>Giới tính: </p>
+                  <select id="sex" (change)="changeSex(sex.value)" #sex>
+                    <option value="0" [selected]="player.Sex == 0">Nam</option>
+                    <option value="1" [selected]="player.Sex == 1">Nữ</option>
+                  </select>
+                </div>
+              <div class="item">
+                <p>Chiều cao: </p>
+                <input type="text" name="height" [(ngModel)]="player.Height" value="{{ player.Height }}">
+              </div>
+              <div class="item">
+                <p>Cân nặng: </p>
+                <input type="number" name="weight" [(ngModel)]="player.Weight" max="200" min="20" value="{{ player.Weight }}">
+              </div>
+            </div>
+            <div class="row three">
+              <div class="item">
+                <p>Thành phố: </p>
+                <select name="" id="city" (change)="changeCity(city.value)" #city>
+                  <option value="0" disabled="disabled" selected="selected">Chọn Tỉnh/Thành phố</option>
+                  <option value="28" [selected] = "player.City == 'TP.Hồ Chí Minh'">TP.Hồ Chí Minh</option>
+                  <option value="24" [selected] = "player.City == 'Hà Nội'">Hà Nội</option>
+                </select>
+              </div>
+              <div class="item">
+                <p>Quận: </p>
+                <select name="" id="ward" #ward (change) = "changeWard(ward.value);" >
+                  <option value="" disabled="disabled" selected="selected">Chọn Quận/Huyện</option>
+                  <option *ngFor="let ward of listWard" [selected] = "player.Ward == ward" >
+                    {{ ward }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="row role">
+              <div class="item">
+                <p>Vị trí chính: </p>
+                <select (change)="changeMP(MP.value);" #MP>
+                  <option *ngFor="let position of listPosition" value="{{position.id}}" 
+                  [selected]="mainUserPosition && position.id == mainUserPosition.position_id">
+                    {{ position.PositionName }}
+                  </option>
+                </select>
+              </div>
+              <div class="item">
+                <p>Vị trí phụ: </p>
+                <select (change)="changeEP(EP.value);" #EP>
+                  <option value="0">Không hiển thị</option>
+                  <option *ngFor="let position of listPosition" value="{{position.id}}" 
+                  [selected]="extraUserPosition && extraUserPosition.position_id == position.id">
+                    {{ position.PositionName }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="row description">
+              <div class="item">
+                <p>Mô tả: </p>
+                <textarea (keyup)="changeDescription(des.value)" #des>{{ player.Description }}</textarea>
+              </div>
+            </div>
+            <div class="row actions">
+              <button type="button" (click)="abort();">Hủy</button>
+              <button type="button" class="submit" (click)="save();">Thay đổi</button>
+            </div>
+          </div>
+        </div>
+  </form>
+</div>

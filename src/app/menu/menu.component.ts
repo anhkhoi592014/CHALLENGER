@@ -1,11 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output , EventEmitter} from '@angular/core';
 import { IMenu } from '../interfaces/IMenu';
-import { SystemConstants } from '../core/common/system.constants';
 import { Router } from '@angular/router';
-import {Location} from '@angular/common';
 import { UrlConstants } from '../core/common/url.constants';
 import { AuthenService } from '../core/services/authen.service';
-import { ISubMenu } from '../interfaces/ISubMenu';
 
 @Component({
   selector: 'app-menu',
@@ -17,13 +14,13 @@ export class MenuComponent implements OnInit {
   @Input() selectedMenu : number;
   constructor(
     private authenService:AuthenService,
-    private router:Router,
-    private location:Location
+    private router:Router
   ) { }
 
   ngOnInit() {
   }
-  clickMenu(code:string){ 
+
+  clickMenu(code:string,id?:number){ 
     if(code == 'dx'){
       this.authenService.logout();
       this.router.navigate([UrlConstants.LOGIN]);
@@ -39,10 +36,21 @@ export class MenuComponent implements OnInit {
     }
     else if(code == 'ttcn'){
       this.router.navigate([UrlConstants.PLAYER_DETAILS]);
+      this.selectedMenu = id;
     }else if(code =='dashboard'){
       this.router.navigate([UrlConstants.DASHBOARD]);
     }else if(code =='csttcn'){
-      this.router.navigate([UrlConstants.EDIT_PLAYER_DETAILS]);
+      this.router.navigate([UrlConstants.EDIT_PLAYER_INFO]);
+      this.selectedMenu = id;
+    }else if(code =='dmk'){
+      this.router.navigate([UrlConstants.CHANGE_PLAYER_PASSWORD]);
+      this.selectedMenu = id;
+    }else if(code == 'editpf'){
+      this.router.navigate([UrlConstants.EDIT_PLAYER_INFO]);
+      this.selectedMenu = id;
+    }else if(code == 'editcscn'){
+      this.selectedMenu = id;
+      this.router.navigate([UrlConstants.EDIT_PLAYER_POWER]);
     }
   }
   hoverMenuItem(code: String){

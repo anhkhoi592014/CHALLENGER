@@ -17,7 +17,7 @@ export class SearchTeamComponent implements OnInit {
   searchFilter : Boolean = false;
   isCloned : Boolean = false;
   listTeamClone :ITeam[] = [];
-
+  showSpinner: boolean = true;
   listMenu : IMenu[] = [
     {id:1,code:'dashboard', title : 'Dashboard',imgUrl : '../../assets/mapView.png' },
     {id:2,code:'tk', title : 'Tìm kiếm',imgUrl : '../../assets/loop.png',subMenu :[
@@ -58,10 +58,13 @@ export class SearchTeamComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.accountService.Teams.subscribe(res => {
-      this.listTeamsResult = res;
-    })
+    setTimeout(() => {
+      this.accountService.Teams.subscribe(res => {
+        this.listTeamsResult = res;
+        this.showSpinner = false;
+      })
     this.accountService.getTeamsFromServer();
+    }, 1000);
   }
   test(){
     console.log(this.listTeamsResult);

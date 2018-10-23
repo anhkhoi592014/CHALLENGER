@@ -39,7 +39,8 @@
         </div>
       </div>
     </div>
-    <div class="list-player" *ngIf="listPlayerResult.length > 0">
+      <div class="list-player">
+        <loading-spinner *ngIf="showSpinner"></loading-spinner>
         <div class="box" *ngFor="let player of listPlayerResult | filter : filterPlayer" (mouseenter)="changeSelection(player);">
             <div class="player-container" (click) = "viewDetail(player.id)">
               <div class="img-container">
@@ -62,8 +63,8 @@
     <div class="player-info-section">
       <div class="row"><p>Tên cầu thủ: </p>{{ playerFocusing.Fullname }}</div>
       <div class="row"><p>Vị trí: </p>{{ playerFocusing.MainPosition }}</div>
-      <div class="row"><p>Tuổi: </p>{{ playerFocusing.Age }}</div>
-      <div class="row"><p>Tỉnh/Thành phố: </p>{{ playerCity }}</div>
+      <div class="row"><p>Tuổi: </p>{{ playerAge }}</div>
+      <div class="row"><p>Tỉnh/Thành phố: </p>{{ playerFocusing.City }}</div>
       <div class="row"><p>Quận/Huyện: </p>{{ playerFocusing.Ward }}</div>
       <div class="row"><p>Chiều cao: </p>{{ playerFocusing.Height }}</div>
       <div class="row"><p>Cân nặng: </p>{{ playerFocusing.Weight }}</div>

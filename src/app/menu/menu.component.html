@@ -1,6 +1,6 @@
 <div class="menu">
   <ul class="list-menu">
-          <li *ngFor="let item of listMenu" [ngClass] = "(item.id == selectedMenu)? 'selected' : ''" (click) = "clickMenu(item.code);" (mouseenter) = "hoverMenuItem(item.code)">
+          <li *ngFor="let item of listMenu" [ngClass] = "(item.id == selectedMenu)? 'selected' : ''" (click) = "clickMenu(item.code,item.id);" (mouseenter) = "hoverMenuItem(item.code)">
               <a>
               <div class="img-container">
                 <img src="{{ item.imgUrl }}">

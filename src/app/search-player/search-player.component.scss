@@ -136,6 +136,8 @@
             }
         }
         .list-player{
+            position: relative;
+            overflow-x: hidden;
             width: 100%;
             height: 70%;
             margin: auto;
@@ -146,6 +148,8 @@
             flex-direction: row;
             justify-content: flex-start;
             flex-wrap: wrap;
+            app-loading-spinner{
+            }
             .box{
                 cursor: pointer;
                 background: #3333330d;

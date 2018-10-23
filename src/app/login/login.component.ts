@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UrlConstants } from '../core/common/url.constants';
-import { SystemConstants } from '../core/common/system.constants';
 import { AuthenService } from '../core/services/authen.service';
-
+import { ToastrManager } from 'ng6-toastr-notifications';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -17,6 +16,7 @@ export class LoginComponent implements OnInit {
   };
 
   constructor(
+    public toastr: ToastrManager,
     private router:Router,
     private authenService:AuthenService
   ) { }
@@ -26,7 +26,14 @@ export class LoginComponent implements OnInit {
   
   login():void{
     this.authenService.login(this.model.username,this.model.password).subscribe(res=>{
-      res ? this.router.navigate([UrlConstants.DASHBOARD]) : console.log("khong dung tai khoan hoac mat khau");
+      if(res){
+        this.router.navigate([UrlConstants.DASHBOARD]);
+      }else{
+        this.toastr.errorToastr('Tài khoản hoặc mật khẩu không chính xác.', 'Lỗi !!!',{
+          position: 'top-right',
+          animate: 'slideFromTop'
+        });
+      }
     })
   }
 }
