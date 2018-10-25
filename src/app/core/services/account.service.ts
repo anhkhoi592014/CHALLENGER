@@ -37,7 +37,6 @@ export class AccountService {
   get Teams(){
     return this._teams.asObservable();
   }
-
   get Positions(){
     return this._positions.asObservable();
   }
@@ -68,6 +67,7 @@ export class AccountService {
       map((res) =>{
           if(res){
             console.log("Update Profile Success");
+            this._users.next(<IPlayer[]>res);
             return true;
           }
           return false;
@@ -96,6 +96,19 @@ export class AccountService {
       this._teams.next(<ITeam[]>data);
     });
   }
+  
+  updatePositionNameToUser(user_id: any,position_id: any,type: string){
+    this.http.put(SystemConstants.BASE_API + 'user/' + user_id +'/position/update',JSON.stringify({position_id,type}),httpOptions)
+    .subscribe(res => {
+        this._users.next(<IPlayer[]>res);
+    });
+  }
+
+  deleteUserEP(id: any){
+    this.http.delete(SystemConstants.BASE_API + 'user/' + id +'/position/delete').subscribe(res =>{
+      this._users.next(<IPlayer[]>res);
+    });
+  }
 
   // Đổi mật khẩu
   changePassword(id: any,newPassword: string): Observable<boolean>{
@@ -111,5 +124,16 @@ export class AccountService {
       )
     )
   }
-  
+
+  updateUserPowers(id: any,data: IPower[]): Observable<boolean> {
+    return this.http.put(SystemConstants.BASE_API + 'user/'+ id +'/powers/update',data,httpOptions).
+    pipe(
+      map((res) =>{
+        if(res){
+          return true;
+        }
+        return false;
+      })
+    );
+  }
 }

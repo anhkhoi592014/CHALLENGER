@@ -176,7 +176,7 @@ export class PlayerEditInfoComponent  implements OnInit, AfterContentChecked {
     (this.mainUserPosition.id) ? 
     this.positionServices.updateUserMainPosition(this.mainUserPosition.id,this.mainUserPosition.position_id,localStorage.getItem(SystemConstants.CURRENT_USER)) : 
     this.positionServices.addUserMainPosition(this.mainUserPosition.position_id,localStorage.getItem(SystemConstants.CURRENT_USER));
-    if(this.extraPositionId > 0){
+    if(this.extraPositionId > 0 && this.extraUserPosition){
       (this.extraUserPosition.id) ?
       this.positionServices.updateUserExtraPosition(this.extraUserPosition.id,this.extraUserPosition.position_id,localStorage.getItem(SystemConstants.CURRENT_USER)) :
       this.positionServices.addUserExtraPosition(this.extraUserPosition.position_id,localStorage.getItem(SystemConstants.CURRENT_USER));  
@@ -184,6 +184,7 @@ export class PlayerEditInfoComponent  implements OnInit, AfterContentChecked {
       this.positionServices.deleteUserExtraPosition(this.extraUserPosition.id);
     }
     
+    this.showSpinner = true;
     
     this.accountServices.editProfile(this.player,localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res => {
       if(res){
@@ -192,6 +193,7 @@ export class PlayerEditInfoComponent  implements OnInit, AfterContentChecked {
           animate: 'slideFromTop'
         });
         this.router.navigate([UrlConstants.PLAYER_DETAILS]);
+        
       }else{
         this.toast.errorToastr('Sữa thông tin thất bại.', 'Thông báo !!!',{
           position: 'top-right',

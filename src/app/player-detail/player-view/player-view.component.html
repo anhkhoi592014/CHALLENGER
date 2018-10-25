@@ -16,8 +16,8 @@
         <div class="content-box">
           <div class="info">
               <p><span>Tên cầu thủ: </span>{{ player.Fullname }}</p>
-              <p><span>Vị trí thường đá: </span>{{ player.MainPosition }} - {{ player.ExtraPosition }}</p>
-              <p><span>Tuổi: </span>{{ player.Age }}</p>
+              <p><span>Vị trí thường đá: </span>{{ player.MainPosition }}  {{ player.ExtraPosition }}</p>
+              <p><span>Tuổi: </span>{{ playerAge }}</p>
               <p><span>Chiều cao: </span>{{ player.Height }}</p>
               <p><span>Cân nặng: </span>{{ player.Weight }}</p>
               <p><span>Email: </span>{{ player.Email }}</p>    
@@ -28,8 +28,8 @@
     <div class="power-section">
       <h2>Các chỉ số cầu thủ: </h2>
       <ul>
-        <li [ngClass] = "isMPView ? 'active' : ''" (click) ="changePositionView('MP')">Thủ môn</li>
-        <li [ngClass] = "!isMPView ? 'active' : ''" (click) ="changePositionView('EP')">Tiền đạo</li>
+        <li [ngClass] = "isMPView ? 'active' : ''" (click) ="changePositionView('MP')"  *ngIf="showMainPosition">{{ mainPosition.PositionName }}</li>
+        <li [ngClass] = "!isMPView ? 'active' : ''" (click) ="changePositionView('EP')" *ngIf="showExtraPosition">{{ extraPosition.PositionName }}</li>
       </ul>
       <div class="row">
         <div class="left">

@@ -1,0 +1,87 @@
+.container{
+    height: 100%;
+    padding-left: 8%;
+    .content{
+        padding: 2% 3%;
+        .row{
+            p{               
+                padding: 2%;
+                display: inline-block;
+            }
+            ul{
+                list-style: none;
+                display: inline-block;
+                li{
+                    display: inline-block;
+                    margin-left: 1em;
+                    padding: 5px 10px;
+                    background: #e8e8e8;
+                    color: black;
+                    box-shadow: 0 3px 1px rgba(10, 16, 20, 0.15), 0 0 52px rgba(10, 16, 20, 0.12);
+                    cursor: pointer;
+                }
+                li.active{
+                    background: #565656;
+                    color: white;
+                }
+            }
+        }
+        .list-power{  
+            display: flex;
+            flex-flow: row;
+            flex-wrap: wrap;
+            width: 85%;
+            .item-container{    
+                display: flex;
+                flex-flow: row;
+                flex-wrap: wrap;
+                width: 100%;
+                .item{
+                    width: 35%;
+                    display: flex;
+                    flex-flow: row;
+                    height: 3em;
+                    p{
+                        text-align: left;
+                        align-self: center;
+                        width: 35%;
+                    }
+                    input{
+                        margin-left: 1em;
+                        height: 50%;
+                        -ms-grid-row-align: center;
+                        align-self: center;
+                        padding: 5px 10px;
+                        font-size: 24px;
+                        width: 30%;
+                        text-align: center;
+                    }
+                }
+            }     
+        }
+        .actions{
+            margin-top: 2em;
+            height: 50px;
+            display: flex;
+            flex-flow: row;
+            button{
+                align-self: center;
+                height: 70%;
+            }
+            button.abortBtn{
+                width: 100px;
+                margin-right: 20px;
+                border: none;
+                cursor: pointer;
+            }
+            button.saveBtn{
+                background: #2020d4;
+                border: none;
+                color: white;
+                width: 100px;
+                margin-right: 20px;
+                cursor: pointer;
+            }
+        }
+    }
+}
