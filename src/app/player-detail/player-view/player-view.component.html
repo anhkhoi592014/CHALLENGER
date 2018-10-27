@@ -45,7 +45,7 @@
     <div class="team-section">
       <h2>Các đội bóng hiện tham gia: </h2>
       <div class="row" *ngIf = "listTeams.length > 0">
-        <div class="img-container" *ngFor = "let team of listTeams">
+        <div class="img-container" *ngFor = "let team of listTeams" (click)= "viewTeam(team);">
           <img src="{{ team.ImgUrl }}">
         </div>
       </div>

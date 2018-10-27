@@ -1,0 +1,64 @@
+<div class="container">
+  <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
+  <div class="overlay">
+    <div class="box">
+      <img src="../../assets/swords.png">
+      <p>Thách Đấu</p>
+    </div>
+  </div>
+  <div class="content">
+    <div class="row logorow">
+      <div class="logo">
+        <div class="img-container">
+          <img src="{{ team.ImgUrl }}">
+        </div>      
+      </div>
+      <div class="team-info">
+        <div class="row"><p>Tên đội : </p><span>{{team.Fullname}}</span></div>
+        <div class="row"><p>Quận/Huyện : </p><span>{{team.Ward}}</span></div>
+        <div class="row"><p>Tỉnh/Thành phố :</p><span>{{team.City}}</span></div>
+        <div class="row" *ngIf="teamAdmin"><p>Đội trưởng : </p><span>{{teamAdmin.Fullname}}</span></div>
+        <div class="row"><p>Tổng số thành viên : </p><span>{{totalMember}}</span></div>
+        <div class="row"><p>Điểm số : </p><span>{{team.TotalScore}}</span></div>
+      </div>
+    </div>
+    <div class="row statsrow">
+      <div class="win-rate-container">
+        <p>Tỷ lệ thắng (%)</p>
+        <div class="chart">
+          <canvas id="pieChart"></canvas>
+        </div>
+      </div>
+      <div class="team-stat">
+        <div class="box">
+          <div class="img-container">
+            <img src="../../assets/score.png">
+          </div>
+          <p>Điểm</p>
+          <span>{{ team.TotalScore }}</span>
+        </div>
+        <div class="box">
+          <div class="img-container">
+            <img src="../../assets/versus.png">
+          </div>
+          <p>Số trận đã đá</p>
+          <span>{{ team.TotalMatch }}</span>
+        </div>
+        <div class="box">
+          <div class="img-container">
+            <img src="../../assets/winner.png">
+          </div>
+          <p>Số trận thắng</p>
+          <span>{{ team.TotalWin }}</span>
+        </div>
+        <div class="box">
+          <div class="img-container">
+            <img src="../../assets/goal.png">
+          </div>
+          <p>Tổng số bàn thắng</p>
+          <span>{{ team.TotalGoal }}</span>
+        </div>    
+      </div>
+    </div>
+  </div>
+</div>  

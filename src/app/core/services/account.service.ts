@@ -20,6 +20,7 @@ const httpOptions = {
 })
 export class AccountService {
   private _users :BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
+  private _listUser :BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
   private _powers :BehaviorSubject<IPower[]> = new BehaviorSubject<IPower[]>([]);
   private _teams :BehaviorSubject<ITeam[]> = new BehaviorSubject<ITeam[]>([]);
   private _positions :BehaviorSubject<IUserPosition[]> = new BehaviorSubject<IUserPosition[]>([]);
@@ -40,12 +41,17 @@ export class AccountService {
   get Positions(){
     return this._positions.asObservable();
   }
+
+  get listUsers(){
+    return this._listUser.asObservable();
+  }
+
   // Lấy data từ server
   getUsersFromServer(){
     this.http.get(SystemConstants.BASE_API + 'users')
     .subscribe(data => {
       //Truyền data tới behaviorSubject đã subcribe (Truyền data vào hàm subcribe)
-      this._users.next(<IPlayer[]>data);
+      this._listUser.next(<IPlayer[]>data);
     })
   }
   getTeamsFromServer(){
@@ -61,7 +67,6 @@ export class AccountService {
     })
   }
   editProfile(info: any,id: any): Observable<Boolean>{
-    console.log(JSON.stringify(info));
     return this.http.put(SystemConstants.BASE_API + 'users/edit/' + id,JSON.stringify(info),httpOptions)
     .pipe(
       map((res) =>{
@@ -101,6 +106,7 @@ export class AccountService {
     this.http.put(SystemConstants.BASE_API + 'user/' + user_id +'/position/update',JSON.stringify({position_id,type}),httpOptions)
     .subscribe(res => {
         this._users.next(<IPlayer[]>res);
+        this.getUserPositions(user_id);
     });
   }
 
@@ -125,6 +131,7 @@ export class AccountService {
     )
   }
 
+  // Cập nhập Danh sách chỉ số của cầu thủ
   updateUserPowers(id: any,data: IPower[]): Observable<boolean> {
     return this.http.put(SystemConstants.BASE_API + 'user/'+ id +'/powers/update',data,httpOptions).
     pipe(
@@ -136,4 +143,7 @@ export class AccountService {
       })
     );
   }
+  
+  //Lấy Danh Sách Team
+
 }

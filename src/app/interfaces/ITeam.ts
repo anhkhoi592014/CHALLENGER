@@ -8,7 +8,7 @@ export interface ITeam {
     TotalMatch?: number;
     TotalWin?: number;
     Ward?: String;
-    CityId?: number;
+    City?: String;
     Description?: String;
     Status?: boolean;
     created_at?: Date;

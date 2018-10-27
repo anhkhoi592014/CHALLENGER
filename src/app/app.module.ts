@@ -15,8 +15,8 @@ import { FilterPipe } from './pipes/filter.pipe';
 import { PlayerDetailComponent } from './player-detail/player-detail.component';
 import { SearchTeamComponent } from './search-team/search-team.component';
 import { TeamDetailComponent } from './team-detail/team-detail.component';
-import { TeamHistoryMatchComponent } from './team-history-match/team-history-match.component';
-import { HistoryMatchComponent } from './team-history-match/history-match.component';
+import { TeamHistoryMatchComponent } from './team-detail/team-history-match/team-history-match.component';
+import { HistoryMatchComponent } from './team-detail/team-history-match/history-match.component';
 import { TeamFormationComponent } from './team-detail/team-formation/team-formation.component';
 import { AuthenGuard } from './core/guards/authen.guard';
 import { HttpClientModule }    from '@angular/common/http';
@@ -29,6 +29,9 @@ import { ChangePasswordComponent } from './player-detail/change-password/change-
 import { PlayerEditInfoComponent } from './player-detail/player-edit/player-edit-info/player-edit-info.component';
 import { PlayerEditPowerComponent } from './player-detail/player-edit/player-edit-power/player-edit-power.component';
 import { PositionService } from './core/services/position.service';
+import { TeamViewComponent } from './team-detail/team-view/team-view.component';
+import { TeamManageComponent } from './team-detail/team-manage/team-manage.component';
+import { TeamsComponent } from './teams/teams.component';
 const appRoute:Routes = [
   {
     path:'login',
@@ -53,6 +56,17 @@ const appRoute:Routes = [
   {
     path:'search-team',
     component:SearchTeamComponent,
+    canActivate: [AuthenGuard]
+  },
+  {
+    path:'teams',
+    redirectTo: 'teams/select',
+    pathMatch: 'full',
+    canActivate: [AuthenGuard]
+  },
+  {
+    path:'teams/select',
+    component:TeamsComponent,
     canActivate: [AuthenGuard]
   },
   {
@@ -99,6 +113,41 @@ const appRoute:Routes = [
         canActivate: [AuthenGuard]
       }
     ]
+  },
+  {
+    path:'team-details',
+    redirectTo: 'dashboard',
+    pathMatch: 'full',
+    canActivate: [AuthenGuard],
+    
+  },
+  {
+    path:'team-details/:id',
+    component:TeamDetailComponent,
+    canActivate: [AuthenGuard],
+    children: [
+      {
+        path:'',
+        component: TeamViewComponent,
+        pathMatch: 'full',
+        canActivate: [AuthenGuard]  
+      },
+      {
+        path:'history-match',
+        component: TeamHistoryMatchComponent,
+        canActivate: [AuthenGuard]
+      },
+      {
+        path:'formation',
+        component: TeamFormationComponent,
+        canActivate: [AuthenGuard]
+      },
+      {
+        path:'manage',
+        component: TeamManageComponent,
+        canActivate: [AuthenGuard]
+      }
+    ]
   }
 ]
 @NgModule({
@@ -119,7 +168,10 @@ const appRoute:Routes = [
     LoadingSpinnerComponent,
     ChangePasswordComponent,
     PlayerEditInfoComponent,
-    PlayerEditPowerComponent
+    PlayerEditPowerComponent,
+    TeamViewComponent,
+    TeamManageComponent,
+    TeamsComponent
   ],
   imports: [
     BrowserModule,

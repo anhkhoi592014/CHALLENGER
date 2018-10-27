@@ -53,7 +53,7 @@ export class SearchPlayerComponent implements OnInit {
   listPlayerResult: IPlayer[]= [];
   playerFocusing: IPlayer = {};
   playerCity: String = "";
-  playerAge: number = null;
+  playerAge: number = 0;
   filterPlayer: string = "";
 
   listPlayers : IPlayer[];
@@ -64,13 +64,14 @@ export class SearchPlayerComponent implements OnInit {
     
   ) { }
   ngOnInit() {
-    setTimeout(() => {
-      this.accountServices.Users.subscribe(data => {
+    this.accountServices.listUsers.subscribe(data => {
+      if(data.length == 0){
+        this.accountServices.getUsersFromServer();
+      }else{
         this.listPlayerResult = data;
         this.showSpinner = false;
-      });
-    this.accountServices.getUsersFromServer();
-    }, 1000);
+      }
+    });
   }
   
   changeSelection(ply: IPlayer){
@@ -99,6 +100,10 @@ export class SearchPlayerComponent implements OnInit {
     this.listPlayerResult = this.listPlayerClone;
   }
   viewDetail(id :any){
-    this.router.navigate([UrlConstants.PLAYER_DETAILS + '/' + id]);
+    this.showSpinner = true;
+    this.accountServices.getUserById(id);
+    setTimeout(()=>{
+      this.router.navigate([UrlConstants.PLAYER_DETAILS + '/' + id])
+    },2000);
   }
 }

@@ -3,6 +3,8 @@ import { IMenu } from '../interfaces/IMenu';
 import { ITeam } from '../interfaces/ITeam';
 import { Title } from '@angular/platform-browser';
 import { ISubMenu } from '../interfaces/ISubMenu';
+import { AccountService } from '../core/services/account.service';
+import { SystemConstants } from '../core/common/system.constants';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,8 +12,6 @@ import { ISubMenu } from '../interfaces/ISubMenu';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-
-  constructor() { }
   listMenu : IMenu[] = [
     {id:1,code:'dashboard', title : 'Dashboard',imgUrl : '../../assets/mapView.png' },
     {id:2,code:'tk', title : 'Tìm kiếm',imgUrl : '../../assets/loop.png',subMenu :[
@@ -35,7 +35,12 @@ export class DashboardComponent implements OnInit {
 
   longitude = 106.699878;
   latitude = 10.821923;
+
+  constructor(
+    private accountServices: AccountService
+  ) { }
   ngOnInit() {
+    this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER)); 
   }
   locationChosen(event){
     this.latitude = event.coords.lat;

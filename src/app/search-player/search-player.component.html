@@ -1,6 +1,8 @@
 <div class="container">
   <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
   <div class="search">
+    
+      <loading-spinner *ngIf="showSpinner"></loading-spinner>
     <div class="search-section">
       <div class="search-input">
         <img src="../../assets/search.png">
@@ -40,7 +42,6 @@
       </div>
     </div>
       <div class="list-player">
-        <loading-spinner *ngIf="showSpinner"></loading-spinner>
         <div class="box" *ngFor="let player of listPlayerResult | filter : filterPlayer" (mouseenter)="changeSelection(player);">
             <div class="player-container" (click) = "viewDetail(player.id)">
               <div class="img-container">

@@ -3,7 +3,7 @@ import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SystemConstants } from '../common/system.constants';
 import { AccountService } from './account.service';
-
+import { IPosition } from 'src/app/interfaces/iposition';
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  'application/json'
@@ -13,7 +13,7 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class PositionService {
-  private _positions :BehaviorSubject<Object[]> = new BehaviorSubject<Object[]>([]);
+  private _positions :BehaviorSubject<IPosition[]> = new BehaviorSubject<IPosition[]>([]);
   constructor(
     private accountService: AccountService,
     private http: HttpClient
@@ -23,9 +23,15 @@ export class PositionService {
     return this._positions.asObservable();
   }
 
+  getPosition(id: any){
+    this.http.get(SystemConstants.BASE_API + 'positions/' + id).subscribe(res => {
+      this._positions.next(<IPosition[]>res);
+    });
+  }
+
   getPositionsFromServer(){
     this.http.get(SystemConstants.BASE_API + 'positions').subscribe(res => {
-      this._positions.next(<Object[]>res);
+      this._positions.next(<IPosition[]>res);
     });
   }
   
@@ -64,7 +70,6 @@ export class PositionService {
 
   // Sữa Vị Trí Phụ
   updateUserExtraPosition(id: number, position_id: number, user_id: any){
-    console.log(JSON.stringify({id,position_id,user_id}));
     this.http.put(SystemConstants.BASE_API + 'user/positions/ep/update',
     JSON.stringify({id,position_id,user_id}),httpOptions).subscribe(res =>{
       if(res == 1){

@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { IMenu } from '../../interfaces/IMenu';
 import { IPlayer } from '../../interfaces/IPlayer';
+import { AccountService } from 'src/app/core/services/account.service';
+import { ActivatedRoute } from '@angular/router';
+import { SystemConstants } from 'src/app/core/common/system.constants';
+import { TeamService } from 'src/app/core/services/team.service';
+import { IMember } from 'src/app/interfaces/IMember';
+import { IRole } from 'src/app/interfaces/irole';
+import { PositionService } from 'src/app/core/services/position.service';
+import { IPosition } from 'src/app/interfaces/iposition';
 
 @Component({
   selector: 'app-team-formation',
@@ -9,28 +17,53 @@ import { IPlayer } from '../../interfaces/IPlayer';
 })
 export class TeamFormationComponent implements OnInit {
 
-  playerChoiced :number = 1;
-  
-  constructor() { }
+  playerChoiced :IPlayer = {};
+  playerChoicedAge : number = 0;
+  playerChoicedPosition : IPosition = {}; 
+  teamMembers: IMember[] = [];
+  listPlayer: IPlayer[] = [];
+  listPlayerRoles: IRole[] = [];
 
-  ngOnInit() {
+  constructor(
+    private teamServices: TeamService,
+    private positionServices: PositionService
+  ) {}
+
+  ngOnInit() { 
+    this.teamServices.Users.subscribe(res => {
+      this.listPlayer = <IPlayer[]>res;
+      this.playerChoiced = this.listPlayer[0];
+      this.playerChoicedAge = (new Date().getFullYear() - new Date(this.listPlayer[0].DateOfBirth).getFullYear());
+    });
+    this.teamServices.Members.subscribe(res =>{
+      this.teamMembers = <IMember[]>res;
+      this.positionServices.Positions.subscribe(res =>{
+        this.playerChoicedPosition = <IPosition>res;
+      });
+      this.positionServices.getPosition(this.teamMembers[0].position_id);
+    });
+    if(!localStorage.getItem(SystemConstants.IS_USER_LOADED)){
+      this.teamServices.getTeamMembers(localStorage.getItem(SystemConstants.CURRENT_TEAM));
+      this.teamServices.getTeamMembersDetails(localStorage.getItem(SystemConstants.CURRENT_TEAM));  
+    }
   }
-  
-  listPlayer: IPlayer[]= [
-  ];
+    
 
-  
+  show(){
+    console.log(this.teamMembers);
+  }
   listMenu : IMenu[] = [
-    { id:1, title : 'Thông tin đội',imgUrl : '../../assets/timcauthu.png' },
-    { id:2,title : 'Lịch sữ đấu',imgUrl : '../../assets/map.png' },
-    { id:3,title : 'Đội hình',imgUrl : '../../assets/doibong.png' },
-    { id:4,title : 'Quản lý đội',imgUrl : '../../assets/thongtincanhan.png' },
-    { id:5,title : 'Quay lại',imgUrl : '../../assets/dangxuat.png' },
+    { id:1,code:'ttdb',title : 'Thông tin đội',imgUrl : '../../assets/timcauthu.png' },
+    { id:2,code:'tlsd',title : 'Lịch sữ đấu',imgUrl : '../../assets/map.png' },
+    { id:3,code:'tdh',title : 'Đội hình',imgUrl : '../../assets/doibong.png' },
+    { id:4,code:'qld',title : 'Quản lý đội',imgUrl : '../../assets/thongtincanhan.png' },
+    { id:5,code:'back',title : 'Quay lại',imgUrl : '../../assets/dangxuat.png' },
   ];
 
   selectedMenu : number = 3;
 
-  choicePlayer(id: number): void{
-    this.playerChoiced = id;
+  choicePlayer(player: IPlayer): void{
+    this.playerChoiced = player;
+    this.playerChoicedAge = (new Date().getFullYear() - new Date(player.DateOfBirth).getFullYear());
   }
 }

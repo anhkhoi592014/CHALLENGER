@@ -42,7 +42,7 @@
         <div class="list-player">
             <loading-spinner *ngIf="showSpinner"></loading-spinner>
             <div class="box" *ngFor="let team of listTeamsResult | filter : filterPlayer" (mouseenter)="changeSelection(team);">
-                <div class="player-container">
+                <div class="player-container" (click) = "viewTeam(team);">
                 <div class="img-container">
                     <img src="{{ team.ImgUrl }}">
                 </div>

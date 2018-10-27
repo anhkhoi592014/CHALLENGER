@@ -9,16 +9,15 @@ import { PositionService } from 'src/app/core/services/position.service';
 import { IUserPosition } from 'src/app/interfaces/iuser-position';
 import { UrlConstants } from 'src/app/core/common/url.constants';
 import { ToastrManager } from 'ng6-toastr-notifications';
-import { JsonpCallbackContext } from '@angular/common/http/src/jsonp';
 
 @Component({
   selector: 'app-player-edit-info',
   templateUrl: './player-edit-info.component.html',
   styleUrls: ['./player-edit-info.component.scss']
 })
-export class PlayerEditInfoComponent  implements OnInit, AfterContentChecked {
+export class PlayerEditInfoComponent  implements OnInit{
   
-  player : IPlayer;
+  player : IPlayer = {};
   listTeams: ITeam[] = [];
   imgUrl: string = "";
   selectedFile: File = null;
@@ -62,8 +61,6 @@ export class PlayerEditInfoComponent  implements OnInit, AfterContentChecked {
   mainUserPosition: IUserPosition = null;
   extraUserPosition: IUserPosition = null;
   extraPositionId: number = 0;
-
-  test = true;
   constructor(
     private accountServices : AccountService,
     private positionServices : PositionService,
@@ -74,37 +71,40 @@ export class PlayerEditInfoComponent  implements OnInit, AfterContentChecked {
 
   ngOnInit() {
     this.accountServices.Users.subscribe(res => {
-      this.player = <IPlayer>res;   
-      this.imgUrl = <string>this.player.ImgUrl;
-      this.dateOfBirth = new Date(this.player.DateOfBirth).getFullYear().toString() + '-' 
-      +  ((new Date(this.player.DateOfBirth).getMonth() + 1 < 10) ? '0' + new Date(this.player.DateOfBirth).getMonth() + 1 : new Date(this.player.DateOfBirth).getMonth() + 1)+'-'
-      + ((new Date(this.player.DateOfBirth).getDate() + 1 < 10) ? '0' + new Date(this.player.DateOfBirth).getDate().toString() : new Date(this.player.DateOfBirth).getDate().toString())
-      ;
+      if(res.length != 0){
+        this.player = <IPlayer>res;   
+        this.imgUrl = <string>this.player.ImgUrl;
+        this.dateOfBirth = new Date(this.player.DateOfBirth).getFullYear().toString() + '-' 
+        +  ((new Date(this.player.DateOfBirth).getMonth() + 1 < 10) ? '0' + new Date(this.player.DateOfBirth).getMonth() + 1 : new Date(this.player.DateOfBirth).getMonth() + 1)+'-'
+        + ((new Date(this.player.DateOfBirth).getDate() + 1 < 10) ? '0' + new Date(this.player.DateOfBirth).getDate().toString() : new Date(this.player.DateOfBirth).getDate().toString());
+      this.showSpinner = false;
+      this.listWard = this.listWardData.find(data => data.name == this.player.City).listWard;
+      }else{
+        this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));    
+      }
     });
     this.accountServices.Teams.subscribe(res => {
-      this.listTeams = <ITeam[]>res;
+      (res.length != 0)?
+      this.listTeams = <ITeam[]>res:
+      this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
     });
     this.positionServices.Positions.subscribe(res =>{
-      this.listPosition = <Object[]>res;   
+      (res.length != 0)?
+      this.listPosition = <Object[]>res:
+      this.positionServices.getPositionsFromServer();    
     });
     this.accountServices.Positions.subscribe(res =>{
-      this.playerPosition = <IUserPosition[]>res; 
-      this.mainUserPosition = this.playerPosition.filter(p => p.TypeCode == "MP")[0]; 
-      if((this.extraUserPosition = this.playerPosition.filter(p => p.TypeCode == "EP")[0])){
-        this.extraPositionId = this.extraUserPosition.position_id;
+      if((res.length != 0)){
+        this.playerPosition = <IUserPosition[]>res; 
+        this.mainUserPosition = this.playerPosition.filter(p => p.TypeCode == "MP")[0]; 
+        if((this.extraUserPosition = this.playerPosition.filter(p => p.TypeCode == "EP")[0])){
+          this.extraPositionId = this.extraUserPosition.position_id;
+        }  
+      }else{
+        this.accountServices.getUserPositions(localStorage.getItem(SystemConstants.CURRENT_USER));
       }
-      this.showSpinner = false;
-      
     });
-    this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
-    this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
-    this.positionServices.getPositionsFromServer();
-    this.accountServices.getUserPositions(localStorage.getItem(SystemConstants.CURRENT_USER));
   }
-  ngAfterContentChecked(): void {
-    this.listWard = this.listWardData.find(data => data.name == this.player.City).listWard;
-  }
-  
   changeCity(val: number){
     if(val == 28){
       this.player.City = 'TP.Hồ Chí Minh';
@@ -188,12 +188,11 @@ export class PlayerEditInfoComponent  implements OnInit, AfterContentChecked {
     
     this.accountServices.editProfile(this.player,localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res => {
       if(res){
-        this.toast.successToastr('Sữa thông tin thành công.', 'Thông báo !!!',{
-          position: 'top-right',
-          animate: 'slideFromTop'
-        });
-        this.router.navigate([UrlConstants.PLAYER_DETAILS]);
-        
+          this.router.navigate([UrlConstants.PLAYER_DETAILS]);
+          this.toast.successToastr('Sữa thông tin thành công.', 'Thông báo !!!',{
+            position: 'top-right',
+            animate: 'slideFromTop'
+          });
       }else{
         this.toast.errorToastr('Sữa thông tin thất bại.', 'Thông báo !!!',{
           position: 'top-right',

@@ -44,33 +44,45 @@ export class PlayerEditPowerComponent implements OnInit {
 
   ngOnInit() {
     this.accountServices.Users.subscribe(res => {
-      this.player = <IPlayer>res;
-      this.showSpinner = false;
+      if(res.length == 0){
+        this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
+      }else{
+        this.player = <IPlayer>res;
+        this.showSpinner = false;
+      }
     });
     this.accountServices.Powers.subscribe(res => {
-      this.powersData = <IPower[]>res;
-      this.listMainPowers = <IPower[]>this.powersData.filter(e => e.TypeCode == "MP");
-      this.listExtraPowers = <IPower[]>this.powersData.filter(e => e.TypeCode == "EP");
-      this.listPowerView = this.listMainPowers;
-      this.showSpinner = false;
+      if(res.length == 0){
+        this.accountServices.getUserPowers(localStorage.getItem(SystemConstants.CURRENT_USER));
+      }else{
+        this.powersData = <IPower[]>res;
+        this.listMainPowers = <IPower[]>this.powersData.filter(e => e.TypeCode == "MP");
+        this.listExtraPowers = <IPower[]>this.powersData.filter(e => e.TypeCode == "EP");
+        this.listPowerView = this.listMainPowers;
+        this.showSpinner = false;
+      }
     });
     this.accountServices.Positions.subscribe(res =>{
-      this.userPositions = <IUserPosition[]>res;
-      if(this.mainPosition = this.userPositions.filter(p => p.TypeCode == 'MP')[0]){
-        this.showMainPosition = true;
+      if(res.length == 0){
+        this.accountServices.getUserPositions(localStorage.getItem(SystemConstants.CURRENT_USER));
       }else{
-        this.showMainPosition = false;
+        this.userPositions = <IUserPosition[]>res;
+        if(this.mainPosition = this.userPositions.filter(p => p.TypeCode == 'MP')[0]){
+          this.showMainPosition = true;
+        }else{
+          this.showMainPosition = false;
+        }
+        if(this.extraPosition = this.userPositions.filter(p => p.TypeCode == 'EP')[0]) {
+          this.showExtraPosition = true;
+        }else{
+          this.showExtraPosition = false;
+        } 
+        this.showSpinner = false;
       }
-      if(this.extraPosition = this.userPositions.filter(p => p.TypeCode == 'EP')[0]) {
-        this.showExtraPosition = true;
-      }else{
-        this.showExtraPosition = false;
-      } 
-      this.showSpinner = false;
     });
-    this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
-    this.accountServices.getUserPowers(localStorage.getItem(SystemConstants.CURRENT_USER));
-    this.accountServices.getUserPositions(localStorage.getItem(SystemConstants.CURRENT_USER));
+    //
+    //
+    //
   }
 
   changePositionView(po : String){

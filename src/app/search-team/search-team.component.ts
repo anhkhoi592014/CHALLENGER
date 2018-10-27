@@ -3,6 +3,9 @@ import { IMenu } from '../interfaces/IMenu';
 import { ITeam } from '../interfaces/ITeam';
 import { IPlayer } from '../interfaces/IPlayer';
 import { AccountService } from '../core/services/account.service';
+import { Router } from '@angular/router';
+import { UrlConstants } from '../core/common/url.constants';
+import { SystemConstants } from '../core/common/system.constants';
 
 @Component({
   selector: 'app-search-team',
@@ -54,7 +57,8 @@ export class SearchTeamComponent implements OnInit {
   filterTeam: string = "";
 
   constructor(
-    private accountService: AccountService
+    private accountService: AccountService,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -73,12 +77,16 @@ export class SearchTeamComponent implements OnInit {
     (val == 28) ? (this.listWard = this.listWardData.find(x => x.id == 28).listWard) : 
                  (this.listWard = this.listWardData.find(x => x.id == 24).listWard);
  }
-
   changeSelection(team: ITeam){
     this.teamFocusing = team;
-    if(this.listWardData.filter(city => city.id == this.teamFocusing.CityId)[0])
+    if(this.listWardData.filter(city => city.name == this.teamFocusing.City)[0])
     {
-      this.teamCity = this.listWardData.filter(city => city.id == this.teamFocusing.CityId)[0].name; 
+      this.teamCity = this.listWardData.filter(city => city.name == this.teamFocusing.City)[0].name;
     }
+  }
+  viewTeam(team : ITeam){
+    localStorage.removeItem(SystemConstants.CURRENT_TEAM);
+    localStorage.setItem(SystemConstants.CURRENT_TEAM,team.id.toString());
+    this.router.navigate([UrlConstants.TEAM_DETAILS + "/" + team.id]);
   }
 }

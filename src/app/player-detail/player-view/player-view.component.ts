@@ -15,7 +15,7 @@ import { IUserPosition } from 'src/app/interfaces/iuser-position';
   styleUrls: ['./player-view.component.scss']
 })
 export class PlayerViewComponent implements OnInit {
-  player : IPlayer;
+  player : IPlayer = {};
   powersData : IPower[] = [];
   listPowers : IPower[] = [];
   extraPowers : IPower[] = [];
@@ -39,7 +39,6 @@ export class PlayerViewComponent implements OnInit {
   selectedMenu: number = 1;
   constructor(
     private accountServices : AccountService,
-    private positionServices : PositionService,
     private route: ActivatedRoute,
   ) { 
     this.route.params.subscribe(param => {
@@ -52,49 +51,61 @@ export class PlayerViewComponent implements OnInit {
   ngOnInit() {
     // Lấy dữ liệu 
     this.accountServices.Users.subscribe(res => {
-      this.player = <IPlayer>res;
-      this.playerAge = (new Date().getFullYear() - new Date(this.player.DateOfBirth).getFullYear());
-      this.spinnerLoading = false;
+      if(res.length != 0){
+        console.log(1);
+        this.player = <IPlayer>res;
+        this.playerAge = (new Date().getFullYear() - new Date(this.player.DateOfBirth).getFullYear());
+        this.spinnerLoading = false;
+      }else{
+        this.userId?
+          this.accountServices.getUserById(this.userId):
+          this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
+      }
     });
     this.accountServices.Powers.subscribe(res => {
-      this.powersData = res;
-      this.listPowers = res.filter(e => (e.TypeCode == "MP" && e.ViewStatus == 1));
-      this.spinnerLoading = false;
+      if(res.length != 0){
+        this.powersData = res;
+        this.listPowers = res.filter(e => (e.TypeCode == "MP" && e.ViewStatus == 1));
+        // Delay progress bar
+        this.spinnerLoading = false;
+        setTimeout(() => this.setProgressbar(), 200); 
+      }else{
+        this.userId?
+        this.accountServices.getUserPowers(this.userId):
+        this.accountServices.getUserPowers(localStorage.getItem(SystemConstants.CURRENT_USER));     
+        setTimeout(() => this.setProgressbar(), 200); 
+      }
     });
     this.accountServices.Teams.subscribe(res => {
-      this.listTeams = <ITeam[]>res;
-      this.spinnerLoading = false;
+      if(res.length != 0){
+        this.listTeams = <ITeam[]>res;
+        this.spinnerLoading = false;
+      }else{
+        this.userId?
+        this.accountServices.getUsersTeams(this.userId):
+        this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
+      }
     });
     this.accountServices.Positions.subscribe(res =>{
-      this.userPositions = <IUserPosition[]>res;
-      if(this.mainPosition = this.userPositions.filter(p => p.TypeCode == 'MP')[0]){
-        this.showMainPosition = true;
+      if(res.length != 0){
+        this.userPositions = <IUserPosition[]>res;
+        if(this.mainPosition = this.userPositions.filter(p => p.TypeCode == 'MP')[0]){
+          this.showMainPosition = true;
+        }else{
+          this.showMainPosition = false;
+        }
+        if(this.extraPosition = this.userPositions.filter(p => p.TypeCode == 'EP')[0]) {
+          this.showExtraPosition = true;
+        }else{
+          this.showExtraPosition = false;
+        }
       }else{
-        this.showMainPosition = false;
+        this.userId ? 
+        this.accountServices.getUserPositions(this.userId):
+        this.accountServices.getUserPositions(localStorage.getItem(SystemConstants.CURRENT_USER));
       }
-      if(this.extraPosition = this.userPositions.filter(p => p.TypeCode == 'EP')[0]) {
-        this.showExtraPosition = true;
-      }else{
-        this.showExtraPosition = false;
-      }
-        
       this.spinnerLoading = false;
     });
-    // Xem thong tin ca nhan nguoi la
-    if(this.userId){
-      this.accountServices.getUserById(this.userId);
-      this.accountServices.getUserPowers(this.userId);
-      this.accountServices.getUsersTeams(this.userId);
-      this.accountServices.getUserPositions(this.userId);
-    }else{
-      // Xem thong tin ca nhan user
-      this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
-      this.accountServices.getUserPowers(localStorage.getItem(SystemConstants.CURRENT_USER));
-      this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
-      this.accountServices.getUserPositions(localStorage.getItem(SystemConstants.CURRENT_USER));
-    }
-    // Delay progress bar
-    setTimeout(() => this.setProgressbar(), 1000);
   } 
   log(){
     console.log(this.mainPosition); 
@@ -111,5 +122,8 @@ export class PlayerViewComponent implements OnInit {
       after[i].style.transition = "1s cubic-bezier(.24,.72,.35,1.01),-webkit- 1s cubic-bezier(.24,.72,.35,1.01)";
       after[i].style.width = percent + "%"; 
     }
+  }
+  viewTeam(team: ITeam){
+    console.log(team);
   }
 }

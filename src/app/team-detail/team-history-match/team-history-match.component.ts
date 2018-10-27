@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { IMenu } from '../interfaces/IMenu';
+import { IMenu } from '../../interfaces/IMenu';
 import { trigger,state,style,animate,transition } from '@angular/animations';
 
 @Component({
-  selector: 'app-history-match',
+  selector: 'app-team-history-match',
   animations: [
     trigger('hideShow',[
       state('hide',style({ zIndex : '-1' })),
@@ -22,15 +22,22 @@ import { trigger,state,style,animate,transition } from '@angular/animations';
       transition('show=>hide' ,[animate('300ms')])
     ])
   ],
-  templateUrl: './history-match.component.html',
-  styleUrls: ['./history-match.component.scss'],
+  templateUrl: './team-history-match.component.html',
+  styleUrls: ['./team-history-match.component.scss'],
   
 })
-export class HistoryMatchComponent implements OnInit {
- 
+export class TeamHistoryMatchComponent implements OnInit {
+  listMenu : IMenu[] = [
+    { id:1,code:'ttdb',title : 'Thông tin đội',imgUrl : '../../assets/timcauthu.png' },
+    { id:2,code:'tlsd',title : 'Lịch sữ đấu',imgUrl : '../../assets/map.png' },
+    { id:3,code:'tdh',title : 'Đội hình',imgUrl : '../../assets/doibong.png' },
+    { id:4,code:'qld',title : 'Quản lý đội',imgUrl : '../../assets/thongtincanhan.png' },
+    { id:5,code:'back',title : 'Quay lại',imgUrl : '../../assets/dangxuat.png' },
+  ];
+  selectedMenu : number = 2;
   isOVShow:boolean = true;
   isNoteShow:boolean = false;
-  DetailShow:boolean = false;
+  DetailShow:number = 0;
   constructor() { }
 
   ngOnInit() {
@@ -45,7 +52,12 @@ export class HistoryMatchComponent implements OnInit {
       this.isOVShow = false;
     }
   }
-  toggleDetail(){
-    this.DetailShow = !this.DetailShow;
+  toggleDetail(box:any){
+    console.log(box);
+    /*if(this.DetailShow == box){
+      this.DetailShow = 0;
+    }else{  
+      this.DetailShow = box;
+    }*/
   }
 }
