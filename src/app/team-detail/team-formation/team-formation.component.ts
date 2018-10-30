@@ -31,27 +31,29 @@ export class TeamFormationComponent implements OnInit {
 
   ngOnInit() { 
     this.teamServices.Users.subscribe(res => {
-      this.listPlayer = <IPlayer[]>res;
-      this.playerChoiced = this.listPlayer[0];
-      this.playerChoicedAge = (new Date().getFullYear() - new Date(this.listPlayer[0].DateOfBirth).getFullYear());
+      if(res.length == 0){
+        this.teamServices.getTeamMembers(localStorage.getItem(SystemConstants.CURRENT_TEAM));
+      }else{
+        this.listPlayer = <IPlayer[]>res;
+        this.playerChoiced = this.listPlayer[0];
+        this.playerChoicedAge = (new Date().getFullYear() - new Date(this.listPlayer[0].DateOfBirth).getFullYear());
+      }
     });
     this.teamServices.Members.subscribe(res =>{
-      this.teamMembers = <IMember[]>res;
-      this.positionServices.Positions.subscribe(res =>{
-        this.playerChoicedPosition = <IPosition>res;
-      });
-      this.positionServices.getPosition(this.teamMembers[0].position_id);
+      if(res.length == 0){
+        this.teamServices.getTeamMembersDetails(localStorage.getItem(SystemConstants.CURRENT_TEAM));  
+      }else{
+        this.teamMembers = <IMember[]>res;
+        this.positionServices.Positions.subscribe(res =>{
+          res.length == 0 ?
+          this.positionServices.getPosition(this.teamMembers[0].position_id) :
+          this.playerChoicedPosition = <IPosition>res;
+        });
+      } 
     });
-    if(!localStorage.getItem(SystemConstants.IS_USER_LOADED)){
-      this.teamServices.getTeamMembers(localStorage.getItem(SystemConstants.CURRENT_TEAM));
-      this.teamServices.getTeamMembersDetails(localStorage.getItem(SystemConstants.CURRENT_TEAM));  
-    }
+      
   }
     
-
-  show(){
-    console.log(this.teamMembers);
-  }
   listMenu : IMenu[] = [
     { id:1,code:'ttdb',title : 'Thông tin đội',imgUrl : '../../assets/timcauthu.png' },
     { id:2,code:'tlsd',title : 'Lịch sữ đấu',imgUrl : '../../assets/map.png' },

@@ -1,8 +1,9 @@
 <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
 <div class="container">
+    <app-header [title] = "pageTitle"></app-header>
     <div class="content">
         <loading-spinner *ngIf="showSpinner"></loading-spinner>
-        <h1>Chỉ số cầu thủ</h1>
+        
         <div class="row">
             <p>Chọn vị trí: </p>
             <ul>

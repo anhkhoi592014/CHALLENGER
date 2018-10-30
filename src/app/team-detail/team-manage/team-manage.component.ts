@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IMenu } from 'src/app/interfaces/IMenu';
+import { AccountService } from 'src/app/core/services/account.service';
+import { Router } from '@angular/router';
+import { IPlayer } from 'src/app/interfaces/IPlayer';
 
 @Component({
   selector: 'app-team-manage',
@@ -16,10 +19,24 @@ export class TeamManageComponent implements OnInit {
     { id:5,code:'back',title : 'Quay lại',imgUrl : '../../assets/dangxuat.png' },
   ];
   selectedMenu : number = 4;
-  
-  constructor() { }
+  listPlayerResult: IPlayer[] = [];
+  constructor(
+    private accountServices : AccountService,
+    private router: Router,
+    ) { }
 
   ngOnInit() {
+    this.accountServices.listUsers.subscribe(data => {
+      if(data.length == 0){
+        this.accountServices.getUsersFromServer();
+      }else{
+        this.listPlayerResult = data;
+        // this.showSpinner = false;
+      }
+    });
   }
 
+  test(){
+    console.log(this.listPlayerResult);
+  }
 }

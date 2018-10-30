@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, ErrorHandler } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ng6-toastr-notifications';
 
@@ -7,8 +7,8 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AgmCoreModule } from '@agm/core';
-import { MenuComponent } from './menu/menu.component';
-import { SearchPlayerComponent } from './search-player/search-player.component';
+import { MenuComponent } from './shared/menu/menu.component';
+import { SearchPlayerComponent,DialogFriendRequestMessages } from './search-player/search-player.component';
 import { FormsModule ,ReactiveFormsModule  } from '@angular/forms';
 import { RouterModule, Routes} from '@angular/router';
 import { FilterPipe } from './pipes/filter.pipe';
@@ -20,11 +20,12 @@ import { HistoryMatchComponent } from './team-detail/team-history-match/history-
 import { TeamFormationComponent } from './team-detail/team-formation/team-formation.component';
 import { AuthenGuard } from './core/guards/authen.guard';
 import { HttpClientModule }    from '@angular/common/http';
+import { HeaderComponent } from './shared/header/header.component';
 import { LoggedGuard } from './core/guards/logged.guard';
 import { AccountService } from './core/services/account.service';
 import { PlayerViewComponent } from './player-detail/player-view/player-view.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { LoadingSpinnerComponent } from './ui/loading-spinner/loading-spinner.component';
+import { LoadingSpinnerComponent } from './shared/ui/loading-spinner/loading-spinner.component';
 import { ChangePasswordComponent } from './player-detail/change-password/change-password.component';
 import { PlayerEditInfoComponent } from './player-detail/player-edit/player-edit-info/player-edit-info.component';
 import { PlayerEditPowerComponent } from './player-detail/player-edit/player-edit-power/player-edit-power.component';
@@ -32,6 +33,10 @@ import { PositionService } from './core/services/position.service';
 import { TeamViewComponent } from './team-detail/team-view/team-view.component';
 import { TeamManageComponent } from './team-detail/team-manage/team-manage.component';
 import { TeamsComponent } from './teams/teams.component';
+import { ErrorsHandler } from './shared/errors-handler';
+import { MaterialModule } from './material.module';
+import { MatNativeDateModule } from '@angular/material';
+
 const appRoute:Routes = [
   {
     path:'login',
@@ -156,6 +161,7 @@ const appRoute:Routes = [
     LoginComponent,
     DashboardComponent,
     MenuComponent,
+    HeaderComponent,
     SearchPlayerComponent,
     FilterPipe,
     PlayerDetailComponent,
@@ -171,7 +177,8 @@ const appRoute:Routes = [
     PlayerEditPowerComponent,
     TeamViewComponent,
     TeamManageComponent,
-    TeamsComponent
+    TeamsComponent,
+    DialogFriendRequestMessages
   ],
   imports: [
     BrowserModule,
@@ -181,13 +188,19 @@ const appRoute:Routes = [
     FormsModule,
     HttpClientModule,
     NgxSpinnerModule,
+    MatNativeDateModule,
+    MaterialModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAezERfylXQGWKbOyR9XV5aJb_FTZQkApI'
     }),
     RouterModule.forRoot(appRoute)
   ],
+
+  entryComponents: [SearchPlayerComponent, DialogFriendRequestMessages],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [AuthenGuard,LoggedGuard,AccountService,PositionService],
+  providers: [AuthenGuard,LoggedGuard,AccountService,PositionService,{
+    provide: ErrorHandler,
+    useClass: ErrorsHandler}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IPlayer } from 'src/app/interfaces/IPlayer';
 import { SystemConstants } from '../common/system.constants';
-import { UrlConstants } from '../common/url.constants';
 import { IPower } from 'src/app/interfaces/ipower';
 import { ITeam } from 'src/app/interfaces/ITeam';
 import { map } from 'rxjs/operators';
@@ -23,6 +22,7 @@ export class AccountService {
   private _listUser :BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
   private _powers :BehaviorSubject<IPower[]> = new BehaviorSubject<IPower[]>([]);
   private _teams :BehaviorSubject<ITeam[]> = new BehaviorSubject<ITeam[]>([]);
+  private _listTeams :BehaviorSubject<ITeam[]> = new BehaviorSubject<ITeam[]>([]);
   private _positions :BehaviorSubject<IUserPosition[]> = new BehaviorSubject<IUserPosition[]>([]);
   constructor(
     private http: HttpClient
@@ -45,6 +45,9 @@ export class AccountService {
   get listUsers(){
     return this._listUser.asObservable();
   }
+  get listTeams(){
+    return this._listTeams.asObservable();
+  }
 
   // Lấy data từ server
   getUsersFromServer(){
@@ -58,7 +61,7 @@ export class AccountService {
     this.http.get(SystemConstants.BASE_API + 'teams')
     .subscribe(data => {
       //Truyền data tới behaviorSubject đã subcribe (Truyền data vào hàm subcribe)
-      this._teams.next(<ITeam[]>data);
+      this._listTeams.next(<ITeam[]>data);
     })
   }
   getUserById(id: any){
@@ -71,7 +74,6 @@ export class AccountService {
     .pipe(
       map((res) =>{
           if(res){
-            console.log("Update Profile Success");
             this._users.next(<IPlayer[]>res);
             return true;
           }
@@ -95,6 +97,14 @@ export class AccountService {
     })
   }
 
+  
+  addUserPowers(idUser: any,idPosition: any){
+    this.http.post(SystemConstants.BASE_API + 'user/'+ idUser +'/powers/add',
+    JSON.stringify({idPosition}),httpOptions).subscribe(res =>{
+      console.log("Added User Powers");
+      this._powers.next(<IPower[]>res);
+    });
+  }
   // Lấy danh sách đội
   getUsersTeams(id: any){
     this.http.get(SystemConstants.BASE_API + 'users/' + id + '/teams').subscribe(data => {
@@ -103,14 +113,16 @@ export class AccountService {
   }
   
   updatePositionNameToUser(user_id: any,position_id: any,type: string){
+    this.getUserPositions(user_id);
     this.http.put(SystemConstants.BASE_API + 'user/' + user_id +'/position/update',JSON.stringify({position_id,type}),httpOptions)
     .subscribe(res => {
         this._users.next(<IPlayer[]>res);
-        this.getUserPositions(user_id);
     });
   }
 
+
   deleteUserEP(id: any){
+    this.getUserPositions(id);
     this.http.delete(SystemConstants.BASE_API + 'user/' + id +'/position/delete').subscribe(res =>{
       this._users.next(<IPlayer[]>res);
     });
@@ -145,5 +157,82 @@ export class AccountService {
   }
   
   //Lấy Danh Sách Team
+  addUserMainPosition(position_id: number,user_id: any){
+    this.http.post(SystemConstants.BASE_API + 'user/positions/mp/add',
+    JSON.stringify({position_id,user_id}),httpOptions).subscribe(res =>{
+      if(res == 1){
+        console.log("Added Main Position");
+        this.updatePositionNameToUser(user_id,position_id,"MP");
+      }
+    });
+  }
+
+  // Sữa Vị Trí Chính
+  updateUserMainPosition(id: number, position_id: number, user_id: any){
+    this.http.put(SystemConstants.BASE_API + 'user/positions/mp/update',
+    JSON.stringify({id,position_id,user_id}),httpOptions).subscribe(res => {
+      if(res == 1){
+        console.log("Updated Main Position");
+        this.getUserPowers(user_id);
+        this.updatePositionNameToUser(user_id,position_id,"MP");
+      }
+    });
+  }
+
+  // Thêm Vị Trí Phụ
+  addUserExtraPosition(position_id: number,user_id: any){
+    this.http.post(SystemConstants.BASE_API + 'user/positions/ep/add',
+    JSON.stringify({position_id,user_id}),httpOptions).subscribe(res =>{
+      if(res == 1){
+        console.log("Added Extra Position");
+        this.addUserPowers(user_id,position_id);
+        this.updatePositionNameToUser(user_id,position_id,"EP");
+      }
+    });
+  }
+
+  // Sữa Vị Trí Phụ
+  updateUserExtraPosition(id: number, position_id: number, user_id: any){
+    this.http.put(SystemConstants.BASE_API + 'user/positions/ep/update',
+    JSON.stringify({id,position_id,user_id}),httpOptions).subscribe(res =>{
+      if(res == 1){
+        console.log("Updated Extra Position !!!")
+        this.getUserPowers(user_id);
+        this.updatePositionNameToUser(user_id,position_id,"EP");
+      }
+    });
+  }
+
+
+  deleteUserExtraPosition(id: number){
+    this.http.delete(SystemConstants.BASE_API + 'user/positions/ep/delete/' + id,httpOptions).subscribe(res =>{
+      if(res == 1){
+        console.log("Deleted Extra Position");
+        this.getUserPowers(localStorage.getItem(SystemConstants.CURRENT_USER));
+        this.deleteUserEP(localStorage.getItem(SystemConstants.CURRENT_USER));
+      }
+    });
+  }
+  //Extra power 
+  updateListPowers(user_id: any,id: any,position_id: any){
+    this.http.put(SystemConstants.BASE_API + 'user/' + user_id +'/listPower/update',JSON.stringify({position_id,id}),httpOptions)
+    .subscribe(() => {
+      this.updateUserExtraPosition(id,position_id,user_id);
+    });
+  }
+  deleteListPowers(id: any){
+    this.http.delete(SystemConstants.BASE_API + 'user/listPower/delete/'+id,httpOptions)
+    .subscribe(() => {
+      this.deleteUserExtraPosition(id);
+    });
+  }
+
+  //Main power
+  updateListMainPowers(user_id: any,id: any,position_id: any){
+    this.http.put(SystemConstants.BASE_API + 'user/' + user_id +'/listPower/update',JSON.stringify({position_id,id}),httpOptions)
+    .subscribe(() => {
+      this.updateUserMainPosition(id,position_id,user_id);
+    });
+  }
 
 }

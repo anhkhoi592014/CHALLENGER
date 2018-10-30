@@ -14,8 +14,8 @@ const httpOptions = {
 })
 export class PositionService {
   private _positions :BehaviorSubject<IPosition[]> = new BehaviorSubject<IPosition[]>([]);
+  private _listPositions :BehaviorSubject<IPosition[]> = new BehaviorSubject<IPosition[]>([]);
   constructor(
-    private accountService: AccountService,
     private http: HttpClient
     ) { }
     
@@ -23,6 +23,9 @@ export class PositionService {
     return this._positions.asObservable();
   }
 
+  get listPositions(){
+    return this._listPositions.asObservable();
+  }
   getPosition(id: any){
     this.http.get(SystemConstants.BASE_API + 'positions/' + id).subscribe(res => {
       this._positions.next(<IPosition[]>res);
@@ -31,62 +34,7 @@ export class PositionService {
 
   getPositionsFromServer(){
     this.http.get(SystemConstants.BASE_API + 'positions').subscribe(res => {
-      this._positions.next(<IPosition[]>res);
+      this._listPositions.next(<IPosition[]>res);
     });
   }
-  
-  // Thêm Vị Trí Chính
-  addUserMainPosition(position_id: number,user_id: any){
-    this.http.post(SystemConstants.BASE_API + 'user/positions/mp/add',
-    JSON.stringify({position_id,user_id}),httpOptions).subscribe(res =>{
-      if(res == 1){
-        console.log("Added Main Position");
-        this.accountService.updatePositionNameToUser(user_id,position_id,"MP");
-      }
-    });
-  }
-
-  // Sữa Vị Trí Chính
-  updateUserMainPosition(id: number, position_id: number, user_id: any){
-    this.http.put(SystemConstants.BASE_API + 'user/positions/mp/update',
-    JSON.stringify({id,position_id,user_id}),httpOptions).subscribe(res => {
-      if(res == 1){
-        console.log("Updated Main Position");
-        this.accountService.updatePositionNameToUser(user_id,position_id,"MP");
-      }
-    });
-  }
-
-  // Thêm Vị Trí Phụ
-  addUserExtraPosition(position_id: number,user_id: any){
-    this.http.post(SystemConstants.BASE_API + 'user/positions/ep/add',
-    JSON.stringify({position_id,user_id}),httpOptions).subscribe(res =>{
-      if(res == 1){
-        console.log("Added Extra Position");
-        this.accountService.updatePositionNameToUser(user_id,position_id,"EP");
-      }
-    });
-  }
-
-  // Sữa Vị Trí Phụ
-  updateUserExtraPosition(id: number, position_id: number, user_id: any){
-    this.http.put(SystemConstants.BASE_API + 'user/positions/ep/update',
-    JSON.stringify({id,position_id,user_id}),httpOptions).subscribe(res =>{
-      if(res == 1){
-        console.log("Updated Extra Position !!!");
-        this.accountService.updatePositionNameToUser(user_id,position_id,"EP");
-      }
-    });
-  }
-
-
-  deleteUserExtraPosition(id: number){
-    this.http.delete(SystemConstants.BASE_API + 'user/positions/ep/delete/' + id,httpOptions).subscribe(res =>{
-      if(res == 1){
-        console.log("Deleted Extra Position");
-        this.accountService.deleteUserEP(localStorage.getItem(SystemConstants.CURRENT_USER));
-      }
-    });
-  }
-
 }

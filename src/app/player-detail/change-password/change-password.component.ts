@@ -13,6 +13,7 @@ import { UrlConstants } from 'src/app/core/common/url.constants';
   styleUrls: ['./change-password.component.scss']
 })
 export class ChangePasswordComponent implements OnInit {
+  pageTitle: string = "Thay đỗi mật khẩu";
   oldPassword: string = "";
   newPassword: string = "";
   cfNewPassword: string = "";

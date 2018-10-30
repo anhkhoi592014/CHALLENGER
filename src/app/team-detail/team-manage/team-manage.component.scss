@@ -1,0 +1,240 @@
+.container{
+    min-height: 100%;
+    .content{
+        height: 100vh;
+        padding-left: 8%;
+        display: flex;
+        flex-flow: row;
+        background: #f9efef;
+        .wrapper{
+            width: 30%;
+            padding: 1.5%;
+            display: flex;
+            flex-flow: column;
+            .left{
+                width: 100%;
+                height: 100%;
+                display: flex;
+                flex-flow: column;
+                .row{
+                    height: 10%;
+                    display: flex;
+                    flex-flow: row;
+                    justify-content: space-between;
+                    .logo{
+                        align-self: center;
+                        display: flex;
+                        flex-flow: row;
+                        height: 55%;
+                        .img-container{
+                            height: 100%;
+                            align-self: center;
+                            width: 30%;
+                            img{
+                                width: 100%;
+                                height: 100%;
+                            }
+                        }
+                        p{                  
+                            align-self: center;
+                            padding-left: 10px;
+                            font-size: 20px;
+                        }
+                    }
+                    .search-box{
+                        align-self: center;
+                        padding-right: 10px;
+                        width: 60%;
+                        input{
+                            width: 90%;
+                            padding: 6px 7px;
+                            font-size: 16px;
+                        }
+                    }
+                }
+                .list-player{    
+                    border: 2px solid #715f5f;
+                    flex-grow: 1;
+                    font-size: 1.1em;
+                    overflow: auto;
+                    overflow-x: hidden;
+                    p{
+                        padding: 5px;
+                        border-bottom: 1px solid #333;
+                    }
+                    .item{
+                        display: flex;
+                        flex-flow: row;
+                        border-bottom: 1px solid #333;
+                        padding: 7px 5px 0px 0px;
+                        p{              
+                            width: 88%;
+                            padding-left: 10px;
+                            border: none;
+                        }
+                        .img-container{
+                            width: 6%;
+                            height: 80%;
+                            align-self: center;
+                            img{
+                                width: 100%;
+                                cursor: pointer;
+                                transition: 0.1s;
+                            }
+                            img:hover{
+                                transform: rotate(-45deg);
+                            }
+                        }
+                        span{
+                            width: 6%;
+                        }
+                        span{
+                            display: inline-flex;
+                        }
+                        span::before{
+                            content: " ";
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 50%;
+                            align-self: center;
+                            margin-right: 5px;
+                        }
+                        span.online::before{
+                            background:green;
+                        }
+                        span.offline::before{
+                            background: #333;
+                        }
+                    }
+                }
+            }
+        }
+        
+        .right{
+            flex-grow: 1;
+            display: flex;
+            flex-flow: column;
+            padding: 9px 5px;
+            justify-content: space-between;
+            .top{
+                height: 49%;
+                border: 2px solid #333;
+                display: flex;
+                flex-flow: column;
+                .row{
+                    display: flex;
+                    flex-flow: row;
+                    width: 100%;
+                    height: 11%;
+                    align-self: center;
+                    border-bottom: 1px solid #333;
+                    .img-container{
+                        height: 100%;
+                        width: 4%;
+                        display: flex;
+                        img{    
+                            width: 80%;
+                            align-self: center;
+                            margin-left: 5px;
+                        }
+                    }
+                    p{
+                        margin-left: 10px;
+                        align-self: center;
+                    }
+                }
+                .details{
+                    flex-grow: 1;
+                    display: flex;
+                    flex-flow: column;
+                    justify-content: space-between;
+                    .logo{
+                        width: 20%;
+                        display: flex;
+                        flex-flow: row;
+                        border-right: 1px solid #333;
+                        border-bottom: 1px solid #333;
+                        justify-content: space-around;
+                        .img-container{
+                            width: 90%;
+                            align-self: center;
+                            img{
+                                width: 100%;
+                            }
+                        }
+                    }
+                    .row{
+                        display: flex;
+                        flex-flow: row;
+                        border:none;
+                        .item{
+                            width: 50%;
+                            display: flex;
+                            flex-flow: row;
+                            justify-content: space-between;
+                            padding: 5px 10px;
+                        }
+                    }
+                }
+            }
+            .bottom{
+                display: flex;
+                flex-flow: row;
+                justify-content: space-between;
+                height: 49%;
+                .list{
+                    width: 49%;
+                    display: flex;
+                    flex-flow: column;
+                    border: 2px solid #333;
+                    .title{
+                        display: flex;
+                        flex-flow: row;
+                        height: 10%;
+                        justify-content: space-around;
+                        background: #dad7d7;
+                        p,span{            
+                            width: 47%;
+                            align-self: center;
+                            font-size: 1.3em;
+                        }
+                        span{
+                            text-align: right;
+                        }
+                    }
+                }
+                .list-container{
+                    display: flex;
+                    flex-flow: column;
+                    .item{               
+                        display: flex;
+                        flex-flow: column;
+                        padding: 10px 0px;
+                        .name{
+                            display: flex;
+                            flex-flow: row;
+                            justify-content: space-between;
+                            span{                    
+                                font-size: 1.2em;
+                                padding-left: 0.5em;
+                            }
+                            .img-container{                                    
+                                padding-right: 10px;
+                                width: 4%;
+                                img{
+                                    width: 100%;
+                                    cursor: pointer;
+                                }
+                            }
+                        }
+                        .date{
+                            display: flex;
+                            flex-flow: row;
+                            padding-left: 0.5em;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

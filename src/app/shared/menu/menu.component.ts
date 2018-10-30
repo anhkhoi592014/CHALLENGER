@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, Output , EventEmitter} from '@angular/core';
-import { IMenu } from '../interfaces/IMenu';
+import { IMenu } from '../../interfaces/IMenu';
 import { Router } from '@angular/router';
-import { UrlConstants } from '../core/common/url.constants';
-import { AuthenService } from '../core/services/authen.service';
-import { SystemConstants } from '../core/common/system.constants';
+import { UrlConstants } from '../../core/common/url.constants';
+import { AuthenService } from '../../core/services/authen.service';
+import { SystemConstants } from '../../core/common/system.constants';
 
 @Component({
   selector: 'app-menu',

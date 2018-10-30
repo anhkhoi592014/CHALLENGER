@@ -9,6 +9,7 @@ import { PositionService } from 'src/app/core/services/position.service';
 import { IUserPosition } from 'src/app/interfaces/iuser-position';
 import { UrlConstants } from 'src/app/core/common/url.constants';
 import { ToastrManager } from 'ng6-toastr-notifications';
+import { IPosition } from 'src/app/interfaces/iposition';
 
 @Component({
   selector: 'app-player-edit-info',
@@ -16,7 +17,7 @@ import { ToastrManager } from 'ng6-toastr-notifications';
   styleUrls: ['./player-edit-info.component.scss']
 })
 export class PlayerEditInfoComponent  implements OnInit{
-  
+  pageTitle:String = "Chỉnh sữa thông tin";
   player : IPlayer = {};
   listTeams: ITeam[] = [];
   imgUrl: string = "";
@@ -56,11 +57,14 @@ export class PlayerEditInfoComponent  implements OnInit{
   playerCity: String = "";
   listWard :String[] = [];
   dateOfBirth: string = null;
-  listPosition: Object[] = [];
+  listPosition: IPosition[] = [];
   playerPosition: IUserPosition[] = [];
   mainUserPosition: IUserPosition = null;
   extraUserPosition: IUserPosition = null;
   extraPositionId: number = 0;
+  mainPositionIdChanged: number = 0;
+  listMainPosition: IPosition[] = [];
+  listExtraPosition: IPosition[] = [];
   constructor(
     private accountServices : AccountService,
     private positionServices : PositionService,
@@ -88,18 +92,22 @@ export class PlayerEditInfoComponent  implements OnInit{
       this.listTeams = <ITeam[]>res:
       this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
     });
-    this.positionServices.Positions.subscribe(res =>{
-      (res.length != 0)?
-      this.listPosition = <Object[]>res:
-      this.positionServices.getPositionsFromServer();    
+    this.positionServices.listPositions.subscribe(res =>{
+      if(res.length != 0){
+        this.listPosition = <IPosition[]>res;
+      }else{
+        this.positionServices.getPositionsFromServer();
+      }    
     });
     this.accountServices.Positions.subscribe(res =>{
-      if((res.length != 0)){
+      if(res.length != 0){
         this.playerPosition = <IUserPosition[]>res; 
-        this.mainUserPosition = this.playerPosition.filter(p => p.TypeCode == "MP")[0]; 
+        this.mainUserPosition = this.playerPosition.filter(p => p.TypeCode == "MP")[0];
         if((this.extraUserPosition = this.playerPosition.filter(p => p.TypeCode == "EP")[0])){
           this.extraPositionId = this.extraUserPosition.position_id;
         }  
+        this.listMainPosition = this.listPosition.filter(p => p.id != this.extraPositionId);
+        this.listExtraPosition = this.listPosition.filter(p => p.id != this.mainUserPosition.position_id);
       }else{
         this.accountServices.getUserPositions(localStorage.getItem(SystemConstants.CURRENT_USER));
       }
@@ -147,21 +155,19 @@ export class PlayerEditInfoComponent  implements OnInit{
 
   // Cập nhập vị trí chính
   changeMP(id: number){
-    if(this.mainUserPosition){
-      this.mainUserPosition.position_id = id;  
-    }else{
-      this.mainUserPosition = {
-        position_id : id
-      }
+    this.listExtraPosition = this.listPosition.filter(p => p.id != id);
+    if(this.mainUserPosition.id != id){
+      this.mainPositionIdChanged = id;  
     }
   }
   changeEP(id: number){
+    this.listMainPosition = this.listPosition.filter(p => p.id != id);
     if(this.extraUserPosition){
-        this.extraUserPosition.position_id = id;
-        this.extraPositionId = id;
-      }else{
-        this.extraUserPosition = {
-          position_id : id
+      this.extraUserPosition.position_id = id;
+      this.extraPositionId = id;
+    }else{
+      this.extraUserPosition = {
+        position_id : id
       }
     }
     this.extraPositionId = id;
@@ -173,27 +179,30 @@ export class PlayerEditInfoComponent  implements OnInit{
   
 
   save(){
-    (this.mainUserPosition.id) ? 
-    this.positionServices.updateUserMainPosition(this.mainUserPosition.id,this.mainUserPosition.position_id,localStorage.getItem(SystemConstants.CURRENT_USER)) : 
-    this.positionServices.addUserMainPosition(this.mainUserPosition.position_id,localStorage.getItem(SystemConstants.CURRENT_USER));
+    this.showSpinner = true;
+    if(this.mainPositionIdChanged){
+      this.accountServices.updateListMainPowers(localStorage.getItem(SystemConstants.CURRENT_USER),this.mainUserPosition.id,this.mainPositionIdChanged);
+    } 
     if(this.extraPositionId > 0 && this.extraUserPosition){
       (this.extraUserPosition.id) ?
-      this.positionServices.updateUserExtraPosition(this.extraUserPosition.id,this.extraUserPosition.position_id,localStorage.getItem(SystemConstants.CURRENT_USER)) :
-      this.positionServices.addUserExtraPosition(this.extraUserPosition.position_id,localStorage.getItem(SystemConstants.CURRENT_USER));  
-    }else{
-      this.positionServices.deleteUserExtraPosition(this.extraUserPosition.id);
+      this.accountServices.updateListPowers(localStorage.getItem(SystemConstants.CURRENT_USER),this.extraUserPosition.id,this.extraUserPosition.position_id) :
+      this.accountServices.addUserExtraPosition(this.extraUserPosition.position_id,localStorage.getItem(SystemConstants.CURRENT_USER));  
+    }else if(this.extraUserPosition){
+      this.accountServices.deleteListPowers(this.extraUserPosition.id);
     }
-    
-    this.showSpinner = true;
-    
     this.accountServices.editProfile(this.player,localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res => {
       if(res){
+        setTimeout(() => {
+          console.log("Update Profile Success");
           this.router.navigate([UrlConstants.PLAYER_DETAILS]);
           this.toast.successToastr('Sữa thông tin thành công.', 'Thông báo !!!',{
             position: 'top-right',
             animate: 'slideFromTop'
-          });
+          });  
+        }, 4000);
       }else{
+        console.log("Update Profile Failed");
+        this.router.navigate([UrlConstants.PLAYER_DETAILS]);
         this.toast.errorToastr('Sữa thông tin thất bại.', 'Thông báo !!!',{
           position: 'top-right',
           animate: 'slideFromTop'

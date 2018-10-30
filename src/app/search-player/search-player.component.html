@@ -43,16 +43,20 @@
     </div>
       <div class="list-player">
         <div class="box" *ngFor="let player of listPlayerResult | filter : filterPlayer" (mouseenter)="changeSelection(player);">
-            <div class="player-container" (click) = "viewDetail(player.id)">
-              <div class="img-container">
-                <img src="{{ player.ImgUrl }}">
-              </div>
-              <div class="player-content">
-                <p>{{ player.Fullname }}</p>
-                <span class="{{ player.status == 1 ? 'online' : 'offline' }}">{{ player.status == 1 ? 'Online' : 'Offline' }}</span>
-              </div>
+          <div class="player-container">
+            <div class="img-container">
+              <img src="{{ player.ImgUrl }}">
+            </div>
+            <div class="player-content">
+              <p>{{ player.Fullname }}</p>
+              <span class="{{ player.status == 1 ? 'online' : 'offline' }}">{{ player.status == 1 ? 'Online' : 'Offline' }}</span>
             </div>
           </div>
+          <div class="actions">
+              <a (click)="viewDetail(player.id);"><i class="ion-eye"></i></a>
+              <a (click)="addFriend(player.id);"><i class="ion-person-add"></i></a>
+          </div>
+        </div>
     </div>
   </div>
   <div class="info" *ngIf="playerFocusing.ImgUrl">

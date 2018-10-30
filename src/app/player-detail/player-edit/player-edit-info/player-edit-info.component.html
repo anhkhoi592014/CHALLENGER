@@ -1,9 +1,6 @@
 <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
 <div class="wrapper">
-  <div class="header" style="background:url('../../assets/headerbg.jpg')"> 
-    <div class="overlay"></div>
-    <h1>Chỉnh sữa thông tin cá nhân</h1>
-  </div>
+  <app-header [title]= "pageTitle"></app-header>
   <loading-spinner *ngIf="showSpinner"></loading-spinner>
   <form #editInfoForm="ngForm">
       <div class="profile">
@@ -88,7 +85,7 @@
               <div class="item">
                 <p>Vị trí chính: </p>
                 <select (change)="changeMP(MP.value);" #MP>
-                  <option *ngFor="let position of listPosition" value="{{position.id}}" 
+                  <option *ngFor="let position of listMainPosition" value="{{position.id}}" 
                   [selected]="mainUserPosition && position.id == mainUserPosition.position_id">
                     {{ position.PositionName }}
                   </option>
@@ -98,7 +95,7 @@
                 <p>Vị trí phụ: </p>
                 <select (change)="changeEP(EP.value);" #EP>
                   <option value="0">Không hiển thị</option>
-                  <option *ngFor="let position of listPosition" value="{{position.id}}" 
+                  <option *ngFor="let position of listExtraPosition" value="{{position.id}}" 
                   [selected]="extraUserPosition && extraUserPosition.position_id == position.id">
                     {{ position.PositionName }}</option>
                 </select>

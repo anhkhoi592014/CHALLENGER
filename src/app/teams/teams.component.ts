@@ -5,6 +5,7 @@ import { ITeam } from '../interfaces/ITeam';
 import { SystemConstants } from '../core/common/system.constants';
 import { Router } from '@angular/router';
 import { UrlConstants } from '../core/common/url.constants';
+import { TeamService } from '../core/services/team.service';
 
 @Component({
   selector: 'app-teams',
@@ -24,25 +25,38 @@ export class TeamsComponent implements OnInit {
   ];
   listTeams : ITeam[] = [];
   selectedMenu : number = 3;
+  showSpinner: boolean = true;
   constructor(
     private accountServices: AccountService,
-    private router: Router  
+    private teamServices: TeamService,
+    private router: Router 
     ) { }
 
   ngOnInit() {
     this.accountServices.Teams.subscribe(res => {
-      this.listTeams = <ITeam[]>res;
+      if(res.length == 0){
+        this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
+        this.showSpinner = false;      
+      }else{
+        this.listTeams = <ITeam[]>res;
+        this.showSpinner = false;
+      }
     });
-    this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
   }
   test(){
     console.log(this.listTeams.length);  
   }
 
   viewTeam(team: ITeam){
+    this.showSpinner = true;
+    this.teamServices.getTeamById(team.id);
+    this.teamServices.getTeamMembers(team.id);
+    this.teamServices.getTeamMembersDetails(team.id);
     localStorage.removeItem(SystemConstants.CURRENT_TEAM);
     localStorage.setItem(SystemConstants.CURRENT_TEAM,team.id.toString());
-    this.router.navigate([UrlConstants.TEAM_DETAILS + '/' + team.id]);
+    setTimeout(() => {
+      this.router.navigate([UrlConstants.TEAM_DETAILS + '/' + team.id]);  
+    }, 2000);
   }
 
 }

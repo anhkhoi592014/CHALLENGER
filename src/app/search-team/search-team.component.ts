@@ -62,13 +62,14 @@ export class SearchTeamComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    setTimeout(() => {
-      this.accountService.Teams.subscribe(res => {
-        this.listTeamsResult = res;
-        this.showSpinner = false;
+      this.accountService.listTeams.subscribe(res => {
+        if(res.length == 0){
+          this.accountService.getTeamsFromServer();
+        }else{
+          this.listTeamsResult = res;
+          this.showSpinner = false;
+        }
       })
-    this.accountService.getTeamsFromServer();
-    }, 1000);
   }
   test(){
     console.log(this.listTeamsResult);

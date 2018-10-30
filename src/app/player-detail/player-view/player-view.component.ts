@@ -4,10 +4,11 @@ import { IPlayer } from 'src/app/interfaces/IPlayer';
 import { IPower } from 'src/app/interfaces/ipower';
 import { ITeam } from 'src/app/interfaces/ITeam';
 import { AccountService } from 'src/app/core/services/account.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SystemConstants } from 'src/app/core/common/system.constants';
 import { PositionService } from 'src/app/core/services/position.service';
 import { IUserPosition } from 'src/app/interfaces/iuser-position';
+import { UrlConstants } from 'src/app/core/common/url.constants';
 
 @Component({
   selector: 'app-player-view',
@@ -15,6 +16,7 @@ import { IUserPosition } from 'src/app/interfaces/iuser-position';
   styleUrls: ['./player-view.component.scss']
 })
 export class PlayerViewComponent implements OnInit {
+  page_title : String = "Thông tin cầu thủ";
   player : IPlayer = {};
   powersData : IPower[] = [];
   listPowers : IPower[] = [];
@@ -39,11 +41,17 @@ export class PlayerViewComponent implements OnInit {
   selectedMenu: number = 1;
   constructor(
     private accountServices : AccountService,
+    private positionServices : PositionService,
     private route: ActivatedRoute,
+    private router: Router,
   ) { 
     this.route.params.subscribe(param => {
-      (param['id'] && (param['id'] != localStorage.getItem(SystemConstants.CURRENT_USER)))? 
-      this.listMenu = [{ id: 3,code:'back', title : 'Quay Lại',imgUrl : '../../assets/left-arrow.png' }] : '';
+      if(param['id'] && (param['id'] != localStorage.getItem(SystemConstants.CURRENT_USER))){
+        this.listMenu = [{ id: 3,code:'back', title : 'Quay Lại',imgUrl : '../../assets/left-arrow.png' }];
+      }  
+      else{
+        this.router.navigate([UrlConstants.PLAYER_DETAILS]);
+      }
       this.userId = param['id'];  
     })
   }
@@ -52,42 +60,42 @@ export class PlayerViewComponent implements OnInit {
     // Lấy dữ liệu 
     this.accountServices.Users.subscribe(res => {
       if(res.length != 0){
-        console.log(1);
         this.player = <IPlayer>res;
         this.playerAge = (new Date().getFullYear() - new Date(this.player.DateOfBirth).getFullYear());
-        this.spinnerLoading = false;
-      }else{
-        this.userId?
-          this.accountServices.getUserById(this.userId):
-          this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
+        this.spinnerLoading = false;  
       }
-    });
+      else{
+        (this.userId)?          
+        this.accountServices.getUserById(this.userId) :
+        this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
+        
+      }
+    });  
     this.accountServices.Powers.subscribe(res => {
-      if(res.length != 0){
+        if(res.length != 0){
         this.powersData = res;
         this.listPowers = res.filter(e => (e.TypeCode == "MP" && e.ViewStatus == 1));
         // Delay progress bar
         this.spinnerLoading = false;
         setTimeout(() => this.setProgressbar(), 200); 
       }else{
-        this.userId?
+        (this.userId)?
         this.accountServices.getUserPowers(this.userId):
         this.accountServices.getUserPowers(localStorage.getItem(SystemConstants.CURRENT_USER));     
-        setTimeout(() => this.setProgressbar(), 200); 
       }
-    });
+    });  
     this.accountServices.Teams.subscribe(res => {
       if(res.length != 0){
         this.listTeams = <ITeam[]>res;
         this.spinnerLoading = false;
       }else{
-        this.userId?
-        this.accountServices.getUsersTeams(this.userId):
+        (this.userId)?
+        this.accountServices.getUsersTeams(this.userId) :
         this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
       }
     });
-    this.accountServices.Positions.subscribe(res =>{
-      if(res.length != 0){
+    this.accountServices.Positions.subscribe(res =>{   
+      if(res.length != 0){  
         this.userPositions = <IUserPosition[]>res;
         if(this.mainPosition = this.userPositions.filter(p => p.TypeCode == 'MP')[0]){
           this.showMainPosition = true;
@@ -100,15 +108,16 @@ export class PlayerViewComponent implements OnInit {
           this.showExtraPosition = false;
         }
       }else{
-        this.userId ? 
-        this.accountServices.getUserPositions(this.userId):
+        (this.userId)? 
+        this.accountServices.getUserPositions(this.userId) :
         this.accountServices.getUserPositions(localStorage.getItem(SystemConstants.CURRENT_USER));
+        this.positionServices.getPositionsFromServer(); 
       }
       this.spinnerLoading = false;
     });
   } 
   log(){
-    console.log(this.mainPosition); 
+    console.log(this.player); 
   }
   changePositionView(po : String){
     po == "MP" ? this.isMPView = true : this.isMPView = false; 

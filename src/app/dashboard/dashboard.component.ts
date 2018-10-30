@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IMenu } from '../interfaces/IMenu';
 import { ITeam } from '../interfaces/ITeam';
-import { Title } from '@angular/platform-browser';
-import { ISubMenu } from '../interfaces/ISubMenu';
 import { AccountService } from '../core/services/account.service';
 import { SystemConstants } from '../core/common/system.constants';
 
@@ -40,7 +38,10 @@ export class DashboardComponent implements OnInit {
     private accountServices: AccountService
   ) { }
   ngOnInit() {
+    this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
+    this.accountServices.getUserPowers(localStorage.getItem(SystemConstants.CURRENT_USER));
     this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER)); 
+    this.accountServices.getUserPositions(localStorage.getItem(SystemConstants.CURRENT_USER));
   }
   locationChosen(event){
     this.latitude = event.coords.lat;

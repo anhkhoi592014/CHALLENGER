@@ -1,23 +1,35 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { IMenu } from '../interfaces/IMenu';
 import { IPlayer } from '../interfaces/IPlayer';
 import { AccountService } from '../core/services/account.service';
-import { SystemConstants } from '../core/common/system.constants';
 import { Router } from '@angular/router';
 import { UrlConstants } from '../core/common/url.constants';  
-import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
-import { timeInterval } from 'rxjs/operators';
-import { timeout } from 'q';
-@Component({
+import { ToastrManager } from 'ng6-toastr-notifications';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { ChatService } from '../core/services/chat.service';
+
+export interface message {
+  name: string;
+  message: string;
+}
+
+
+@Component({  
   selector: 'app-search-player',
   templateUrl: './search-player.component.html',
   styleUrls: ['./search-player.component.scss']
 })
 export class SearchPlayerComponent implements OnInit {
+  private requestMessage: message = {
+    name: '',
+    message: ''
+  };
   listWard :String[] = [];
   searchFilter : Boolean = false;
   isCloned : Boolean = false;
   listPlayerClone :IPlayer[] = [];
+  toUserName: String = "";
+  messages: String = "";
   listWardData = [
     { 
       id: 28,name:'TP.Hồ Chí Minh' , listWard: ['Quận 1','Quận 2','Quận 3','Quận 4','Quận 5',
@@ -61,9 +73,15 @@ export class SearchPlayerComponent implements OnInit {
   constructor(
     private accountServices : AccountService,
     private router: Router,
-    
-  ) { }
+    private toastr: ToastrManager,
+    public dialog: MatDialog,
+    private chatService: ChatService 
+  ) { 
+  }
   ngOnInit() {
+    this.chatService.message.subscribe(msg => {
+      console.log("Respone from websocket server" + msg);
+    })
     this.accountServices.listUsers.subscribe(data => {
       if(data.length == 0){
         this.accountServices.getUsersFromServer();
@@ -73,7 +91,6 @@ export class SearchPlayerComponent implements OnInit {
       }
     });
   }
-  
   changeSelection(ply: IPlayer){
     this.playerFocusing = ply;
     this.playerAge = (new Date().getFullYear() - new Date(ply.DateOfBirth).getFullYear());
@@ -102,8 +119,49 @@ export class SearchPlayerComponent implements OnInit {
   viewDetail(id :any){
     this.showSpinner = true;
     this.accountServices.getUserById(id);
+    this.accountServices.getUserPowers(id);
+    this.accountServices.getUsersTeams(id); 
+    this.accountServices.getUserPositions(id);
     setTimeout(()=>{
       this.router.navigate([UrlConstants.PLAYER_DETAILS + '/' + id])
     },2000);
   }
+
+  addFriend(id: any){
+    const dialogRef = this.dialog.open(DialogFriendRequestMessages, {
+      width: '250px',
+      data: {message: ""}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.requestMessage.name = id;
+      this.requestMessage.message = result;
+      this.sendMsg();
+    });
+    // this.toastr.successToastr('Đã gửi lời mời kết bạn', 'Thông báo',{
+    //   position: 'top-right',
+    //   animate: 'slideFromTop'
+    // })
+  }
+  sendMsg(){
+    this.chatService.message.next(this.requestMessage);
+  }
 }
+
+
+@Component({
+  selector: 'dialog-friend-request-messages',
+  templateUrl: 'dialog-friend-request-message.html',
+})
+export class DialogFriendRequestMessages {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogFriendRequestMessages>,
+    @Inject(MAT_DIALOG_DATA) public data: message) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+}
+

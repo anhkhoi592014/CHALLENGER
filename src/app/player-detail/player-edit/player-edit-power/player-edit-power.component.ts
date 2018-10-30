@@ -15,6 +15,7 @@ import { ToastrManager } from 'ng6-toastr-notifications';
   styleUrls: ['./player-edit-power.component.scss']
 })
 export class PlayerEditPowerComponent implements OnInit {
+  pageTitle: String = "Chỉnh sữa chỉ số";
   listMenu : IMenu[] = [
     { id: 1,code:'ttcn', title: 'Thông tin cá nhân',imgUrl : '../../assets/viewdetails.png' },
     { id: 2,code:'editpf' ,title: 'Chỉnh sữa',imgUrl : '../../assets/editprofies.png'},

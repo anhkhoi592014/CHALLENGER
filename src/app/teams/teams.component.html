@@ -2,7 +2,8 @@
     <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
     <div class="content">
         <div class="wrapper">
-            <div class="box">
+            <loading-spinner *ngIf="showSpinner"></loading-spinner>
+            <div class="box" *ngIf="!showSpinner">
                 <div class="item" *ngFor="let team of listTeams" (click)="viewTeam(team);">
                     <div class="img-container">
                         <img src="{{team.ImgUrl}}">

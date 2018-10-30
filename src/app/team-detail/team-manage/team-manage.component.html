@@ -1,4 +1,117 @@
 <div class="container">
   <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
-  
+  <div class="content">
+    <div class="wrapper">
+        <div class="left">
+            <div class="row">
+              <div class="logo">
+                <div class="img-container">
+                  <img src="../../../assets/smalllogo.png">
+                </div>
+                <p>Mời</p>
+              </div>
+              <div class="search-box">
+                <input type="text" placeholder="Bộ lọc danh sách bạn">
+              </div>
+            </div>
+            <div class="list-player">
+              <p>Danh sách cầu thủ</p>
+              <div class="item" *ngFor="let player of listPlayerResult">
+                <p>{{ player.Fullname }}</p>
+                <span class="{{ player.status == 1 ? 'online' : 'offline' }}"></span> 
+                <div class="img-container">
+                    <img src="../../../assets/invite.png">
+                </div>
+              </div>
+            </div>
+          </div>
+    </div>
+    <div class="right">
+      <div class="top">
+        <div class="row">
+          <div class="img-container">
+            <img src="../../../assets/smalllogo.png">
+          </div>
+          <p>Thông tin đội</p>
+        </div>
+        <div class="details">
+          <div class="logo">
+            <div class="img-container">
+              <img src="../../../assets/logo02.png">
+            </div>
+          </div>
+          <div class="row">
+            <div class="item">
+              <p>Tình hình đội:</p>
+              <span>Tạm thời</span>
+            </div>
+            <div class="item">
+             <p>Ngày tạo</p>
+             <span>02-12-1995</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="item">
+              <p>Tình hình đội:</p>
+              <span>Tạm thời</span>
+            </div>
+            <div class="item">
+              <p>Ngày tạo</p>
+              <span>02-12-1995</span>
+            </div>
+          </div>
+          <div class="row">
+              <div class="item">
+                <p>Tình hình đội:</p>
+                <span>Tạm thời</span>
+              </div>
+              <div class="item">
+               <p>Ngày tạo</p>
+               <span>02-12-1995</span>
+              </div>
+            </div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="list">
+          <div class="title">
+            <p>Danh sách mời</p>
+            <span>Các lời mời hiện có: 0</span>
+          </div>
+          <div class="list-container">
+            <div class="item">
+              <div class="name">
+                <span>Vương Vũ Anh Khôi</span>
+                <div class="img-container">
+                  <img src="../../../assets/x.png">
+                </div>
+              </div>
+              <div class="date">
+                <p>05/12/2015</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="list">
+          <div class="title">
+            <p>Đội hình hiện tại</p>
+            <span>Số thành viên: 0</span>
+          </div>
+          <div class="list-container">
+            <div class="item">
+              <div class="name">
+                <span>Vương Vũ Anh Khôi</span>
+                <div class="img-container">
+                  <img src="../../../assets/x.png">
+                </div>
+              </div>
+              <div class="date">
+                <p>05/12/2015</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

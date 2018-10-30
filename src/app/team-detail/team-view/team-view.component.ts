@@ -52,44 +52,55 @@ export class TeamViewComponent implements OnInit {
       this.router.navigate([UrlConstants.TEAMS]);
     }
     this.teamServices.Teams.subscribe(res => {
-      this.team = <ITeam>res;
-      this.data = {
-        labels: ["Win(%)", "Lose(%)"],
-        datasets: [{
-          fill: true, 
-          backgroundColor: [
-            '#81CE97',
-            'brown'
-          ],
-          data: [this.team.WinRate,100-this.team.WinRate]
-        }]
-      };
-      this.PieChart = new Chart('pieChart',{
-        type:'pie',
-        data:this.data,
-        options: {}
-      });
+      if(res.length == 0){
+        this.teamServices.getTeamById(this.teamId);
+      }else{
+        this.team = <ITeam>res;
+        this.data = {
+          labels: ["Win(%)", "Lose(%)"],
+          datasets: [{
+            fill: true, 
+            backgroundColor: [
+              '#81CE97',
+              'brown'
+            ],
+            data: [this.team.WinRate,100-this.team.WinRate]
+          }]
+        };
+        this.PieChart = new Chart('pieChart',{
+          type:'pie',
+          data:this.data,
+          options: {}
+        });
+      }
     });
     this.accountServices.Teams.subscribe(res =>{
-      this.listUserTeam = <ITeam[]>res;
-      if(!this.listUserTeam.filter(team => team.id == this.teamId)){
-        this.listMenu = [{ id: 3,code:'back', title : 'Quay Lại',imgUrl : '../../assets/left-arrow.png' }];
+      if(res.length == 0){
+        this.teamServices.getTeamMembers(this.teamId);
+      }else{
+        this.listUserTeam = <ITeam[]>res;
+        if(!this.listUserTeam.filter(team => team.id == this.teamId)){
+          this.listMenu = [{ id: 3,code:'back', title : 'Quay Lại',imgUrl : '../../assets/left-arrow.png' }];
+        }
       }
     });
     this.teamServices.Users.subscribe(res => {
-      this.teamMembers = res;
-      this.totalMember = this.teamMembers.length;
+      if(res.length == 0){
+        this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
+      }else{
+        this.teamMembers = res;
+        this.totalMember = this.teamMembers.length;
+      }
     });
     this.teamServices.Members.subscribe(res => {
-      this.teamMembersDetails = <IMember[]>res; 
-      this.teamAdmin = this.teamMembers.filter(member => member.id == (this.teamMembersDetails.filter(member => member.role_id == 2)[0].user_id))[0];
-      this.showSpinner = false;
+      if(res.length == 0){
+        this.teamServices.getTeamMembersDetails(this.teamId);
+      }else{
+        this.teamMembersDetails = <IMember[]>res; 
+        this.teamAdmin = this.teamMembers.filter(member => member.id == (this.teamMembersDetails.filter(member => member.role_id == 2)[0].user_id))[0];
+        this.showSpinner = false;
+      }
     });
-    this.teamServices.getTeamById(this.teamId);
-    this.teamServices.getTeamMembers(this.teamId);
-    this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
-    this.teamServices.getTeamMembersDetails(this.teamId);
-
   }
 
 }
