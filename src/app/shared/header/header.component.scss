@@ -1,9 +1,9 @@
 :host{
-    background:url('../../../assets/headerbg.jpg');
+    background: url('../../../assets/headerbg.jpg');
     display: flex;
     height: 70px;
-    flex-flow: column;
-    justify-content: space-around;
+    flex-flow: row;
+    justify-content: space-between;
     position: relative;
     z-index: 1;
     h1{
@@ -11,6 +11,7 @@
         font-size: 1.7em;
         z-index: 2;
         color: white;
+        align-self: center;
     }
     .overlay{ 
         position: absolute;
@@ -21,5 +22,117 @@
         z-index: 2;
         content: " ";
         background: #333333bf;
+    }
+    .options{
+        z-index: 3;
+        width: 20%;
+        display: flex;
+        .nofication,.user{
+            width: 75px;
+            height: 100%;
+            align-self: center;
+            display: flex;
+            cursor: pointer;
+            .img-container{
+                width: 100%;
+                align-self: center;
+                margin: auto;
+                display: flex;
+                position: relative;
+                justify-content: space-around;
+                img{
+                    width: 45%;
+                    align-self: center;
+                }
+                #circle{ 
+                    position: absolute;
+                    top: -0.6rem;
+                    left: 2.6rem;
+                    width: 0.75rem;
+                    height: 0.75rem;
+                    border-radius: 100%;
+                    background: #f07379;
+                }
+            }
+        }
+        .nofication:hover,.user:hover{
+            background: #333;
+        }
+        .nofication{
+            .tooltip{     
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: -0.4rem;
+                    right: 8.3rem;
+                    border-left: 2rem solid transparent;
+                    border-right: 2rem solid transparent;
+                    border-bottom: 1.5rem solid #fff;
+                }
+                position: absolute;
+                top: 4.5rem;
+                -webkit-transform: translateX(-37%);
+                transform: translateX(-37%);
+                line-height: 1.5;
+                color: #27303d;
+                width: 20rem;
+                background: #fff;
+                border-radius: 5px;
+                box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+            }
+            .header{
+                height: 2.5em;
+                display: flex;
+                border-bottom: 1px solid #33333317;
+                p{
+                    align-self: center;
+                    font-size: 1.2em;
+                    padding-left: 5px;
+                }
+            }
+            ul{
+                list-style: none;
+                display: flex;
+                flex-flow: column;
+                li{
+                    height: 4.5rem;
+                    display: flex;
+                    flex-flow: row;
+                    .img-container{
+                        width: 25%;
+                        display: flex;
+                        flex-flow: row;
+                        justify-content: space-around;
+                        img{
+                            width: 69%;
+                        }
+                    }
+                    .content{
+                        display: flex;
+                        flex-flow: column;
+                        justify-content: space-around;
+                        padding: 0px 10px;
+                    }
+                }
+                li:hover{
+                    background:#333;
+                    color: white;
+                }
+            }
+            .tooltip.off{
+                opacity: 0;
+                visibility: hidden;
+                top:2.5rem;
+            }
+            .tooltip.show{
+                transition:0.5s;
+                opacity: 1;
+                visibility: visible; 
+                top:4.5rem;
+            }
+        }
+        .nofication.show{
+            background:#333;
+        }
     }
 }

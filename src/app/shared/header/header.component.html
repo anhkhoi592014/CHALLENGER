@@ -1,2 +1,31 @@
 <div class="overlay"></div>
 <h1>{{title}}</h1>
+<div class="options">
+    <div [ngClass]="['nofication',showNotification? 'show':'off']" (click)="toggleNtf();">
+        <div class="img-container">
+            <img src="../../../assets/nofication-bell.png">
+            <span id="circle"></span>
+        </div>
+        <div [ngClass]="['tooltip',showNotification? 'show':'off']" >
+            <div class="header">
+                <p>Thông báo</p>
+            </div>
+            <ul>
+                <li *ngFor="let noti of listShowNotification">
+                    <div class="img-container">
+                        <img src="{{ noti.imgUrl }}">
+                    </div>
+                    <div class="content">
+                        <p>{{ noti.typeName }}</p>
+                        <p>1 hour ago</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="user">
+        <div class="img-container">
+            <img src="../../../assets/user.png">
+        </div>
+    </div>
+</div>

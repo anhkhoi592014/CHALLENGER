@@ -7,10 +7,12 @@ import { UrlConstants } from '../core/common/url.constants';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ChatService } from '../core/services/chat.service';
+import { SystemConstants } from '../core/common/system.constants';
 
 export interface message {
-  name: string;
+  to_user_id: number;
   message: string;
+  type:number;
 }
 
 
@@ -21,8 +23,9 @@ export interface message {
 })
 export class SearchPlayerComponent implements OnInit {
   private requestMessage: message = {
-    name: '',
-    message: ''
+    to_user_id: 0,
+    message: '',
+    type:1,
   };
   listWard :String[] = [];
   searchFilter : Boolean = false;
@@ -79,9 +82,9 @@ export class SearchPlayerComponent implements OnInit {
   ) { 
   }
   ngOnInit() {
-    this.chatService.message.subscribe(msg => {
-      console.log("Respone from websocket server" + msg);
-    })
+    // this.chatService.message.subscribe(msg => {
+    //   console.log("Respone from websocket server" + msg);
+    // })
     this.accountServices.listUsers.subscribe(data => {
       if(data.length == 0){
         this.accountServices.getUsersFromServer();
@@ -134,9 +137,10 @@ export class SearchPlayerComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.requestMessage.name = id;
+      this.requestMessage.to_user_id = id;
       this.requestMessage.message = result;
-      this.sendMsg();
+      console.log(this.requestMessage);
+      this.accountServices.addFriendRequest(localStorage.getItem(SystemConstants.CURRENT_USER),this.requestMessage.to_user_id,this.requestMessage.message);
     });
     // this.toastr.successToastr('Đã gửi lời mời kết bạn', 'Thông báo',{
     //   position: 'top-right',
@@ -144,7 +148,7 @@ export class SearchPlayerComponent implements OnInit {
     // })
   }
   sendMsg(){
-    this.chatService.message.next(this.requestMessage);
+    //this.chatService.message.next(this.requestMessage);
   }
 }
 

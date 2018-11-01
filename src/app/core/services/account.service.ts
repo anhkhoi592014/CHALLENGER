@@ -7,6 +7,7 @@ import { IPower } from 'src/app/interfaces/ipower';
 import { ITeam } from 'src/app/interfaces/ITeam';
 import { map } from 'rxjs/operators';
 import { IUserPosition } from 'src/app/interfaces/iuser-position';
+import { INotification } from 'src/app/interfaces/INotification';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -24,6 +25,7 @@ export class AccountService {
   private _teams :BehaviorSubject<ITeam[]> = new BehaviorSubject<ITeam[]>([]);
   private _listTeams :BehaviorSubject<ITeam[]> = new BehaviorSubject<ITeam[]>([]);
   private _positions :BehaviorSubject<IUserPosition[]> = new BehaviorSubject<IUserPosition[]>([]);
+  private _notifications :BehaviorSubject<INotification[]> = new BehaviorSubject<INotification[]>([]); 
   constructor(
     private http: HttpClient
   ) { }
@@ -49,6 +51,9 @@ export class AccountService {
     return this._listTeams.asObservable();
   }
 
+  get Notifications(){
+    return this._notifications.asObservable();
+  }
   // Lấy data từ server
   getUsersFromServer(){
     this.http.get(SystemConstants.BASE_API + 'users')
@@ -235,4 +240,15 @@ export class AccountService {
     });
   }
 
+  getUserNotifications(id: any){
+    this.http.get(SystemConstants.BASE_API + 'user/' + id + '/notifications').subscribe(data => {
+      this._notifications.next(<INotification[]>data);
+    });
+  }
+  addFriendRequest(from_id: any,to_id: any,message:string){
+    this.http.post(SystemConstants.BASE_API + 'user/'+ to_id +'/friend-request/add',
+    JSON.stringify({from_id,message}),httpOptions).subscribe(res =>{
+      console.log(res);
+    });
+  }
 }

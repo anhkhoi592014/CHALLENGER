@@ -22,17 +22,17 @@ export class ChatService {
   constructor(
     private wsService: WebsocketService
   ) { 
-    this.message = <Subject<Message>>this.wsService
-    .connect(environment.CHAT_URL)
-    .pipe(
-      map((respone: MessageEvent): Message => {
-        let data = JSON.parse(respone.data);
-        return {
-          name: data.name,
-          message: data.message
-        }
-      })
-    )
+    // this.message = <Subject<Message>>this.wsService
+    // .connect(environment.CHAT_URL)
+    // .pipe(
+    //   map((respone: MessageEvent): Message => {
+    //     let data = JSON.parse(respone.data);
+    //     return {
+    //       name: data.name,
+    //       message: data.message
+    //     }
+    //   })
+    // )
   }
 
 }

@@ -9,6 +9,8 @@ import { SystemConstants } from 'src/app/core/common/system.constants';
 import { PositionService } from 'src/app/core/services/position.service';
 import { IUserPosition } from 'src/app/interfaces/iuser-position';
 import { UrlConstants } from 'src/app/core/common/url.constants';
+import { INotification } from 'src/app/interfaces/INotification';
+import { NotificationService } from 'src/app/core/services/notification.service';
 
 @Component({
   selector: 'app-player-view',
@@ -42,6 +44,7 @@ export class PlayerViewComponent implements OnInit {
   constructor(
     private accountServices : AccountService,
     private positionServices : PositionService,
+    private notificationServices: NotificationService,
     private route: ActivatedRoute,
     private router: Router,
   ) { 
@@ -68,7 +71,6 @@ export class PlayerViewComponent implements OnInit {
         (this.userId)?          
         this.accountServices.getUserById(this.userId) :
         this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
-        
       }
     });  
     this.accountServices.Powers.subscribe(res => {
@@ -117,7 +119,6 @@ export class PlayerViewComponent implements OnInit {
     });
   } 
   log(){
-    console.log(this.player); 
   }
   changePositionView(po : String){
     po == "MP" ? this.isMPView = true : this.isMPView = false; 
