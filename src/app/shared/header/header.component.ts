@@ -62,7 +62,7 @@ export class HeaderComponent implements OnInit {
       key: '2a8e4ee7091be69eff31',
       cluster: 'ap1'
     });
-    echo.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER))
+    echo.private('user.'+localStorage.getItem(SystemConstants.CURRENT_USER))
       .listen('NewRequest', (e:INotification)=>{
          this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
       });
