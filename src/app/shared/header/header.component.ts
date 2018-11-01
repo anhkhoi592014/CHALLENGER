@@ -63,12 +63,12 @@ export class HeaderComponent implements OnInit {
       cluster: 'ap1'
     });
     echo.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER))
-      .listen('NewRequest', (e)=>{
-         this.notifications.unshift(e);
+      .listen('NewRequest', (e:INotification)=>{
+         this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
       });
   }
   toggleNtf(){
     this.showNotification = !this.showNotification;
-    console.log(this.listShowNotification);
+    console.log(this.notifications);
   }
 }
