@@ -10,8 +10,9 @@
     </div>
   </div>
   <div class="right">
-    <div class="login-section">
-      <h1>Sign In</h1>
+    <loading-spinner *ngIf="showSpinner"></loading-spinner>
+    <div [ngClass]="['login-section',showLogin? 'show': 'hide']" *ngIf="!showSpinner">
+      <h1>Đăng nhập</h1>
       <form action="#" method="POST" id="login">
         <div class="input">
           <input type="text" placeholder="Username" name="username" [(ngModel)] = "model.username">
@@ -20,17 +21,143 @@
             <input type="password" placeholder="Password" name="password" [(ngModel)] = "model.password">
         </div>
         <div class="input">
-            <a href="#" id="f-password">forgot your password ?</a>
+            <a href="#" id="f-password">Quên mật khẩu ?</a>
         </div>
         <div class="input">
           <button type="submit" id="login-btn" (click)="login();">
-            <p>LOGIN</p>
+            <p>ĐĂNG NHẬP</p>
           </button>
         </div>
         <div class="input" id="create">
-        <a href="#" id="c-account">create an account</a>
+        <a id="c-account" (click)="showRegister();">Tạo tài khoản</a>
         </div>
       </form>
     </div>
+    <div [ngClass]="['registration-section',showRegis? 'show': 'hide']" *ngIf="!showSpinner">
+      <div class="row">
+        <div class="return" (click)="return()">
+          <div class="img-container">
+            <img src="../../assets/return-arrow.png">
+          </div>    
+          Quay lại trang đăng nhập
+        </div>
+      </div>
+      <h1>Đăng kí tài khoản</h1>
+      <form action="#" method="POST" id="register" [formGroup]="registionForm" (ngSubmit)="onSubmit()">
+        <div class="input">
+          <input [ngClass]="['input',(registionForm.get('username').invalid && 
+                (registionForm.submitted || registionForm.get('username').dirty)) ? 
+                'error':'']"
+          type="text" placeholder="Username" name="username" formControlName="username">
+          <div class="img-container" (mouseenter)="showNameRequire();" (mouseleave)="hideNameRequire();">
+            <img src="../../assets/information.png">
+            <div class="requires" *ngIf="showNameRq">
+                <ul>
+                  <li>Tên đăng nhập không được để trống</li>
+                  <li>Tên đăng nhập phải từ 4 đến 20 kí tự</li>
+                </ul>
+              </div>
+          </div>
+          
+        </div>
+        <div class="input">
+          <input [ngClass]="['input',(registionForm.get('password').invalid && 
+          (registionForm.submitted || registionForm.get('password').dirty)) ? 
+          'error':'']"
+          type="password" placeholder="Password" name="password" formControlName="password">
+          <div class="img-container" (mouseenter)="showPasswordRequire();" (mouseleave)="hidePasswordRequire();">
+              <img src="../../assets/information.png">
+              <div class="requires" *ngIf="showPasswordRq">
+                <ul>
+                  <li>Mật khẩu không được để trống</li>
+                  <li>Mật khẩu phải từ 4 kí tự trở lên</li>
+                </ul>
+              </div>
+            </div>
+        </div>
+        <div class="input">
+          <input [ngClass]="['input',(registionForm.get('fullname').invalid && 
+          (registionForm.submitted || registionForm.get('fullname').dirty)) ? 
+          'error':'']" 
+          type="text" placeholder="Họ và tên" name="fullname" formControlName="fullname">
+          <div class="img-container" (mouseenter)="showFullnameRequire();" (mouseleave)="hideFullnameRequire();">
+            <img src="../../assets/information.png">
+            <div class="requires" *ngIf="showFullnameRq">
+              <ul>
+                <li>Họ tên không được để trống</li>
+                <li>Họ tên phải từ 4 đến 20 kí tự</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="input">
+          <input [ngClass]="['input',(registionForm.get('email').invalid && 
+          (registionForm.submitted || registionForm.get('email').dirty)) ? 
+          'error':'']"
+          type="email" placeholder="Email" name="email" formControlName="email">
+          <div class="img-container" (mouseenter)="showEmailRequire();" (mouseleave)="hideEmailRequire();">
+            <img src="../../assets/information.png">
+            <div class="requires" *ngIf="showEmailRq">
+              <ul>
+                <li>Email phải đúng định dạnh</li>
+                <li>Email không được để trống</li>
+              </ul>
+            </div>
+            </div>
+        </div>
+        <div class="input">
+          <button type="submit" [disabled]="!registionForm.valid">
+            <p>Tiếp tục</p>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Cập nhập thông tin -->
+    <div [ngClass]="['info-update-section',showInfoUpdate? 'show': 'hide']" *ngIf="!showSpinner">
+        <div class="row">
+          <div class="return" (click)="return()">
+            <div class="img-container">
+              <img src="../../assets/return-arrow.png">
+            </div>    
+            Quay lại trang đăng nhập
+          </div>
+        </div>
+        <h1>Đăng kí tài khoản</h1>
+        <form action="#" method="POST" id="updateInfo" [formGroup]="updateInfoForm" (ngSubmit)="onUpdateSubmit()">
+          <div class="input">
+            <p>Ngày sinh: </p><input type="date" value="{{ dateOfBirth }}"
+            min="1950-01-01" max="2018-01-01" (change)="changeDOB(dob.value);" #dob>
+          </div>
+          <div class="input">
+            <p>Giới tính: </p>
+            <input type="radio" name="gender"  value="0" (change)="changeSex(0)" checked>Nam
+            <input type="radio" name="gender" value="1" (change)="changeSex(1)">Nữ
+          </div>
+          <div class="user-image">
+            <p>Ảnh đại diện : </p>
+            <div class="img-container">
+              <img [src]="imgUrl">
+            </div>
+            <div class="actions">
+              <input type="file" (change)="onFileSelected($event)" accept=".png,.jpg,.jpeg">
+              <button type="button" (click)="uploadFile()">Upload</button>
+            </div>
+          </div>
+          <div class="input">
+              <p>Chọn vị trí đá : </p>
+              <select (change)="onChangePosition(p.value)" #p>
+                <option *ngFor="let position of positionData" value="{{ position.id }}">
+                  {{ position.PositionName }}
+                </option>
+              </select>  
+          </div>
+          <div class="input">
+            <button type="submit" [disabled]="!updateInfoForm.valid">
+              <p>Đăng kí</p>
+            </button>
+          </div>
+        </form>
+      </div>
   </div>
 </div>

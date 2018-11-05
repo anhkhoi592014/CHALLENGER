@@ -53,9 +53,12 @@
                 }
         }
         .right{
+            overflow: hidden;
             display: flex;
+            position: relative;
             justify-content: space-around;
-            .login-section{
+            .login-section,.registration-section{
+                position: absolute;
                 align-self: center;
                 width: 70%;
                 height: 70%;
@@ -68,12 +71,20 @@
                     padding-left: 10px;
                     font-weight: 1200;                    
                 }
-                form#login{
+            }
+            .login-section,.registration-section,.info-update-section{
+                form{
                     height: 85%;    
                     .input{
                         width: 100%;
                         height: 15%;
                         padding-top: 10px;
+                        display: flex;
+                        align-items: center;
+                        .img-container{
+                            transform: translateX(-120%);
+                            cursor: pointer;
+                        }
                         input{
                             width: 70%;
                             height: 50%;
@@ -83,7 +94,7 @@
                             font-size: 20px;
                             outline: none;
                         }
-                        button#login-btn{
+                        button{
                             width: 80%;
                             padding: 10px 20px;
                             background:black;
@@ -95,28 +106,164 @@
                         }
                     }
                     a#f-password,a#c-account{
-                        float:right;
+                        text-align: right;
                         text-transform: uppercase;
                         font-family:  'Open Sans', sans-serif;
                         font-size: 0.9em;
                         text-decoration: none;
                         color: black;
+                        cursor: pointer;
                         transition: cubic-bezier(0.68, -0.55, 0.265, 1.55);
                         padding-right: 18%;
+                        width: 100%;
                     }
                     
                     a#f-password:hover,a#c-account:hover{
                         color: rgb(56, 56, 105);
                         font-weight: bold;
+                        // width: 100%;
                     }
                     
                     div#create{
                         text-align: center;
                         a#c-account{
-                            float: none;
+                            text-align: center;
                         }
                     }
                 }
+            }
+            .registration-section,.info-update-section{
+                height: 85%;
+                .row{
+                    height: 6%;
+                    display: flex;
+                    flex-flow: row;
+                    .return{
+                        color: red;
+                        width: 52%;
+                        cursor: pointer;
+                        display: flex;
+                        flex-flow: row;
+                        align-items: center;
+                        .img-container{
+                            width: 10%;
+                            padding-right: 10px;
+                            img{
+                                width: 100%;
+                            }
+                        }
+                    }
+                    .return:hover{
+                        color: blue;
+                    }
+                }
+                form{
+                    .input{
+                        .img-container{
+                            position: relative;
+                            cursor: crosshair;
+                            .requires{
+                                &::before {
+                                    content: '';
+                                    position: absolute;
+                                    bottom: -0.4rem;
+                                    right: 50%;
+                                    transform: translateX(50%);
+                                    border-left: 1rem solid transparent;
+                                    border-right: 1rem solid transparent;
+                                    border-top: 0.4rem solid #ce3131;
+                                }
+                                position: absolute;
+                                transition: 0.2s;
+                                width: 15rem;
+                                background: white;
+                                bottom: 150%;
+                                padding: 2rem;
+                                right: -430%;
+                                color: red;
+                                border: 1px solid #ce3131;
+                                ul{
+                                    li{
+                                        padding-bottom: 5px;
+                                    }
+                                }
+                            }
+                        }
+                        input.error{
+                            border:2px solid red;
+                        }
+                    }
+                }
+            }
+            .info-update-section{
+                align-self: center;
+                height: 95%;
+                width: 80%;
+                form{
+                    .input{
+                        height: 10%;
+                        p{
+                            padding-right: 1rem;
+                            font-size: 1.5rem;
+                        }
+                        input{
+                            width: 16rem;
+                            height: 30%;
+                        }
+                        select{
+                            padding: 5px 8px;
+                            font-size: 1.2rem;
+                            width: 9rem;
+                        }
+                        input[type=radio]{
+                            width: 2rem;
+                        }
+                        button{
+                            width: 100%;
+                        }
+                    }
+                    .user-image{
+                        display: flex;
+                        flex-flow: column;
+                        padding: 10px 0px;
+                        p{
+                            padding-right: 1rem;
+                            font-size: 1.5rem;
+                        }
+                        .img-container{
+                            width: 50%;
+                            align-self: center;
+                            margin-bottom: 11px;
+                            padding: 10px;
+                            background: #0000000d;
+                            display: flex;
+                            justify-content: space-around;
+                            img{
+                            }
+                        }
+                        .actions{
+                            display: flex;
+                            flex-flow: row;
+                            input{
+                                width: 37%;
+                                margin-left: 26%;
+                            }
+                        }
+                    }
+                }
+            }
+            .login-section.hide,.registration-section.hide,.info-update-section.hide{
+                visibility: hidden;
+                opacity: 0;
+                transition: 0.2s;
+                transform: translateX(30%);
+            }
+            .login-section.show,.registration-section.show,.info-update-section.show{
+                z-index: 2;
+                opacity: 1;
+                visibility: visible;
+                transition: 0.2s;
+                transform: translateX(0%);
             }
         }
     }

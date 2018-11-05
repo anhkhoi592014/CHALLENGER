@@ -42,6 +42,8 @@ export class DashboardComponent implements OnInit {
     this.accountServices.getUserPowers(localStorage.getItem(SystemConstants.CURRENT_USER));
     this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER)); 
     this.accountServices.getUserPositions(localStorage.getItem(SystemConstants.CURRENT_USER));
+    this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
+    this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER));
   }
   locationChosen(event){
     this.latitude = event.coords.lat;

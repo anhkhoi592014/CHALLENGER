@@ -22,7 +22,7 @@ export class ErrorsHandler implements ErrorHandler{
                 }
             }
         }
-        toastr.errorToastr('Không thể kết nối đến server', 'Lỗi !!!',{
+        toastr.errorToastr('Có lỗi xãy ra', 'Thông báo ',{
             position: 'top-right',
             animate: 'slideFromTop'
           })

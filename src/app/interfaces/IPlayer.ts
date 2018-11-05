@@ -4,7 +4,8 @@ export interface IPlayer {
     UserName?: String;
     password?: String;
     Fullname?: String;
-    DateOfBirth?: Date;
+    DateOfBirth?: string;
+    Email?:string;
     Sex?: number;
     Weight?: String;
     Height?: String;
@@ -13,9 +14,10 @@ export interface IPlayer {
     City?: String;
     Ward?: String;
     Description?: String;
-    ImgUrl?: String;
+    ImgUrl?: string;
     MainPosition?: String;
     ExtraPosition?: String;
     DateCreated?: String;
     Status?: number;
+    IsFriend?: boolean;
 }

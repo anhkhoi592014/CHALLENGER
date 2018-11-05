@@ -14,11 +14,14 @@ const httpOptions = {
     'Content-Type':  'application/json'
   })
 };
+declare const Pusher: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
+  pusher: any;
+  channel: any;
   private _users :BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
   private _listUser :BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
   private _powers :BehaviorSubject<IPower[]> = new BehaviorSubject<IPower[]>([]);
@@ -26,13 +29,25 @@ export class AccountService {
   private _listTeams :BehaviorSubject<ITeam[]> = new BehaviorSubject<ITeam[]>([]);
   private _positions :BehaviorSubject<IUserPosition[]> = new BehaviorSubject<IUserPosition[]>([]);
   private _notifications :BehaviorSubject<INotification[]> = new BehaviorSubject<INotification[]>([]); 
+  private _listUserHadSendFR :BehaviorSubject<INotification[]> = new BehaviorSubject<INotification[]>([]);
+  private _friends:BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
+  
   constructor(
     private http: HttpClient
-  ) { }
+  ) {
+    this.pusher = new Pusher('2a8e4ee7091be69eff31', {
+      cluster: 'ap1',
+      encrypted: true
+    });
+    this.channel = this.pusher.subscribe('my-channel');
+   }
 
   // Đăng kí behaviorSubject 
   get Users(){
     return this._users.asObservable();
+  } 
+  get Friends(){
+    return this._friends.asObservable();
   }
   get Powers(){
     return this._powers.asObservable();
@@ -42,6 +57,9 @@ export class AccountService {
   }
   get Positions(){
     return this._positions.asObservable();
+  }
+  get listHadSendFR(){
+    return this._listUserHadSendFR.asObservable();
   }
 
   get listUsers(){
@@ -74,6 +92,25 @@ export class AccountService {
       this._users.next(<IPlayer[]>data);
     })
   }
+
+  checkUser(username: string,password: string,fullname: string,email: string): Observable<any>{
+    return this.http.post(SystemConstants.BASE_API + 'users/check',
+    JSON.stringify({username,password,fullname,email}),httpOptions).pipe(
+      map(res =>{
+        return res;
+      })  
+    )
+  }
+
+  addUser(info: any): Observable<IPlayer>{
+    return this.http.post<IPlayer>(SystemConstants.BASE_API + 'users/add',
+    JSON.stringify(info),httpOptions).pipe(
+      map(res =>{
+        return res;
+      })  
+    )
+  }
+
   editProfile(info: any,id: any): Observable<Boolean>{
     return this.http.put(SystemConstants.BASE_API + 'users/edit/' + id,JSON.stringify(info),httpOptions)
     .pipe(
@@ -112,8 +149,12 @@ export class AccountService {
   }
   // Lấy danh sách đội
   getUsersTeams(id: any){
-    this.http.get(SystemConstants.BASE_API + 'users/' + id + '/teams').subscribe(data => {
-      this._teams.next(<ITeam[]>data);
+    this.http.get<ITeam[]>(SystemConstants.BASE_API + 'users/' + id + '/teams').subscribe(data => {
+      if(data.length == 0){
+        console.log("Don't have team");
+      }else{
+        this._teams.next(<ITeam[]>data);
+      }
     });
   }
   
@@ -167,6 +208,7 @@ export class AccountService {
     JSON.stringify({position_id,user_id}),httpOptions).subscribe(res =>{
       if(res == 1){
         console.log("Added Main Position");
+        this.addUserPowers(user_id,position_id);
         this.updatePositionNameToUser(user_id,position_id,"MP");
       }
     });
@@ -249,6 +291,51 @@ export class AccountService {
     this.http.post(SystemConstants.BASE_API + 'user/'+ to_id +'/friend-request/add',
     JSON.stringify({from_id,message}),httpOptions).subscribe(res =>{
       console.log(res);
+    });
+  }
+  deleteNotification(id: any): Observable<boolean>{
+    return this.http.delete(SystemConstants.BASE_API + 'user/notifications/delete/'+id,httpOptions).
+      pipe(
+        map((res) =>{
+          if(res){
+            return true;
+          }
+          return false;
+        })
+      );
+  }
+
+  addFriend(userId: any,friendId: any,notiId: any){
+    this.deleteNotification(notiId).subscribe((res)=>{
+      if(res){
+        console.log("Delete friend request notification success");
+        this.getUserNotifications(userId);
+        this.http.post(SystemConstants.BASE_API + 'user/'+ userId +'/friends/add',
+        JSON.stringify({friendId}),httpOptions).subscribe(res =>{
+          console.log(res);
+          console.log("Add friend success");
+        });
+      }
+    });
+  }
+
+  getListFriend(userId: any){
+    this.http.get<IPlayer[]>(SystemConstants.BASE_API + 'user/' + userId + '/friends/').subscribe(data => {
+      if(data.length == 0){
+        console.log("Don't have friend");
+      }else{
+        this._friends.next(<IPlayer[]>data);
+      }
+    });
+  }
+
+  getListUserHadSendFR(id: any){
+    this.http.get<INotification[]>(SystemConstants.BASE_API + 'user/' + id + '/notifications/sended').subscribe(data => {
+      if(data.length == 0){
+        console.log("Don't have notification"); 
+      }else{
+        this._listUserHadSendFR.next(<INotification[]>data);
+      }
     });
   }
 }

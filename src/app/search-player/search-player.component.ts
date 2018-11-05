@@ -8,14 +8,13 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ChatService } from '../core/services/chat.service';
 import { SystemConstants } from '../core/common/system.constants';
+import { INotification } from '../interfaces/INotification';
 
 export interface message {
   to_user_id: number;
   message: string;
   type:number;
 }
-
-
 @Component({  
   selector: 'app-search-player',
   templateUrl: './search-player.component.html',
@@ -31,6 +30,7 @@ export class SearchPlayerComponent implements OnInit {
   searchFilter : Boolean = false;
   isCloned : Boolean = false;
   listPlayerClone :IPlayer[] = [];
+  listPlayerHadSendFR: INotification[] = [];
   toUserName: String = "";
   messages: String = "";
   listWardData = [
@@ -38,7 +38,7 @@ export class SearchPlayerComponent implements OnInit {
       id: 28,name:'TP.Hồ Chí Minh' , listWard: ['Quận 1','Quận 2','Quận 3','Quận 4','Quận 5',
             'Quận 6','Quận 7','Quận 8','Quận 9','Quận 10',
             'Quận 11','Quận 12','Quận Tân Bình','Quận Tân Phú',
-            'Quận Phú Nhuận','Quận Gò Vấp','Quận Bình Thạnh',
+            'Quận Phú Nhuận','Quận Gò Vấp','Quận Bình Thạnh', 
             'Quận Thủ Đức' ,'Quận Bình Tân','Huyện Hóc Môn',
             'Huyện Củ Chi' ,'Huyện Nhà Bè' ,'Huyện Bình Chánh',
             'Huyện Cần Giờ']
@@ -70,15 +70,15 @@ export class SearchPlayerComponent implements OnInit {
   playerCity: String = "";
   playerAge: number = 0;
   filterPlayer: string = "";
-
-  listPlayers : IPlayer[];
+  listPlayers : IPlayer[] = [];
+  listFriends : IPlayer[] = [];
   showSpinner : boolean = true;
+  playerSended: boolean = false;
   constructor(
     private accountServices : AccountService,
     private router: Router,
     private toastr: ToastrManager,
-    public dialog: MatDialog,
-    private chatService: ChatService 
+    public dialog: MatDialog
   ) { 
   }
   ngOnInit() {
@@ -90,9 +90,38 @@ export class SearchPlayerComponent implements OnInit {
         this.accountServices.getUsersFromServer();
       }else{
         this.listPlayerResult = data;
+        this.listPlayerResult.forEach(player =>{
+          player.IsFriend = false;
+        })
+        this.accountServices.Friends.subscribe(data => {
+          if(data.length == 0){
+            this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER));
+            this.showSpinner = false;
+          }else{
+            this.listFriends = <IPlayer[]>data;
+            this.listPlayerResult.forEach(user =>{
+              this.listFriends.forEach(friend => {
+                if(user.id === friend.id){
+                  console.log(friend);
+                  user.IsFriend = true;
+                }
+              })
+            });    
+              this.showSpinner = false;
+          }
+        });
+      }
+    });
+
+    this.accountServices.listHadSendFR.subscribe(data => {
+      if(data.length == 0){
+        this.accountServices.getListUserHadSendFR(localStorage.getItem(SystemConstants.CURRENT_USER));
+      }else{
+        this.listPlayerHadSendFR = data;
         this.showSpinner = false;
       }
     });
+    
   }
   changeSelection(ply: IPlayer){
     this.playerFocusing = ply;
@@ -131,21 +160,36 @@ export class SearchPlayerComponent implements OnInit {
   }
 
   addFriend(id: any){
-    const dialogRef = this.dialog.open(DialogFriendRequestMessages, {
-      width: '250px',
-      data: {message: ""}
+    console.log(this.listPlayerHadSendFR);
+    console.log(id);
+    this.listPlayerHadSendFR.forEach(request =>{
+      if(request.user_id == id) 
+      {
+        this.playerSended = true ;
+      }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      this.requestMessage.to_user_id = id;
-      this.requestMessage.message = result;
-      console.log(this.requestMessage);
-      this.accountServices.addFriendRequest(localStorage.getItem(SystemConstants.CURRENT_USER),this.requestMessage.to_user_id,this.requestMessage.message);
-    });
-    // this.toastr.successToastr('Đã gửi lời mời kết bạn', 'Thông báo',{
-    //   position: 'top-right',
-    //   animate: 'slideFromTop'
-    // })
+    if(this.playerSended){
+      this.toastr.successToastr('Đã gửi lời mời kết bạn', 'Thông báo',{
+        position: 'top-right',
+        animate: 'slideFromTop'
+      });
+    }else{
+      const dialogRef = this.dialog.open(DialogFriendRequestMessages, {
+        width: '250px',
+        data: {message: ""}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        this.requestMessage.to_user_id = id;
+        this.requestMessage.message = result;
+        this.accountServices.addFriendRequest(localStorage.getItem(SystemConstants.CURRENT_USER),this.requestMessage.to_user_id,this.requestMessage.message);
+        this.toastr.successToastr('Đã gửi lời mời kết bạn', 'Thông báo',{
+          position: 'top-right',
+          animate: 'slideFromTop'
+        })
+      });
+    }
+    
   }
   sendMsg(){
     //this.chatService.message.next(this.requestMessage);

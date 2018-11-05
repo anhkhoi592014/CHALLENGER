@@ -54,7 +54,7 @@
           </div>
           <div class="actions">
               <a (click)="viewDetail(player.id);"><i class="ion-eye"></i></a>
-              <a (click)="addFriend(player.id);"><i class="ion-person-add"></i></a>
+              <a *ngIf="!player.IsFriend" (click)="addFriend(player.id);"><i class="ion-person-add"></i></a>
           </div>
         </div>
     </div>

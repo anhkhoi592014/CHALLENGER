@@ -78,11 +78,14 @@ export class PlayerEditInfoComponent  implements OnInit{
       if(res.length != 0){
         this.player = <IPlayer>res;   
         this.imgUrl = <string>this.player.ImgUrl;
-        this.dateOfBirth = new Date(this.player.DateOfBirth).getFullYear().toString() + '-' 
-        +  ((new Date(this.player.DateOfBirth).getMonth() + 1 < 10) ? '0' + new Date(this.player.DateOfBirth).getMonth() + 1 : new Date(this.player.DateOfBirth).getMonth() + 1)+'-'
+        this.dateOfBirth = new Date(this.player.DateOfBirth).getFullYear().toString() 
+        + '-' 
+        +  ((new Date(this.player.DateOfBirth).getMonth() + 1 < 10) ? '0' + (<number>(new Date(this.player.DateOfBirth).getMonth()) + 1) : (<number>(new Date(this.player.DateOfBirth).getMonth()) + 1)) 
+        + '-'
         + ((new Date(this.player.DateOfBirth).getDate() + 1 < 10) ? '0' + new Date(this.player.DateOfBirth).getDate().toString() : new Date(this.player.DateOfBirth).getDate().toString());
       this.showSpinner = false;
       this.listWard = this.listWardData.find(data => data.name == this.player.City).listWard;
+      console.log(this.dateOfBirth);
       }else{
         this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));    
       }
@@ -134,7 +137,7 @@ export class PlayerEditInfoComponent  implements OnInit{
 
   // Cập nhập ngày sinh
   changeDOB(){
-    this.player.DateOfBirth = new Date(this.dateOfBirth);
+    this.player.DateOfBirth = this.dateOfBirth;
   }
 
   // Cập nhập hình đại diện

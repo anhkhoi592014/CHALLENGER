@@ -36,6 +36,7 @@ import { TeamsComponent } from './teams/teams.component';
 import { ErrorsHandler } from './shared/errors-handler';
 import { MaterialModule } from './material.module';
 import { MatNativeDateModule } from '@angular/material';
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 const appRoute:Routes = [
   {
@@ -188,6 +189,7 @@ const appRoute:Routes = [
     FormsModule,
     HttpClientModule,
     NgxSpinnerModule,
+    Ng2ImgMaxModule,
     MatNativeDateModule,
     MaterialModule,
     AgmCoreModule.forRoot({

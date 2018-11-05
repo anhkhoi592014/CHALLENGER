@@ -4,7 +4,11 @@
 
 export const environment = {
   production: false,
-  CHAT_URL: 'ws://echo.websocket.org/'
+  CHAT_URL: 'ws://echo.websocket.org/',
+  pusher: {
+    key: '2a8e4ee7091be69eff31',
+    cluster: 'ap1',
+  }
 };
 
 /*
