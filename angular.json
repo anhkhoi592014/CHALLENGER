@@ -30,8 +30,8 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "../node_modules/pusher-js/dist/web/pusher.min.js",
-              "../node_modules/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"
+              "../CHALLENGER/node_modules/pusher-js/dist/web/pusher.min.js",
+              "../CHALLENGER/node_modules/blueimp-canvas-to-blob/js/canvas-to-blob.min.js"
             ]
           },
           "configurations": {
