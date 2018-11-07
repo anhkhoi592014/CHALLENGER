@@ -86,6 +86,7 @@ export class HeaderComponent implements OnInit {
   accept(noti: showNotification){
     this.accountServices.addFriend(localStorage.getItem(SystemConstants.CURRENT_USER),noti.idFrom,noti.idNoti);
     this.listFriends.push(this.listUserSendNotification.filter(p => p.id == noti.idFrom)[0]);
+    
   }
   viewUser(id: any){
     this.showSpinnerViewUser = true;
@@ -112,11 +113,15 @@ export class HeaderComponent implements OnInit {
       cluster: 'ap1',
       encrypted: true
     });
-    echo.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER))
+    echo.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.notifications')
       .listen('NewRequest', (e:INotification[])=>{
         this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
         //this.notifications = e
       });
+    echo.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.friends')
+    .listen('UserFriends', (e:IPlayer[])=>{
+      this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER)); 
+    });
   }
   toggleNtf(){
     this.showNotification = !this.showNotification;
