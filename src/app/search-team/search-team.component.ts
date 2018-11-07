@@ -13,7 +13,7 @@ import { SystemConstants } from '../core/common/system.constants';
   styleUrls: ['./search-team.component.scss']
 })
 export class SearchTeamComponent implements OnInit {
-
+  p: number = 1;
   listTeamsResult : ITeam[] =[];
   listWard :String[] = [];
   filterPlayer: string = "";

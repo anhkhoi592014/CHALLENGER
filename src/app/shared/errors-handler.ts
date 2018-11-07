@@ -21,10 +21,11 @@ export class ErrorsHandler implements ErrorHandler{
                     console.log("404");
                 }
             }
+        }else{
+            // toastr.errorToastr('Có lỗi xãy ra', 'Thông báo ',{
+            // position: 'top-right',
+            // animate: 'slideFromTop'
+            // })
         }
-        toastr.errorToastr('Có lỗi xãy ra', 'Thông báo ',{
-            position: 'top-right',
-            animate: 'slideFromTop'
-          })
     }
 }

@@ -20,7 +20,7 @@ import { HistoryMatchComponent } from './team-detail/team-history-match/history-
 import { TeamFormationComponent } from './team-detail/team-formation/team-formation.component';
 import { AuthenGuard } from './core/guards/authen.guard';
 import { HttpClientModule }    from '@angular/common/http';
-import { HeaderComponent } from './shared/header/header.component';
+import { HeaderComponent,DialogDeleteFriendConfirm } from './shared/header/header.component';
 import { LoggedGuard } from './core/guards/logged.guard';
 import { AccountService } from './core/services/account.service';
 import { PlayerViewComponent } from './player-detail/player-view/player-view.component';
@@ -37,6 +37,7 @@ import { ErrorsHandler } from './shared/errors-handler';
 import { MaterialModule } from './material.module';
 import { MatNativeDateModule } from '@angular/material';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 const appRoute:Routes = [
   {
@@ -179,7 +180,8 @@ const appRoute:Routes = [
     TeamViewComponent,
     TeamManageComponent,
     TeamsComponent,
-    DialogFriendRequestMessages
+    DialogFriendRequestMessages,
+    DialogDeleteFriendConfirm
   ],
   imports: [
     BrowserModule,
@@ -191,14 +193,14 @@ const appRoute:Routes = [
     NgxSpinnerModule,
     Ng2ImgMaxModule,
     MatNativeDateModule,
-    MaterialModule,
+    MaterialModule,NgxPaginationModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAezERfylXQGWKbOyR9XV5aJb_FTZQkApI'
     }),
     RouterModule.forRoot(appRoute)
   ],
 
-  entryComponents: [SearchPlayerComponent, DialogFriendRequestMessages],
+  entryComponents: [SearchPlayerComponent, DialogFriendRequestMessages,DialogDeleteFriendConfirm],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthenGuard,LoggedGuard,AccountService,PositionService,{
     provide: ErrorHandler,

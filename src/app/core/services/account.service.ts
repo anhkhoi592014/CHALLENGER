@@ -313,16 +313,26 @@ export class AccountService {
         this.http.post(SystemConstants.BASE_API + 'user/'+ userId +'/friends/add',
         JSON.stringify({friendId}),httpOptions).subscribe(res =>{
           console.log(res);
-          console.log("Add friend success");
         });
       }
     });
   }
 
+  deleteFriend(userId: any ,friendId: any): Observable<boolean>{
+    return this.http.delete(SystemConstants.BASE_API + 'user/' + userId +'/friends/delete/'+friendId,httpOptions).
+    pipe(
+      map((res) =>{
+        if(res){
+          return true;
+        }
+        return false;
+      })
+    );
+  }
+
   getListFriend(userId: any){
     this.http.get<IPlayer[]>(SystemConstants.BASE_API + 'user/' + userId + '/friends/').subscribe(data => {
       if(data.length == 0){
-        console.log("Don't have friend");
       }else{
         this._friends.next(<IPlayer[]>data);
       }
@@ -332,7 +342,6 @@ export class AccountService {
   getListUserHadSendFR(id: any){
     this.http.get<INotification[]>(SystemConstants.BASE_API + 'user/' + id + '/notifications/sended').subscribe(data => {
       if(data.length == 0){
-        console.log("Don't have notification"); 
       }else{
         this._listUserHadSendFR.next(<INotification[]>data);
       }

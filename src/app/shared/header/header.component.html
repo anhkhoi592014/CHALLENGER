@@ -30,7 +30,7 @@
             </ul>
         </div>
     </div>
-    <div class="user">
+    <div [ngClass]="['user',toggleFL? 'show':'off']">
         <div class="img-container" (click)="toggleFriendList();">
             <img src="../../../assets/friend.png">
         </div>
@@ -38,25 +38,47 @@
     <div class="friend-list">
         <div [ngClass]="['friendList',toggleFL? 'show':'off']" >
             <div class="header">
+                <div class="self">
+                    <div class="left">
+                        <div class="img-container">
+                            <img src="../../../assets/player01.png">
+                        </div>
+                    </div>
+                    <div class="right">
+                        <p>Anh Khoi</p>
+                        <span>Online</span>
+                    </div>
+                </div>
+                <div class="search-input">
+                    <input type="text" placeholder="Lọc danh sách bạn bè">
+                    <div class="s-img-container">
+                        <img src="../../../assets/serach.png">
+                    </div>    
+                </div>
                 <p>Danh sách bạn bè</p>
             </div>
             <ul>
-                <li *ngFor="let noti of listShowNotification">
+                <li *ngFor="let friend of listFriends">
                     <div class="img-container" (click)="viewUser(noti.idFrom);">
                         <loading-spinner *ngIf="showSpinnerViewUser"></loading-spinner>
-                        <img src="">
+                        <img src="../{{friend.ImgUrl}}">
                     </div>
                     <div class="content">
-                        <p>{{ noti.typeName }}</p>
+                        <p>{{ friend.Fullname }}</p>
                         <div class="time-actions">
-                            <span class="time">{{ noti.timeFromNow }}</span>
-                            <div class="actions">
-                                <button type="button" (click)="accept(noti.idNoti)">Chấp nhận</button>
-                                <button type="button" (click)="delete(noti.idNoti)">Xóa</button>
-                            </div>
+                            <span class="time">{{ friend.status }}Online</span>
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <div class="chat-img-container">
+                            <img src="{{imgChat}}" alt="" (mouseenter)="imgChatHover();" (mouseleave)="imgChatLeave();">
+                        </div>
+                        <div class="x-img-container">
+                            <img src="{{imgX}}" alt="" (click)="deleteFriend(friend.id);" (mouseenter)="imgXHover();" (mouseleave)="imgXLeave();">
                         </div>
                     </div>
                 </li>
+                
             </ul>
         </div>
     </div>

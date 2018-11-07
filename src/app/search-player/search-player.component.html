@@ -42,7 +42,7 @@
       </div>
     </div>
       <div class="list-player">
-        <div class="box" *ngFor="let player of listPlayerResult | filter : filterPlayer" (mouseenter)="changeSelection(player);">
+        <div class="box" *ngFor="let player of listPlayerResult  | paginate: { itemsPerPage: 9, currentPage: p } | filter : filterPlayer" (mouseenter)="changeSelection(player);">
           <div class="player-container">
             <div class="img-container">
               <img src="{{ player.ImgUrl }}">
@@ -57,6 +57,7 @@
               <a *ngIf="!player.IsFriend" (click)="addFriend(player.id);"><i class="ion-person-add"></i></a>
           </div>
         </div>
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
     </div>
   </div>
   <div class="info" *ngIf="playerFocusing.ImgUrl">

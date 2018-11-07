@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { IPlayer } from 'src/app/interfaces/IPlayer';
 import { INotification } from 'src/app/interfaces/INotification';
 import { AccountService } from 'src/app/core/services/account.service';
@@ -8,6 +8,8 @@ import * as Echo from 'laravel-echo' ;
 import { Router } from '@angular/router';
 import { UrlConstants } from 'src/app/core/common/url.constants';
 import * as moment from 'moment';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { ToastrManager } from 'ng6-toastr-notifications';
 export interface showNotification{
   idNoti: number,
   idFrom?: number,
@@ -29,16 +31,21 @@ export class HeaderComponent implements OnInit {
   updateStatus : boolean = false;
   showSpinnerViewUser: boolean = false;
   toggleFL: boolean = false;
+  listFriends : IPlayer[] = [];
+  imgChat: string = "../../../assets/chat.png";
+  imgX: string = "../../../assets/x-mark.png";
   @Input() title: String;
   constructor(
     private accountServices: AccountService,
     private notificationServices: NotificationService,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrManager,
+    public dialog: MatDialog
   ) { 
-    this.subscribe();
   }
 
   ngOnInit() {
+    this.subscribe();
     this.accountServices.Notifications.subscribe(res =>{
         this.notifications = <INotification[]> res;
         this.notificationServices.Users.subscribe(res =>{
@@ -58,6 +65,14 @@ export class HeaderComponent implements OnInit {
         this.notificationServices.getListUserSend(localStorage.getItem(SystemConstants.CURRENT_USER));
     }); 
     this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
+    this.accountServices.Friends.subscribe(data => {
+      if(data.length == 0){
+        this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER));
+      }else{
+        this.listFriends = data;   
+      }
+      console.log(data);
+    });
   }
   delete(id: number){
     this.accountServices.deleteNotification(id).subscribe(res => {
@@ -70,6 +85,7 @@ export class HeaderComponent implements OnInit {
   }
   accept(noti: showNotification){
     this.accountServices.addFriend(localStorage.getItem(SystemConstants.CURRENT_USER),noti.idFrom,noti.idNoti);
+    this.listFriends.push(this.listUserSendNotification.filter(p => p.id == noti.idFrom)[0]);
   }
   viewUser(id: any){
     this.showSpinnerViewUser = true;
@@ -98,17 +114,78 @@ export class HeaderComponent implements OnInit {
     });
     echo.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER))
       .listen('NewRequest', (e:INotification[])=>{
-         //this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
-        this.notifications = e
+        this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
+        //this.notifications = e
       });
   }
   toggleNtf(){
     this.showNotification = !this.showNotification;
     this.listShowNotification.map((noti) =>{
       noti.timeFromNow = moment(noti.timeSend).fromNow()
-    })
+    });
+    if(this.showNotification == true){
+      this.toggleFL = false;
+    }
   }
   toggleFriendList(){
     this.toggleFL = !this.toggleFL;
+    if(this.toggleFL == true){
+      this.showNotification = false;
+    }
   }
+  imgChatHover(){
+    this.imgChat = "../../../assets/chat-hover.png";
+  }
+  imgChatLeave(){
+    this.imgChat = "../../../assets/chat.png";
+  }
+  imgXHover(){
+    this.imgX = "../../../assets/x-mark-hover.png";
+  }
+  imgXLeave(){
+    this.imgX = "../../../assets/x-mark.png"; 
+  }
+  deleteFriend(id: number){
+    const dialogRef = this.dialog.open(DialogDeleteFriendConfirm, {
+      width: '250px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.accountServices.deleteFriend(localStorage.getItem(SystemConstants.CURRENT_USER),id).subscribe(res =>{
+          if(res){
+            this.listFriends = this.listFriends.filter(f => f.id != id);
+            this.toastr.successToastr('Xóa bạn thành công', 'Thông báo',{
+              position: 'top-right',
+              animate: 'slideFromTop'
+            });
+          }else{
+            this.toastr.errorToastr('Xóa bạn thất bại', 'Thông báo',{
+              position: 'top-right',
+              animate: 'slideFromTop'
+            });
+          }
+        })
+      }
+      else{
+        console.log("Cancel");
+      }
+    });
+  }
+}
+
+
+@Component({
+  selector: 'dialog-delete-friend-confirm',
+  templateUrl: 'dialog-delete-friend-confirm.html',
+})
+export class DialogDeleteFriendConfirm {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogDeleteFriendConfirm>,
+    @Inject(MAT_DIALOG_DATA) public player: IPlayer) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
 }

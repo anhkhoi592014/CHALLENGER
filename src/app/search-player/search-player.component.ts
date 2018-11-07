@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 import { UrlConstants } from '../core/common/url.constants';  
 import { ToastrManager } from 'ng6-toastr-notifications';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { ChatService } from '../core/services/chat.service';
 import { SystemConstants } from '../core/common/system.constants';
 import { INotification } from '../interfaces/INotification';
 
@@ -21,6 +20,7 @@ export interface message {
   styleUrls: ['./search-player.component.scss']
 })
 export class SearchPlayerComponent implements OnInit {
+  p: number = 1;
   private requestMessage: message = {
     to_user_id: 0,
     message: '',
@@ -92,35 +92,41 @@ export class SearchPlayerComponent implements OnInit {
         this.listPlayerResult = data;
         this.listPlayerResult.forEach(player =>{
           player.IsFriend = false;
-        })
+        });
         this.accountServices.Friends.subscribe(data => {
           if(data.length == 0){
             this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER));
-            this.showSpinner = false;
           }else{
-            this.listFriends = <IPlayer[]>data;
+            this.listFriends = data;
             this.listPlayerResult.forEach(user =>{
               this.listFriends.forEach(friend => {
                 if(user.id === friend.id){
-                  console.log(friend);
                   user.IsFriend = true;
                 }
-              })
+              });
             });    
-              this.showSpinner = false;
+          }
+        });
+        this.accountServices.listHadSendFR.subscribe(data => {
+          if(data.length == 0){
+            this.accountServices.getListUserHadSendFR(localStorage.getItem(SystemConstants.CURRENT_USER));
+            this.showSpinner = false;
+          }else{
+            this.listPlayerHadSendFR = data;
+            this.listPlayerResult.forEach(player =>{
+              this.listPlayerHadSendFR.forEach(playerSended => {
+                if(player.id === playerSended.user_id){
+                   player.IsFriend = true;
+                }
+              });
+            });
+            this.showSpinner = false;
           }
         });
       }
     });
 
-    this.accountServices.listHadSendFR.subscribe(data => {
-      if(data.length == 0){
-        this.accountServices.getListUserHadSendFR(localStorage.getItem(SystemConstants.CURRENT_USER));
-      }else{
-        this.listPlayerHadSendFR = data;
-        this.showSpinner = false;
-      }
-    });
+    
     
   }
   changeSelection(ply: IPlayer){
@@ -160,8 +166,6 @@ export class SearchPlayerComponent implements OnInit {
   }
 
   addFriend(id: any){
-    console.log(this.listPlayerHadSendFR);
-    console.log(id);
     this.listPlayerHadSendFR.forEach(request =>{
       if(request.user_id == id) 
       {
@@ -180,13 +184,24 @@ export class SearchPlayerComponent implements OnInit {
         data: {message: ""}
       });
       dialogRef.afterClosed().subscribe(result => {
-        this.requestMessage.to_user_id = id;
-        this.requestMessage.message = result;
-        this.accountServices.addFriendRequest(localStorage.getItem(SystemConstants.CURRENT_USER),this.requestMessage.to_user_id,this.requestMessage.message);
-        this.toastr.successToastr('Đã gửi lời mời kết bạn', 'Thông báo',{
-          position: 'top-right',
-          animate: 'slideFromTop'
-        })
+        if(result){
+          this.requestMessage.to_user_id = id;
+          this.requestMessage.message = result;
+          this.accountServices.addFriendRequest(localStorage.getItem(SystemConstants.CURRENT_USER),this.requestMessage.to_user_id,this.requestMessage.message);
+          this.toastr.successToastr('Đã gửi lời mời kết bạn', 'Thông báo',{
+            position: 'top-right',
+            animate: 'slideFromTop'
+          });
+          //this.listPlayerResult = this.listPlayerResult.filter(user => user.id != id);
+          this.listPlayerResult.forEach(player => {
+            if(player.id == id){
+              player.IsFriend = true;
+            }
+          });
+        }
+        else{
+          console.log("ok fine");
+        }
       });
     }
     
