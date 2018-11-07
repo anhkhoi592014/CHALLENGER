@@ -118,8 +118,16 @@ export class HeaderComponent implements OnInit {
         this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
         //this.notifications = e
       });
-    echo.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.friends')
+    var echo2 = new Echo({
+      authEndpoint : 'http://127.0.0.1:8000/broadcasting/auth',
+      broadcaster: 'pusher',
+      key: '2a8e4ee7091be69eff31',
+      cluster: 'ap1',
+      encrypted: true
+    });
+    echo2.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.friends')
     .listen('UserFriends', (e:IPlayer[])=>{
+      console.log("alo 123");
       this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER)); 
     });
   }
