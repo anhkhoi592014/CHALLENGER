@@ -10,6 +10,7 @@ import { UrlConstants } from 'src/app/core/common/url.constants';
 import * as moment from 'moment';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ToastrManager } from 'ng6-toastr-notifications';
+import { ConversationService } from 'src/app/core/services/conversation.service';
 export interface showNotification{
   idNoti: number,
   idFrom?: number,
@@ -32,12 +33,16 @@ export class HeaderComponent implements OnInit {
   showSpinnerViewUser: boolean = false;
   toggleFL: boolean = false;
   listFriends : IPlayer[] = [];
+  currentUser: IPlayer = {};
+  filterPlayer: string = "";
+  searchFilter : Boolean = false;
   imgChat: string = "../../../assets/chat.png";
   imgX: string = "../../../assets/x-mark.png";
   @Input() title: String;
   constructor(
     private accountServices: AccountService,
     private notificationServices: NotificationService,
+    private conversationServices: ConversationService,
     private router: Router,
     private toastr: ToastrManager,
     public dialog: MatDialog
@@ -45,7 +50,11 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.subscribe();
+    this.subscribe(); 
+    this.accountServices.Users.subscribe(res => {
+        this.currentUser = <IPlayer>res;
+    }); 
+    this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
     this.accountServices.Notifications.subscribe(res =>{
         this.notifications = <INotification[]> res;
         this.notificationServices.Users.subscribe(res =>{
@@ -86,15 +95,15 @@ export class HeaderComponent implements OnInit {
   accept(noti: showNotification){
     this.accountServices.addFriend(localStorage.getItem(SystemConstants.CURRENT_USER),noti.idFrom,noti.idNoti);
     this.listFriends.push(this.listUserSendNotification.filter(p => p.id == noti.idFrom)[0]);
-    
   }
   viewUser(id: any){
     this.showSpinnerViewUser = true;
+    this.accountServices.getViewUserById(id);
+    this.accountServices.getUserPowers(id);
+    this.accountServices.getUsersTeams(id); 
+    this.accountServices.getUserPositions(id);
     setTimeout(()=>{
-      this.accountServices.getUserById(id);
-      this.accountServices.getUserPowers(id);
-      this.accountServices.getUsersTeams(id); 
-      this.accountServices.getUserPositions(id);
+      this.showSpinnerViewUser = false;
       this.router.navigate([UrlConstants.PLAYER_DETAILS + '/' + id])
     },2000);
   }
@@ -104,6 +113,9 @@ export class HeaderComponent implements OnInit {
     }else if(id == 2){
       return "Đã gửi lời mời vào đội";
     }
+  }
+  resetFilter(){
+    
   }
   subscribe(){
     var echo = new Echo({
@@ -115,6 +127,7 @@ export class HeaderComponent implements OnInit {
     });
     echo.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.notifications')
       .listen('NewRequest', (e:INotification[])=>{
+        console.log("channel new request");
         this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
         //this.notifications = e
       });
@@ -127,7 +140,7 @@ export class HeaderComponent implements OnInit {
     });
     echo2.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.friends')
     .listen('UserFriends', (e:IPlayer[])=>{
-      console.log("alo 123");
+      console.log("channel user friends");
       this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER)); 
     });
   }
@@ -184,8 +197,10 @@ export class HeaderComponent implements OnInit {
       }
     });
   }
+  chat(id: any){  
+    this.router.navigate([UrlConstants.CHAT]);
+  }
 }
-
 
 @Component({
   selector: 'dialog-delete-friend-confirm',

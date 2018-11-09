@@ -61,18 +61,25 @@ export class PlayerViewComponent implements OnInit {
 
   ngOnInit() {
     // Lấy dữ liệu 
-    this.accountServices.Users.subscribe(res => {
-      if(res.length != 0){
+    if(this.userId){
+      this.accountServices.ViewUsers.subscribe(res =>{
         this.player = <IPlayer>res;
         this.playerAge = (new Date().getFullYear() - new Date(this.player.DateOfBirth).getFullYear());
-        this.spinnerLoading = false;  
-      }
-      else{
-        (this.userId)?          
-        this.accountServices.getUserById(this.userId) :
-        this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
-      }
-    });  
+        this.spinnerLoading = false; 
+      });
+      this.accountServices.getViewUserById(this.userId);
+    }else{
+      this.accountServices.Users.subscribe(res => {
+        if(res.length != 0){
+          this.player = <IPlayer>res;
+          this.playerAge = (new Date().getFullYear() - new Date(this.player.DateOfBirth).getFullYear());
+          this.spinnerLoading = false;  
+        }
+        else{       
+          this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
+        }
+      });  
+    }
     this.accountServices.Powers.subscribe(res => {
         if(res.length != 0){
         this.powersData = res;

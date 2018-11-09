@@ -23,6 +23,7 @@ export class AccountService {
   pusher: any;
   channel: any;
   private _users :BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
+  private _view_users :BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
   private _listUser :BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
   private _powers :BehaviorSubject<IPower[]> = new BehaviorSubject<IPower[]>([]);
   private _teams :BehaviorSubject<ITeam[]> = new BehaviorSubject<ITeam[]>([]);
@@ -45,6 +46,9 @@ export class AccountService {
   // Đăng kí behaviorSubject 
   get Users(){
     return this._users.asObservable();
+  } 
+  get ViewUsers(){
+    return this._view_users.asObservable();
   } 
   get Friends(){
     return this._friends.asObservable();
@@ -92,7 +96,11 @@ export class AccountService {
       this._users.next(<IPlayer[]>data);
     })
   }
-
+  getViewUserById(id: any){
+    this.http.get(SystemConstants.BASE_API + 'users/' + id).subscribe(data => {
+      this._view_users.next(<IPlayer[]>data);
+    })
+  }
   checkUser(username: string,password: string,fullname: string,email: string): Observable<any>{
     return this.http.post(SystemConstants.BASE_API + 'users/check',
     JSON.stringify({username,password,fullname,email}),httpOptions).pipe(

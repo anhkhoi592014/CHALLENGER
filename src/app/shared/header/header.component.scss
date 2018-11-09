@@ -63,6 +63,7 @@
             background: #333;
         }
         .nofication,.friend-list{
+            font-size: 0.9em!important;
             .tooltip{     
                 &::before {
                     content: '';
@@ -147,6 +148,21 @@
                             font-size: 12px;
                             font-weight: bold;
                             color: #a2a2a2;
+                            display: inline-flex;
+                        }
+                        span::before{
+                            content: " ";
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 50%;
+                            align-self: center;
+                            margin-right: 5px;
+                        }
+                        span.online::before{
+                            background:green;
+                        }
+                        span.offline::before{
+                            background: #333;
                         }
                     }
                 }
@@ -224,6 +240,21 @@
                             font-size: 12px;
                             font-weight: bold;
                             color: #a2a2a2;
+                            display: inline-flex;
+                        }
+                        span::before{
+                            content: " ";
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 50%;
+                            align-self: center;
+                            margin-right: 5px;
+                        }
+                        span.online::before{
+                            background:green;
+                        }
+                        span.offline::before{
+                            background: #333;
                         }
                     }
                 }
@@ -292,6 +323,21 @@
                             font-size: 12px;
                             font-weight: bold;
                             color: #a2a2a2;
+                            display: inline-flex;
+                        }
+                        span::before{
+                            content: " ";
+                            width: 10px;
+                            height: 10px;
+                            border-radius: 50%;
+                            align-self: center;
+                            margin-right: 5px;
+                        }
+                        span.online::before{
+                            background:green;
+                        }
+                        span.offline::before{
+                            background: #333;
                         }
                     }
                     .actions{    

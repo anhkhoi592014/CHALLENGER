@@ -41,16 +41,16 @@
                 <div class="self">
                     <div class="left">
                         <div class="img-container">
-                            <img src="../../../assets/player01.png">
+                            <img src="../{{currentUser.ImgUrl}}">
                         </div>
                     </div>
                     <div class="right">
-                        <p>Anh Khoi</p>
-                        <span>Online</span>
+                        <p>{{currentUser.Fullname}}</p>
+                        <span class="{{ currentUser.status == 1 ? 'online' : 'offline' }}">{{ currentUser.status == 1 ? 'Online' : 'Offline' }}</span>
                     </div>
                 </div>
                 <div class="search-input">
-                    <input type="text" placeholder="Lọc danh sách bạn bè">
+                    <input type="text" placeholder="Lọc danh sách bạn bè" [(ngModel)] = "filterPlayer">
                     <div class="s-img-container">
                         <img src="../../../assets/serach.png">
                     </div>    
@@ -58,20 +58,20 @@
                 <p>Danh sách bạn bè</p>
             </div>
             <ul>
-                <li *ngFor="let friend of listFriends">
-                    <div class="img-container" (click)="viewUser(noti.idFrom);">
+                <li *ngFor="let friend of listFriends | filter : filterPlayer">
+                    <div class="img-container" (click)="viewUser(friend.id);">
                         <loading-spinner *ngIf="showSpinnerViewUser"></loading-spinner>
                         <img src="../{{friend.ImgUrl}}">
                     </div>
                     <div class="content">
                         <p>{{ friend.Fullname }}</p>
                         <div class="time-actions">
-                            <span class="time">{{ friend.status }}Online</span>
+                            <span class="{{ friend.status == 1 ? 'online' : 'offline' }}">{{ friend.status == 1 ? 'Online' : 'Offline' }}</span>
                         </div>
                     </div>
                     <div class="actions">
                         <div class="chat-img-container">
-                            <img src="{{imgChat}}" alt="" (mouseenter)="imgChatHover();" (mouseleave)="imgChatLeave();">
+                            <img src="{{imgChat}}" alt="" (click)="chat(friend.id);" (mouseenter)="imgChatHover();" (mouseleave)="imgChatLeave();">
                         </div>
                         <div class="x-img-container">
                             <img src="{{imgX}}" alt="" (click)="deleteFriend(friend.id);" (mouseenter)="imgXHover();" (mouseleave)="imgXLeave();">

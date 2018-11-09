@@ -10,4 +10,5 @@ export class UrlConstants {
     public static EDIT_PLAYER_POWER = "/player-details/edit/power";
     public static EDIT_PLAYER_INFO = "/player-details/edit/info";
     public static TEAM_DETAILS = "/team-details";
+    public static CHAT = "/chat";
  }

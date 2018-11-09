@@ -1,0 +1,106 @@
+<div class="container">
+  <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
+  <div class="content">
+    <div class="list-user">
+      <div class="wrapper">
+        <div class="header">
+          <h1>Trò chuyện</h1>
+        </div>
+        <div class="list">
+          <ul>
+            <li>
+              <div class="left">
+                <div class="img-container">
+                  <img src="../../assets/player01.png">
+                </div>
+              </div>
+              <div class="mid">
+                <p>Vương Vũ Anh Khôi</p>
+                <span>Dmm tra tien</span>
+              </div>
+              <div class="right">
+                <span>11:45</span>
+              </div>
+            </li>
+            <li>
+                <div class="left">
+                  <div class="img-container">
+                    <img src="../../assets/player01.png">
+                  </div>
+                </div>
+                <div class="mid">
+                  <p>Vương Vũ Anh Khôi</p>
+                  <span>Dmm tra tien</span>
+                </div>
+                <div class="right">
+                  <span>11:45</span>
+                </div>
+              </li>
+              <li>
+                  <div class="left">
+                    <div class="img-container">
+                      <img src="../../assets/player01.png">
+                    </div>
+                  </div>
+                  <div class="mid">
+                    <p>Vương Vũ Anh Khôi</p>
+                    <span>Dmm tra tien</span>
+                  </div>
+                  <div class="right">
+                    <span>11:45</span>
+                  </div>
+                </li>
+                <li>
+                    <div class="left">
+                      <div class="img-container">
+                        <img src="../../assets/player01.png">
+                      </div>
+                    </div>
+                    <div class="mid">
+                      <p>Vương Vũ Anh Khôi</p>
+                      <span>Dmm tra tien</span>
+                    </div>
+                    <div class="right">
+                      <span>11:45</span>
+                    </div>
+                  </li>
+                  <li>
+                      <div class="left">
+                        <div class="img-container">
+                          <img src="../../assets/player01.png">
+                        </div>
+                      </div>
+                      <div class="mid">
+                        <p>Vương Vũ Anh Khôi</p>
+                        <span>Dmm tra tien</span>
+                      </div>
+                      <div class="right">
+                        <span>11:45</span>
+                      </div>
+                    </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="chatbox">
+      <mat-toolbar>
+        <span>Vương Vũ Anh Khôi</span>
+      </mat-toolbar>
+      <div class="box">
+        <div class="" [ngClass]="['message',m.id == 1 ? 'left':'right']" *ngFor="let m of conversation">
+          <div class="img-container">
+              <img src='../../assets/player01.png'>
+          </div><p>{{m.message}}</p>
+        </div>
+      </div>
+      <div class="message-input">
+        <div class="input-wrapper">
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Send messages" value="">
+          </mat-form-field>
+          <button (click)="sendMessage();" mat-button><img src="../../assets/send-btn.png"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

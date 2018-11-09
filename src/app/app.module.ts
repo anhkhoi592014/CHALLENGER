@@ -33,6 +33,7 @@ import { PositionService } from './core/services/position.service';
 import { TeamViewComponent } from './team-detail/team-view/team-view.component';
 import { TeamManageComponent } from './team-detail/team-manage/team-manage.component';
 import { TeamsComponent } from './teams/teams.component';
+import { ChatRoomComponent } from './chat-room/chat-room.component';
 import { ErrorsHandler } from './shared/errors-handler';
 import { MaterialModule } from './material.module';
 import { MatNativeDateModule } from '@angular/material';
@@ -53,6 +54,11 @@ const appRoute:Routes = [
   {
     path:'dashboard',
     component:DashboardComponent,
+    canActivate: [AuthenGuard]
+  },
+  {
+    path:'chat',
+    component:ChatRoomComponent,
     canActivate: [AuthenGuard]
   },
   {
@@ -179,7 +185,7 @@ const appRoute:Routes = [
     PlayerEditPowerComponent,
     TeamViewComponent,
     TeamManageComponent,
-    TeamsComponent,
+    TeamsComponent,ChatRoomComponent,
     DialogFriendRequestMessages,
     DialogDeleteFriendConfirm
   ],
