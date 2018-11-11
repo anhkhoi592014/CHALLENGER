@@ -88,6 +88,7 @@ export class ChatRoomComponent implements OnInit {
     });
     echo.channel('conversation.'+ this.conversationSelected + '.messages')
       .listen('NewMessage', (e:IMessage[])=>{
+        this.listMessages = e;
     });
   }
   sendMessage(){
