@@ -43,14 +43,14 @@ export class ChatRoomComponent implements OnInit {
   constructor(
     private conversationServices: ConversationService,
     private accountService: AccountService
-    ) {this.subscribe();}
+    ) {}
 
   ngOnInit() {
+    this.subscribe();
     this.conversationServices.Conversations.subscribe(res =>{
       if(res.length != 0){
         this.listConversations = res;
         this.listConversations.forEach(con => {
-          console.log(con);
           con.withUser = <IPlayer>{};
           if(con.user_one + "" == localStorage.getItem(SystemConstants.CURRENT_USER)){
             this.accountService.getUserChatInfo(con.user_second).subscribe(u => {
@@ -86,18 +86,16 @@ export class ChatRoomComponent implements OnInit {
       cluster: 'ap1',
       encrypted: true
     });
-    echo.channel('conversation.'+ this.conversationSelected + '.messages')
+    echo.channel('conversation.'+'2'+'.messages')
       .listen('NewMessage', (e:IMessage[])=>{
-        this.listMessages = e;
+        console.log(e);
+        this.conversationServices.getMessages(e[0].id);
     });
   }
   sendMessage(){
-    console.log(localStorage.getItem(SystemConstants.CURRENT_USER),
-    this.userSelected,this.conversationSelected,this.messageString);
     const messageString = this.messageString;
     this.conversationServices.addMessage(localStorage.getItem(SystemConstants.CURRENT_USER),
     this.userSelected,this.conversationSelected,this.messageString).subscribe(res =>{
-      console.log(res);
       this.listMessages.unshift({
         from_user_id: this.userSelected,
         to_user_id: localStorage.getItem(SystemConstants.CURRENT_USER),
@@ -105,7 +103,6 @@ export class ChatRoomComponent implements OnInit {
         message: messageString,
         isReceived: false
       });
-      console.log(this.listMessages);
     });
 
     this.messageString = "";
