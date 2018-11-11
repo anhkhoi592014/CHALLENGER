@@ -32,7 +32,7 @@ export class AccountService {
   private _notifications :BehaviorSubject<INotification[]> = new BehaviorSubject<INotification[]>([]); 
   private _listUserHadSendFR :BehaviorSubject<INotification[]> = new BehaviorSubject<INotification[]>([]);
   private _friends:BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
-  
+  private _listUserChat:BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
   constructor(
     private http: HttpClient
   ) {
@@ -76,6 +76,9 @@ export class AccountService {
   get Notifications(){
     return this._notifications.asObservable();
   }
+  get listUserChat(){
+    return this._listUserChat.asObservable();
+  }
   // Lấy data từ server
   getUsersFromServer(){
     this.http.get(SystemConstants.BASE_API + 'users')
@@ -91,9 +94,9 @@ export class AccountService {
       this._listTeams.next(<ITeam[]>data);
     })
   }
-  getUserById(id: any){
+  getUserById(id: any,isChat : boolean = false){
     this.http.get(SystemConstants.BASE_API + 'users/' + id).subscribe(data => {
-      this._users.next(<IPlayer[]>data);
+      isChat ? this._listUserChat.next(<IPlayer[]>data) : this._users.next(<IPlayer[]>data);
     })
   }
   getViewUserById(id: any){
@@ -337,7 +340,17 @@ export class AccountService {
       })
     );
   }
-
+  getUserChatInfo(userId: any): Observable<IPlayer>{
+    return this.http.get<IPlayer>(SystemConstants.BASE_API + 'users/' + userId,httpOptions).
+    pipe(
+      map((res) =>{
+        if(res){
+          return res;
+        }
+        return res;
+      })
+    );
+  }
   getListFriend(userId: any){
     this.http.get<IPlayer[]>(SystemConstants.BASE_API + 'user/' + userId + '/friends/').subscribe(data => {
       if(data.length == 0){

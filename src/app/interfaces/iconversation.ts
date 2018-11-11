@@ -1,4 +1,5 @@
 import { IPlayer } from "./IPlayer";
+import { IMessage } from "./imessage";
 
 export interface IConversation {
     id?: number;
@@ -6,4 +7,5 @@ export interface IConversation {
     user_second?:number;
     status?:number;
     withUser?:IPlayer;
+    listMessage?: IMessage[];
 }

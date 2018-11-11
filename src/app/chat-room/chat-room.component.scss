@@ -12,6 +12,7 @@
         width: 30%;
         height: 100%;
         border:1px solid #333;
+        position: relative;
         .wrapper{
             display: flex;
             flex-flow: column;
@@ -70,6 +71,10 @@
                             flex-flow: row;
                             justify-content: flex-end;
                         }
+                    }li:hover{
+                        background: #333;
+                        color:white;
+                        cursor: pointer;
                     }
                 }
             }
@@ -92,9 +97,9 @@
             .message{
                 height: 15%;
                 .img-container{
-                    width: 20%;
+                    width: 10%;
                     img{
-                        width: 100%;
+                        width: 70%;
                     }
                 }
             }

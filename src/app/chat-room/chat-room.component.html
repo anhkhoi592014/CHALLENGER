@@ -2,82 +2,27 @@
   <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
   <div class="content">
     <div class="list-user">
+      <loading-spinner *ngIf="showListSpinner"></loading-spinner>
       <div class="wrapper">
         <div class="header">
           <h1>Trò chuyện</h1>
         </div>
-        <div class="list">
+        <div class="list" *ngIf="!showListSpinner">
           <ul>
-            <li>
+            <li *ngFor = "let con of listConversations" (click)="getMessage(con.id);">
               <div class="left">
                 <div class="img-container">
-                  <img src="../../assets/player01.png">
+                  <img src="{{ con.withUser.ImgUrl }}">
                 </div>
               </div>
               <div class="mid">
-                <p>Vương Vũ Anh Khôi</p>
-                <span>Dmm tra tien</span>
+                <p>{{ con.withUser.Fullname }}</p>
+                <span>Last messages</span>
               </div>
               <div class="right">
                 <span>11:45</span>
               </div>
             </li>
-            <li>
-                <div class="left">
-                  <div class="img-container">
-                    <img src="../../assets/player01.png">
-                  </div>
-                </div>
-                <div class="mid">
-                  <p>Vương Vũ Anh Khôi</p>
-                  <span>Dmm tra tien</span>
-                </div>
-                <div class="right">
-                  <span>11:45</span>
-                </div>
-              </li>
-              <li>
-                  <div class="left">
-                    <div class="img-container">
-                      <img src="../../assets/player01.png">
-                    </div>
-                  </div>
-                  <div class="mid">
-                    <p>Vương Vũ Anh Khôi</p>
-                    <span>Dmm tra tien</span>
-                  </div>
-                  <div class="right">
-                    <span>11:45</span>
-                  </div>
-                </li>
-                <li>
-                    <div class="left">
-                      <div class="img-container">
-                        <img src="../../assets/player01.png">
-                      </div>
-                    </div>
-                    <div class="mid">
-                      <p>Vương Vũ Anh Khôi</p>
-                      <span>Dmm tra tien</span>
-                    </div>
-                    <div class="right">
-                      <span>11:45</span>
-                    </div>
-                  </li>
-                  <li>
-                      <div class="left">
-                        <div class="img-container">
-                          <img src="../../assets/player01.png">
-                        </div>
-                      </div>
-                      <div class="mid">
-                        <p>Vương Vũ Anh Khôi</p>
-                        <span>Dmm tra tien</span>
-                      </div>
-                      <div class="right">
-                        <span>11:45</span>
-                      </div>
-                    </li>
           </ul>
         </div>
       </div>
@@ -87,16 +32,17 @@
         <span>Vương Vũ Anh Khôi</span>
       </mat-toolbar>
       <div class="box">
-        <div class="" [ngClass]="['message',m.id == 1 ? 'left':'right']" *ngFor="let m of conversation">
-          <div class="img-container">
-              <img src='../../assets/player01.png'>
-          </div><p>{{m.message}}</p>
+        <div class="" [ngClass]="['message',m.isReceived ? 'left':'right']" *ngFor="let m of listMessages">
+          <div class="img-container" *ngIf=" m.isReceived ">
+              <img src="{{imgChat}}">
+          </div>
+          <p>{{m.message}}</p>
         </div>
       </div>
       <div class="message-input">
         <div class="input-wrapper">
           <mat-form-field class="example-full-width">
-            <input matInput placeholder="Send messages" value="">
+            <input matInput placeholder="Send messages" [(ngModel)]="messageString">
           </mat-form-field>
           <button (click)="sendMessage();" mat-button><img src="../../assets/send-btn.png"></button>
         </div>
