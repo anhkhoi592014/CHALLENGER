@@ -95,8 +95,7 @@ export class ChatRoomComponent implements OnInit {
       encrypted: true
     });
     name.channel('conversation.'+ conversations.id +'.messages').listen('NewMessage', (e:IMessage[])=>{ 
-      console.log(e);  
-      if(e[0].from_user_id == localStorage.getItem(SystemConstants.CURRENT_USER)){  
+      if(e['message'].to_user_id == localStorage.getItem(SystemConstants.CURRENT_USER)){  
         this.listConversations.map(con => {
           if(con.id == conversations.id){
             console.log(con);
@@ -107,7 +106,7 @@ export class ChatRoomComponent implements OnInit {
               message: e['message'].message,
               isReceived: true
             });
-            console.log(con);
+            con.lastMessage = e['message'].message;
           } 
         }); 
       }
@@ -122,6 +121,11 @@ export class ChatRoomComponent implements OnInit {
       conversation_id: this.conversationSelected,
       message: messageString,
       isReceived: false
+    });
+    this.listConversations.forEach(con =>{
+      if(con.id === this.conversationSelected){
+        con.lastMessage = this.messageString;
+      }
     });
     this.conversationServices.addMessage(localStorage.getItem(SystemConstants.CURRENT_USER),
     this.userSelected,this.conversationSelected,this.messageString).subscribe(res =>{

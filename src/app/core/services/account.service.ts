@@ -9,9 +9,9 @@ import { map } from 'rxjs/operators';
 import { IUserPosition } from 'src/app/interfaces/iuser-position';
 import { INotification } from 'src/app/interfaces/INotification';
 
-const httpOptions = {
+let httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type':  'application/json'
+    'Content-Type': 'application/json'
   })
 };
 declare const Pusher: any;
