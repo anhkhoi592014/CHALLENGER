@@ -14,6 +14,7 @@ import * as moment from 'moment';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { INotification } from '../interfaces/INotification';
+import { last } from 'rxjs/operators';
 @Component({
   selector: 'app-chat-room',
   templateUrl: './chat-room.component.html',
@@ -46,11 +47,11 @@ export class ChatRoomComponent implements OnInit {
     ) {}
 
   ngOnInit() {
-    this.subscribe();
     this.conversationServices.Conversations.subscribe(res =>{
       if(res.length != 0){
         this.listConversations = res;
         this.listConversations.forEach(con => {
+          this.subscribe(con);
           con.withUser = <IPlayer>{};
           if(con.user_one + "" == localStorage.getItem(SystemConstants.CURRENT_USER)){
             this.accountService.getUserChatInfo(con.user_second).subscribe(u => {
@@ -63,46 +64,68 @@ export class ChatRoomComponent implements OnInit {
               this.showListSpinner = false;
             });
           }
-          this.conversationServices.getMessages(con.id).subscribe(m => {
-            con.listMessage = m;
+          this.conversationServices.getMessages(con.id).subscribe(c => {
+            con.listMessage = c;
+            var gotLastMessage = false;
             con.listMessage.forEach(m => {
               if(m.from_user_id + "" == localStorage.getItem(SystemConstants.CURRENT_USER)){
                 m.isReceived = false;
               }else{
                 m.isReceived = true;
               }
-            })
+              if(!gotLastMessage){
+                con.lastMessage = m.message;
+                gotLastMessage = true;
+              }
+            });
+            gotLastMessage = false;
           });
         });
       }
     })
     this.conversationServices.getConversations(localStorage.getItem(SystemConstants.CURRENT_USER));
   }
-  subscribe(){
-    var echo = new Echo({
+  subscribe(conversations : IConversation){
+    console.log("dang lang nghe conversation:"+  conversations.id);
+    var name = new Echo({
       authEndpoint : 'http://127.0.0.1:8000/broadcasting/auth',
       broadcaster: 'pusher',
-      key: '2a8e4ee7091be69eff31',
+      key: 'adb004555d28bac39090',
       cluster: 'ap1',
       encrypted: true
     });
-    echo.channel('conversation.'+'2'+'.messages')
-      .listen('NewMessage', (e:IMessage[])=>{
-        console.log(e);
-        this.conversationServices.getMessages(e[0].id);
+    name.channel('conversation.'+ conversations.id +'.messages').listen('NewMessage', (e:IMessage[])=>{ 
+      console.log(e);  
+      if(e[0].from_user_id == localStorage.getItem(SystemConstants.CURRENT_USER)){  
+        this.listConversations.map(con => {
+          if(con.id == conversations.id){
+            console.log(con);
+            con.listMessage.unshift({
+              from_user_id: e['message'].from_user_id,
+              to_user_id: e['message'].to_user_id,
+              conversation_id: e['message'].conversation_id,
+              message: e['message'].message,
+              isReceived: true
+            });
+            console.log(con);
+          } 
+        }); 
+      }
+      // this.conversationServices.getMessages(e['message']);
     });
   }
   sendMessage(){
     const messageString = this.messageString;
+    this.listMessages.unshift({
+      from_user_id: this.userSelected,
+      to_user_id: localStorage.getItem(SystemConstants.CURRENT_USER),
+      conversation_id: this.conversationSelected,
+      message: messageString,
+      isReceived: false
+    });
     this.conversationServices.addMessage(localStorage.getItem(SystemConstants.CURRENT_USER),
     this.userSelected,this.conversationSelected,this.messageString).subscribe(res =>{
-      this.listMessages.unshift({
-        from_user_id: this.userSelected,
-        to_user_id: localStorage.getItem(SystemConstants.CURRENT_USER),
-        conversation_id: this.conversationSelected,
-        message: messageString,
-        isReceived: false
-      });
+      console.log("Gui message thanh cong");
     });
 
     this.messageString = "";
@@ -118,3 +141,5 @@ export class ChatRoomComponent implements OnInit {
     });
   }
 }
+
+

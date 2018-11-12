@@ -121,7 +121,7 @@ export class HeaderComponent implements OnInit {
     var echo = new Echo({
       authEndpoint : 'http://127.0.0.1:8000/broadcasting/auth',
       broadcaster: 'pusher',
-      key: '2a8e4ee7091be69eff31',
+      key: 'adb004555d28bac39090',
       cluster: 'ap1',
       encrypted: true
     });
@@ -134,7 +134,7 @@ export class HeaderComponent implements OnInit {
     var echo2 = new Echo({
       authEndpoint : 'http://127.0.0.1:8000/broadcasting/auth',
       broadcaster: 'pusher',
-      key: '2a8e4ee7091be69eff31',
+      key: 'adb004555d28bac39090',
       cluster: 'ap1',
       encrypted: true
     });

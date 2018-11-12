@@ -8,4 +8,5 @@ export interface IConversation {
     status?:number;
     withUser?:IPlayer;
     listMessage?: IMessage[];
+    lastMessage?: string;
 }
