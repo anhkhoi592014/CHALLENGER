@@ -47,6 +47,7 @@ export class ChatRoomComponent implements OnInit {
     ) {}
 
   ngOnInit() {
+    this.subscribeNewConversation();
     this.conversationServices.Conversations.subscribe(res =>{
       if(res.length != 0){
         this.listConversations = res;
@@ -84,6 +85,20 @@ export class ChatRoomComponent implements OnInit {
       }
     })
     this.conversationServices.getConversations(localStorage.getItem(SystemConstants.CURRENT_USER));
+  }
+  subscribeNewConversation(){
+    var name = new Echo({
+      authEndpoint : 'http://127.0.0.1:8000/broadcasting/auth',
+      broadcaster: 'pusher',
+      key: 'adb004555d28bac39090',
+      cluster: 'ap1',
+      encrypted: true
+    });
+    name.channel('user.'+ localStorage.getItem(SystemConstants.CURRENT_USER) +'.conversations').listen('NewMessage', (e:IPlayer)=>{ 
+      if(e.id+"" != localStorage.getItem(SystemConstants.CURRENT_USER)){
+        this.conversationServices.getConversations(localStorage.getItem(SystemConstants.CURRENT_USER));
+      }
+    });
   }
   subscribe(conversations : IConversation){
     console.log("dang lang nghe conversation:"+  conversations.id);

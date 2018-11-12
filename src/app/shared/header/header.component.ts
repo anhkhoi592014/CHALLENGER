@@ -11,6 +11,7 @@ import * as moment from 'moment';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { ConversationService } from 'src/app/core/services/conversation.service';
+import { IConversation } from 'src/app/interfaces/iconversation';
 export interface showNotification{
   idNoti: number,
   idFrom?: number,
@@ -38,6 +39,7 @@ export class HeaderComponent implements OnInit {
   searchFilter : Boolean = false;
   imgChat: string = "../../../assets/chat.png";
   imgX: string = "../../../assets/x-mark.png";
+  covs: IConversation[] = [];
   @Input() title: String;
   constructor(
     private accountServices: AccountService,
@@ -95,6 +97,7 @@ export class HeaderComponent implements OnInit {
   accept(noti: showNotification){
     this.accountServices.addFriend(localStorage.getItem(SystemConstants.CURRENT_USER),noti.idFrom,noti.idNoti);
     this.listFriends.push(this.listUserSendNotification.filter(p => p.id == noti.idFrom)[0]);
+    this.filterPlayer = "";
   }
   viewUser(id: any){
     this.showSpinnerViewUser = true;
@@ -197,8 +200,25 @@ export class HeaderComponent implements OnInit {
       }
     });
   }
-  chat(id: any){  
-    this.router.navigate([UrlConstants.CHAT]);
+  chat(id: any){ 
+    this.showSpinnerViewUser = true;
+    this.conversationServices.watchConversations(localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res =>{
+      if(res.length != 0){
+        this.covs = res.filter(con => (con.user_second == id && con.user_one + "" == localStorage.getItem(SystemConstants.CURRENT_USER)) ||
+        (con.user_one == id && con.user_second + "" == localStorage.getItem(SystemConstants.CURRENT_USER)));
+        console.log(this.covs.length);
+        if(this.covs.length != 0){
+          localStorage.setItem(SystemConstants.CURRENT_CONVERSATION,this.covs[0].id+"");
+          console.log(this.covs[0].id);
+          this.router.navigate([UrlConstants.CHAT]);
+        }else{
+          this.conversationServices.addConversations(id,localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res => {
+            console.log(res);
+            this.router.navigate([UrlConstants.CHAT]);
+          });
+        }
+      }
+    });
   }
 }
 

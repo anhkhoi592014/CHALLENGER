@@ -32,6 +32,26 @@ export class ConversationService {
       this._conversations.next(<IConversation[]>data);
     });
   }
+  watchConversations(id: any): Observable<any>{
+    return this.http.get<IConversation>(SystemConstants.BASE_API + 'user/' + id + '/conversations').pipe(
+      map(res =>{
+        if(res){
+          return res;
+        }
+      })
+    );
+  }
+  addConversations(user_one,user_second): Observable<boolean>{
+    return this.http.post<boolean>(SystemConstants.BASE_API + 'user/conversations/add',
+    JSON.stringify({user_one,user_second}),httpOptions).pipe(
+      map(res =>{
+        if(res){
+          return true;
+        }
+      })
+    )
+  }
+
   // getMessages(id: any){
   //   this.http.get(SystemConstants.BASE_API + 'conversations/' + id + '/messages').subscribe(data =>{
   //     //this._messages.next(<IMessage[]>data);
