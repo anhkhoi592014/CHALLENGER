@@ -41,12 +41,12 @@ export class ConversationService {
       })
     );
   }
-  addConversations(user_one,user_second): Observable<boolean>{
-    return this.http.post<boolean>(SystemConstants.BASE_API + 'user/conversations/add',
+  addConversations(user_one,user_second): Observable<IConversation>{
+    return this.http.post<IConversation>(SystemConstants.BASE_API + 'user/conversations/add',
     JSON.stringify({user_one,user_second}),httpOptions).pipe(
       map(res =>{
         if(res){
-          return true;
+          return res;
         }
       })
     )

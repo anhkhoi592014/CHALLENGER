@@ -39,8 +39,11 @@ export class ChatRoomComponent implements OnInit {
   listMessages: IMessage[] = [];
   imgChat: string = "";
   messageString: string = "";
-  conversationSelected: number = 0;
+  conversationSelected: any = localStorage.getItem(SystemConstants.CURRENT_CONVERSATION);
   userSelected: string = "";
+  isListening: boolean = false;
+  newConversation: IConversation = {};
+  gotListMessage: boolean = false;
   constructor(
     private conversationServices: ConversationService,
     private accountService: AccountService
@@ -52,7 +55,9 @@ export class ChatRoomComponent implements OnInit {
       if(res.length != 0){
         this.listConversations = res;
         this.listConversations.forEach(con => {
-          this.subscribe(con);
+          if(!this.isListening){
+            this.subscribe(con);
+          }
           con.withUser = <IPlayer>{};
           if(con.user_one + "" == localStorage.getItem(SystemConstants.CURRENT_USER)){
             this.accountService.getUserChatInfo(con.user_second).subscribe(u => {
@@ -82,11 +87,25 @@ export class ChatRoomComponent implements OnInit {
             gotLastMessage = false;
           });
         });
+        this.isListening = true;
+        if(!this.gotListMessage){
+          this.listConversations.forEach(con =>{
+            if(con.id +"" == this.conversationSelected){
+              console.log("vo roi");
+              this.imgChat = con.withUser.ImgUrl;
+              this.listMessages = con.listMessage;
+              this.userSelected = con.withUser.id + "";
+            }
+          });
+          this.gotListMessage = true;
+        }
       }
+       
     })
     this.conversationServices.getConversations(localStorage.getItem(SystemConstants.CURRENT_USER));
   }
   subscribeNewConversation(){
+    console.log("Dang lang nge conversation new");
     var name = new Echo({
       authEndpoint : 'http://127.0.0.1:8000/broadcasting/auth',
       broadcaster: 'pusher',
@@ -94,10 +113,29 @@ export class ChatRoomComponent implements OnInit {
       cluster: 'ap1',
       encrypted: true
     });
-    name.channel('user.'+ localStorage.getItem(SystemConstants.CURRENT_USER) +'.conversations').listen('NewConversation', (e:IPlayer)=>{ 
-      if(e.id+"" != localStorage.getItem(SystemConstants.CURRENT_USER)){
-        this.conversationServices.getConversations(localStorage.getItem(SystemConstants.CURRENT_USER));
+    name.channel('user.'+ localStorage.getItem(SystemConstants.CURRENT_USER) +'.conversations').listen('NewConversation', (e:any)=>{ 
+      // if(e.id+"" != localStorage.getItem(SystemConstants.CURRENT_USER)){
+      //   this.conversationServices.getConversations(localStorage.getItem(SystemConstants.CURRENT_USER));
+      // }
+      console.log("Da nhan duoc conversation moi");
+      console.log(e.newConversation);
+      this.newConversation = e.newConversation;
+      this.subscribe(this.newConversation);
+      this.newConversation.withUser = <IPlayer>{};
+      if(this.newConversation.user_one + "" == localStorage.getItem(SystemConstants.CURRENT_USER)){
+        this.accountService.getUserChatInfo(this.newConversation.user_second).subscribe(u => {
+          this.newConversation.withUser = u;
+          this.showListSpinner = false;
+        });
+      }else{
+        this.accountService.getUserChatInfo(this.newConversation.user_one).subscribe(u => {
+          this.newConversation.withUser = u;
+          this.showListSpinner = false;
+        });
       }
+      this.newConversation.listMessage = [];
+      this.newConversation.lastMessage = "";
+      this.listConversations.unshift(this.newConversation);
     });
   }
   subscribe(conversations : IConversation){
@@ -122,6 +160,8 @@ export class ChatRoomComponent implements OnInit {
               isReceived: true
             });
             con.lastMessage = e['message'].message;
+            var length = document.getElementById("box").offsetHeight;
+            document.getElementById("box").scrollBy(0,length*3);
           } 
         }); 
       }
@@ -145,14 +185,16 @@ export class ChatRoomComponent implements OnInit {
     this.conversationServices.addMessage(localStorage.getItem(SystemConstants.CURRENT_USER),
     this.userSelected,this.conversationSelected,this.messageString).subscribe(res =>{
       console.log("Gui message thanh cong");
+      var length = document.getElementById("box").offsetHeight;
+      document.getElementById("box").scrollBy(0,length*3);
     });
-
     this.messageString = "";
   }
-  getMessage(id: number){
+  getMessage(id: any){
     this.conversationSelected = id;
     this.listConversations.forEach(con =>{
-      if(con.id === id){
+      if(con.id == id){
+        console.log("vo roi");
         this.imgChat = con.withUser.ImgUrl;
         this.listMessages = con.listMessage;
         this.userSelected = con.withUser.id + "";

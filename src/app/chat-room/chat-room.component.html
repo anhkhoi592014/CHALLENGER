@@ -9,7 +9,7 @@
         </div>
         <div class="list" *ngIf="!showListSpinner">
           <ul>
-            <li *ngFor = "let con of listConversations" (click)="getMessage(con.id);">
+            <li [ngClass]="[con.id == conversationSelected? 'selected':'']" *ngFor = "let con of listConversations" (click)="getMessage(con.id);">
               <div class="left">
                 <div class="img-container">
                   <img src="{{ con.withUser.ImgUrl }}">
@@ -31,12 +31,14 @@
       <mat-toolbar>
         <span>Vương Vũ Anh Khôi</span>
       </mat-toolbar>
-      <div class="box">
-        <div class="" [ngClass]="['message',m.isReceived ? 'left':'right']" *ngFor="let m of listMessages">
-          <div class="img-container" *ngIf=" m.isReceived ">
-              <img src="{{imgChat}}">
+      <div class="box-wrapper" id="box">
+        <div class="box">
+          <div class="" [ngClass]="['message',m.isReceived ? 'left':'right']" *ngFor="let m of listMessages">
+            <div class="img-container" *ngIf=" m.isReceived ">
+                <img src="{{imgChat}}">
+            </div>
+            <p>{{m.message}}</p>
           </div>
-          <p>{{m.message}}</p>
         </div>
       </div>
       <div class="message-input">
@@ -44,7 +46,7 @@
           <mat-form-field class="example-full-width">
             <input matInput placeholder="Send messages" [(ngModel)]="messageString">
           </mat-form-field>
-          <button (click)="sendMessage();" mat-button><img src="../../assets/send-btn.png"></button>
+          <button (click)="sendMessage(box);" mat-button><img src="../../assets/send-btn.png"></button>
         </div>
       </div>
     </div>
