@@ -94,7 +94,7 @@ export class ChatRoomComponent implements OnInit {
       cluster: 'ap1',
       encrypted: true
     });
-    name.channel('user.'+ localStorage.getItem(SystemConstants.CURRENT_USER) +'.conversations').listen('NewMessage', (e:IPlayer)=>{ 
+    name.channel('user.'+ localStorage.getItem(SystemConstants.CURRENT_USER) +'.conversations').listen('NewConversation', (e:IPlayer)=>{ 
       if(e.id+"" != localStorage.getItem(SystemConstants.CURRENT_USER)){
         this.conversationServices.getConversations(localStorage.getItem(SystemConstants.CURRENT_USER));
       }

@@ -212,10 +212,8 @@ export class HeaderComponent implements OnInit {
           console.log(this.covs[0].id);
           this.router.navigate([UrlConstants.CHAT]);
         }else{
-          this.conversationServices.addConversations(id,localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res => {
-            console.log(res);
+           console.log(res);
             this.router.navigate([UrlConstants.CHAT]);
-          });
         }
       }
     });
