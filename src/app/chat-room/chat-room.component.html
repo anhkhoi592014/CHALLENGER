@@ -29,7 +29,7 @@
     </div>
     <div class="chatbox">
       <mat-toolbar>
-        <span>Vương Vũ Anh Khôi</span>
+        <span *ngIf="conversationSelected">Vương Vũ Anh Khôi</span>
       </mat-toolbar>
       <div class="box-wrapper" id="box">
         <div class="box">
@@ -41,8 +41,8 @@
           </div>
         </div>
       </div>
-      <div class="message-input">
-        <div class="input-wrapper">
+      <div class="message-input" >
+        <div class="input-wrapper"*ngIf="conversationSelected">
           <mat-form-field class="example-full-width">
             <input matInput placeholder="Send messages" [(ngModel)]="messageString">
           </mat-form-field>

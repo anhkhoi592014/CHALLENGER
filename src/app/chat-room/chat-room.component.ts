@@ -50,6 +50,7 @@ export class ChatRoomComponent implements OnInit {
     ) {}
 
   ngOnInit() {
+    localStorage.removeItem(SystemConstants.CURRENT_CONVERSATION);
     this.subscribeNewConversation();
     this.conversationServices.Conversations.subscribe(res =>{
       if(res.length != 0){
@@ -89,18 +90,14 @@ export class ChatRoomComponent implements OnInit {
         });
         this.isListening = true;
         if(!this.gotListMessage){
-          this.listConversations.forEach(con =>{
-            if(con.id +"" == this.conversationSelected){
-              console.log("vo roi");
-              this.imgChat = con.withUser.ImgUrl;
-              this.listMessages = con.listMessage;
-              this.userSelected = con.withUser.id + "";
+          this.listConversations.forEach(c =>{
+            if(c.id +"" == this.conversationSelected){
+              this.getMessage(this.conversationSelected);
             }
           });
           this.gotListMessage = true;
         }
       }
-       
     })
     this.conversationServices.getConversations(localStorage.getItem(SystemConstants.CURRENT_USER));
   }
@@ -169,26 +166,28 @@ export class ChatRoomComponent implements OnInit {
     });
   }
   sendMessage(){
-    const messageString = this.messageString;
-    this.listMessages.unshift({
-      from_user_id: this.userSelected,
-      to_user_id: localStorage.getItem(SystemConstants.CURRENT_USER),
-      conversation_id: this.conversationSelected,
-      message: messageString,
-      isReceived: false
-    });
-    this.listConversations.forEach(con =>{
-      if(con.id === this.conversationSelected){
-        con.lastMessage = this.messageString;
-      }
-    });
-    this.conversationServices.addMessage(localStorage.getItem(SystemConstants.CURRENT_USER),
-    this.userSelected,this.conversationSelected,this.messageString).subscribe(res =>{
-      console.log("Gui message thanh cong");
-      var length = document.getElementById("box").offsetHeight;
-      document.getElementById("box").scrollBy(0,length*3);
-    });
-    this.messageString = "";
+    if(this.messageString != ""){
+      const messageString = this.messageString;
+      this.listMessages.unshift({
+        from_user_id: this.userSelected,
+        to_user_id: localStorage.getItem(SystemConstants.CURRENT_USER),
+        conversation_id: this.conversationSelected,
+        message: messageString,
+        isReceived: false
+      });
+      this.listConversations.forEach(con =>{
+        if(con.id === this.conversationSelected){
+          con.lastMessage = this.messageString;
+        }
+      });
+      this.conversationServices.addMessage(localStorage.getItem(SystemConstants.CURRENT_USER),
+      this.userSelected,this.conversationSelected,this.messageString).subscribe(res =>{
+        console.log("Gui message thanh cong");
+        var length = document.getElementById("box").offsetHeight;
+        document.getElementById("box").scrollBy(0,length*3);
+      });
+      this.messageString = "";
+    }
   }
   getMessage(id: any){
     this.conversationSelected = id;
@@ -197,7 +196,11 @@ export class ChatRoomComponent implements OnInit {
         console.log("vo roi");
         this.imgChat = con.withUser.ImgUrl;
         this.listMessages = con.listMessage;
-        this.userSelected = con.withUser.id + "";
+        if(con.user_one +"" == (localStorage.getItem(SystemConstants.CURRENT_USER))){
+          this.userSelected = con.user_second+"";
+        }else{
+          this.userSelected = con.user_one + "";
+        }
       }
     });
   }
