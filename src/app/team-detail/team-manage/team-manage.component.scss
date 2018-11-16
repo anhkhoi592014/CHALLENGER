@@ -7,10 +7,11 @@
         flex-flow: row;
         background: #f9efef;
         .wrapper{
-            width: 30%;
+            width: 50%;
             padding: 1.5%;
             display: flex;
             flex-flow: column;
+            position: relative;
             .left{
                 width: 100%;
                 height: 100%;
@@ -132,6 +133,7 @@
                         height: 100%;
                         width: 4%;
                         display: flex;
+                        cursor: pointer;
                         img{    
                             width: 80%;
                             align-self: center;
@@ -146,35 +148,59 @@
                 .details{
                     flex-grow: 1;
                     display: flex;
-                    flex-flow: column;
-                    justify-content: space-between;
+                    flex-flow: row;
                     .logo{
-                        width: 20%;
+                        width: 30%;
                         display: flex;
                         flex-flow: row;
-                        border-right: 1px solid #333;
-                        border-bottom: 1px solid #333;
                         justify-content: space-around;
                         .img-container{
                             width: 90%;
                             align-self: center;
+                            cursor: pointer;
                             img{
                                 width: 100%;
                             }
                         }
                     }
-                    .row{
-                        display: flex;
-                        flex-flow: row;
-                        border:none;
-                        .item{
-                            width: 50%;
+                    .team-info{
+                        flex-grow: 1;
+                        .row{
                             display: flex;
                             flex-flow: row;
-                            justify-content: space-between;
-                            padding: 5px 10px;
+                            border: none;
+                            height: 20%;
+                            justify-items: center;
+                            align-items: center;
+                            font-size: 1.3em;
+                            .item{
+                                width: 100%;
+                                display: flex;
+                                flex-flow: row;
+                                padding: 5px 10px;
+                                .show{
+                                    opacity: 1;
+                                    visibility: visible;
+                                }
+                                .hide{
+                                    opacity: 0;
+                                    visibility: hidden;
+                                    width: 0;
+                                }
+                                p{
+                                    width: 40%;
+                                }
+                                .img-container{
+                                    padding-left: 10px;
+                                }
+                                select{
+                                    padding: 2px 5px;
+                                    font-size:1em;
+                                }
+                            }
                         }
                     }
+                    
                 }
             }
             .bottom{
@@ -187,6 +213,7 @@
                     display: flex;
                     flex-flow: column;
                     border: 2px solid #333;
+                    position: relative;
                     .title{
                         display: flex;
                         flex-flow: row;
@@ -204,20 +231,88 @@
                     }
                 }
                 .list-container{
-                    display: flex;
-                    flex-flow: column;
-                    .item{               
+                    overflow-y: scroll;
+                    height: 90%;
+                    .item-invi{
+                        height: 17%;
+                        padding: 5px 10px;
                         display: flex;
-                        flex-flow: column;
-                        padding: 10px 0px;
+                        justify-content: space-around;
+                        .img-section{
+                            width: 20%;
+                            display: flex;
+                            flex-flow: column;
+                            justify-content: space-around;
+                            .img-container{
+                                width: 50%;
+                                align-self: center;
+                                img{
+                                    width: 100%;
+                                }
+                            }
+                        }
+                        .info-section{
+                            flex-grow: 1;
+                            display: flex;
+                            flex-flow: column;
+                            .name{
+                                display: flex;
+                                span{
+                                    flex-grow: 1;
+                                    font-size: 1.35em;
+                                    color: red;
+                                    font-weight: bold;
+                                }
+                                .img-container{
+                                    width: 6%;
+                                    cursor: pointer;
+                                    img{
+                                        width: 100%;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .item{               
+                        height: 17%;
+                        padding: 5px 10px;
+                        justify-content: space-around;
+                        
+                        cursor: pointer;
+                        .img-section{
+                            width: 20%;
+                        }
                         .name{
                             display: flex;
                             flex-flow: row;
-                            justify-content: space-between;
-                            span{                    
-                                font-size: 1.2em;
-                                padding-left: 0.5em;
+                            span{
+                                font-size: 1.35em;
+                                flex-grow: 1;
+                                color: red;
                             }
+                            .logo-container{
+                                display: flex;
+                                flex-flow: row;
+                                width: 15%;
+                                justify-content: space-around;
+                                align-items: center;
+                                img{
+                                    width: 40%;
+                                }
+                            }
+                            .info{
+                                flex-grow: 1;
+                                display: flex;
+                                flex-flow: column;
+                                span{                      
+                                    color: #ec0000;
+                                    font-weight: bold;
+                                }
+                                p{
+                                    
+                                }
+                            }
+                            
                             .img-container{                                    
                                 padding-right: 10px;
                                 width: 4%;
@@ -227,11 +322,10 @@
                                 }
                             }
                         }
-                        .date{
-                            display: flex;
-                            flex-flow: row;
-                            padding-left: 0.5em;
-                        }
+                    }
+                    .item:hover{
+                        color: white;
+                        background: #c7bbbb;
                     }
                 }
             }

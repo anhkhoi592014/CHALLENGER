@@ -2,7 +2,8 @@
   <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
   <div class="content">
     <div class="box-wrapper">
-        <div class="box">
+        <loading-spinner *ngIf="showSpinner"></loading-spinner>
+        <div class="box" *ngIf="!showSpinner">
           <div class="button" (click)="show()">
             show
           </div>
@@ -14,23 +15,27 @@
               <div class="members">
                 <div class="list-member">
                   <ul class="list-members">
-                    <li *ngFor="let player of listPlayer" (click) = "choicePlayer(player)" [ngClass]="( player.id == playerChoiced.id) ? 'clicked' : ''">
-                      <p>{{player.Fullname}}</p>
+                    <li *ngFor="let member of teamMembers" (click) = "choicePlayer(member.user)" [ngClass]="( member.user_id == playerChoiced.id) ? 'clicked' : ''">
+                      <div class="logo-container">
+                        <img src="{{member.imgRoleUrl}}">
+                      </div>
+                      <p>{{member.user.Fullname}}</p>
                     </li>
                   </ul>
                 </div>
                 <div class="slide-wrapper">
-                  <div *ngFor = "let player of listPlayer" [ngClass]="['slide',(player.id == playerChoiced.id)? 'top': '']" >
+                  <div *ngFor = "let member of teamMembers" [ngClass]="['slide',(member.user_id == playerChoiced.id)? 'top': '']" >
                     <div class="img-container">
                         <div class="img-wrapper">
-                          <img src="{{ player.ImgUrl }}"/>
+                          <img src="{{ member.user.ImgUrl }}"/>
                         </div>
                       </div>
                       <div class="info">
-                        <p>Vị trí : {{ playerChoicedPosition.PositionName }}</p>
+                        <p>Chức vụ:  <span style="color:red;">{{ member.roleName }}</span></p>
+                        <p>Vị trí : {{ member.position.PositionName }}</p>
                         <p *ngIf="playerChoicedAge">Tuổi : {{ playerChoicedAge }}</p>
-                        <p>Chiều cao :{{ player.Height }} </p>
-                        <p>Cân nặng : {{ player.Weight }}</p>
+                        <p>Chiều cao :{{  member.user.Height }} </p>
+                        <p>Cân nặng : {{  member.user.Weight }}</p>
                         <p></p>
                       </div>
                   </div>

@@ -20,4 +20,6 @@ export interface IPlayer {
     DateCreated?: String;
     Status?: number;
     IsFriend?: boolean;
+    TeamRole?: string;
+    Invited?: boolean;
 }

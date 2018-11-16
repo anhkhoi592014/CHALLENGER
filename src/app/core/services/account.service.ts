@@ -304,6 +304,12 @@ export class AccountService {
       console.log(res);
     });
   }
+  addTeamRequest(from_id: any,to_id: any){
+    this.http.post(SystemConstants.BASE_API + 'user/'+ to_id +'/team-request/add',
+    JSON.stringify({from_id}),httpOptions).subscribe(res =>{
+      console.log(res);
+    });
+  }
   deleteNotification(id: any): Observable<boolean>{
     return this.http.delete(SystemConstants.BASE_API + 'user/notifications/delete/'+id,httpOptions).
       pipe(

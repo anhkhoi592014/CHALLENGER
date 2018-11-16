@@ -2,11 +2,12 @@
   <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
   <div class="content">
     <div class="wrapper">
-        <div class="left">
+        <loading-spinner *ngIf="showListFriendSpinner"></loading-spinner>
+        <div class="left" *ngIf="!showListFriendSpinner">
             <div class="row">
               <div class="logo">
                 <div class="img-container">
-                  <img src="../../../assets/smalllogo.png">
+                  <img src="../../../assets/smalllogo.png" (click)= "test()">
                 </div>
                 <p>Mời</p>
               </div>
@@ -16,10 +17,10 @@
             </div>
             <div class="list-player">
               <p>Danh sách cầu thủ</p>
-              <div class="item" *ngFor="let player of listPlayerResult">
+              <div class="item" *ngFor="let player of listFriends">
                 <p>{{ player.Fullname }}</p>
                 <span class="{{ player.status == 1 ? 'online' : 'offline' }}"></span> 
-                <div class="img-container">
+                <div class="img-container" *ngIf="!player.Invited" (click)="invite(player);">
                     <img src="../../../assets/invite.png">
                 </div>
               </div>
@@ -37,57 +38,88 @@
         <div class="details">
           <div class="logo">
             <div class="img-container">
-              <img src="../../../assets/logo02.png">
+              <img src="{{ team.ImgUrl }}">
             </div>
           </div>
-          <div class="row">
-            <div class="item">
-              <p>Tình hình đội:</p>
-              <span>Tạm thời</span>
-            </div>
-            <div class="item">
-             <p>Ngày tạo</p>
-             <span>02-12-1995</span>
-            </div>
-          </div>
-          <div class="row">
-            <div class="item">
-              <p>Tình hình đội:</p>
-              <span>Tạm thời</span>
-            </div>
-            <div class="item">
-              <p>Ngày tạo</p>
-              <span>02-12-1995</span>
-            </div>
-          </div>
-          <div class="row">
+          <div class="team-info">
+            <div class="row">
               <div class="item">
-                <p>Tình hình đội:</p>
-                <span>Tạm thời</span>
-              </div>
+                <p>Tên đội: </p>
+                <span *ngIf="!showEditFullName">{{ newName }}</span>
+                <ng-container *ngIf = "showEditFullName">
+                    <input type="text" value="{{team.Fullname}}" [(ngModel)]="newName">
+                    <div class="img-container"  (click)="changeName();">
+                      <img src="../../../assets/accept.png">
+                    </div>
+                    <div class="img-container" (click)="cancelEditFullName();">
+                      <img src="../../../assets/cancel.png">
+                    </div>
+                </ng-container>
+                <div class="img-container" (click)="editFullName();" *ngIf="!showEditFullName">
+                  <img src="../../../assets/pencil.png">
+                </div>
+              </div>  
+            </div>
+            <div class="row">
               <div class="item">
-               <p>Ngày tạo</p>
-               <span>02-12-1995</span>
+                <p>Mã đội: </p>
+                <span>{{ team.TeamCode }}</span>
               </div>
             </div>
+            <div class="row">
+              <div class="item">
+                <p>Ngày tạo</p>
+                <span>{{ team.created_at }}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="item">
+                <p>Thành phố: </p>
+                <span *ngIf="!showEditCity">{{ team.City }}</span>
+                <ng-container *ngIf = "showEditCity">
+                    <select #city>
+                      <option value="TP.Hồ Chí Minh">TP.Hồ Chí Minh</option>
+                      <option value="Hà Nội">Hà Nội</option>
+                    </select>
+                    <div class="img-container" (click)="changeCity(city.value);">
+                      <img src="../../../assets/accept.png">
+                    </div>
+                    <div class="img-container" (click)="cancelEditCity();">
+                      <img src="../../../assets/cancel.png">
+                    </div>
+                </ng-container>
+                <div class="img-container" (click)="editCity();" *ngIf="!showEditCity">
+                  <img src="../../../assets/pencil.png">
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="bottom">
         <div class="list">
+          <loading-spinner *ngIf="showListInvitationSpinner"></loading-spinner>
           <div class="title">
             <p>Danh sách mời</p>
-            <span>Các lời mời hiện có: 0</span>
+            <span>Các lời mời hiện có: {{ countInvitation }}</span>
           </div>
-          <div class="list-container">
-            <div class="item">
-              <div class="name">
-                <span>Vương Vũ Anh Khôi</span>
+          <div class="list-container" *ngIf="!showListInvitationSpinner">
+            <div class="item-invi" *ngFor="let invi of listInvitations">
+              <div class="img-section">
                 <div class="img-container">
-                  <img src="../../../assets/x.png">
+                  <img src="{{ invi.user.ImgUrl }}" alt="">
                 </div>
               </div>
-              <div class="date">
-                <p>05/12/2015</p>
+              <div class="info-section">
+                <div class="name">
+                  <span>{{ invi.user.Fullname }}</span>
+                  <div class="img-container" (click)="cancelInvited(invi);">
+                    <img src="{{ imgX }}">
+                  </div>
+                </div>
+                <div class="date">
+                  <p>05/12/2015</p>
+                </div>
               </div>
             </div>
           </div>
@@ -95,18 +127,22 @@
         <div class="list">
           <div class="title">
             <p>Đội hình hiện tại</p>
-            <span>Số thành viên: 0</span>
+            <span>Số thành viên: {{ countMember }}</span>
           </div>
-          <div class="list-container">
-            <div class="item">
+          <loading-spinner *ngIf="showListMemberSpinner"></loading-spinner>
+          <div class="list-container" *ngIf="!showListMemberSpinner">
+            <div class="item" *ngFor="let member of teamMembers">
               <div class="name">
-                <span>Vương Vũ Anh Khôi</span>
-                <div class="img-container">
-                  <img src="../../../assets/x.png">
+                <div class="logo-container">
+                  <img src="{{ member.imgRoleUrl }}">
                 </div>
-              </div>
-              <div class="date">
-                <p>05/12/2015</p>
+                <div class="info">
+                    <span>{{ member.user.Fullname }}</span>
+                    <p>{{ member.position.PositionName }}</p>
+                </div>
+                <div *ngIf="member.role_id != 3" class="img-container" (click)="deleteMember(member)">
+                  <img src="{{ imgX }}">
+                </div>
               </div>
             </div>
           </div>

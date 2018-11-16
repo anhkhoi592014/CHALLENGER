@@ -82,7 +82,6 @@ export class HeaderComponent implements OnInit {
       }else{
         this.listFriends = data;   
       }
-      console.log(data);
     });
   }
   delete(id: number){

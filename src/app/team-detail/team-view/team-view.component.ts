@@ -97,7 +97,7 @@ export class TeamViewComponent implements OnInit {
         this.teamServices.getTeamMembersDetails(this.teamId);
       }else{
         this.teamMembersDetails = <IMember[]>res; 
-        this.teamAdmin = this.teamMembers.filter(member => member.id == (this.teamMembersDetails.filter(member => member.role_id == 2)[0].user_id))[0];
+        this.teamAdmin = this.teamMembers.filter(member => member.id == (this.teamMembersDetails.filter(member => member.role_id == 3)[0].user_id))[0];
         this.showSpinner = false;
       }
     });

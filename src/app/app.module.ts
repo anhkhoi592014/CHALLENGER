@@ -31,7 +31,7 @@ import { PlayerEditInfoComponent } from './player-detail/player-edit/player-edit
 import { PlayerEditPowerComponent } from './player-detail/player-edit/player-edit-power/player-edit-power.component';
 import { PositionService } from './core/services/position.service';
 import { TeamViewComponent } from './team-detail/team-view/team-view.component';
-import { TeamManageComponent } from './team-detail/team-manage/team-manage.component';
+import { TeamManageComponent,DialogDeleteMemberConfirm } from './team-detail/team-manage/team-manage.component';
 import { TeamsComponent } from './teams/teams.component';
 import { ChatRoomComponent } from './chat-room/chat-room.component';
 import { ErrorsHandler } from './shared/errors-handler';
@@ -187,7 +187,8 @@ const appRoute:Routes = [
     TeamManageComponent,
     TeamsComponent,ChatRoomComponent,
     DialogFriendRequestMessages,
-    DialogDeleteFriendConfirm
+    DialogDeleteFriendConfirm,
+    DialogDeleteMemberConfirm
   ],
   imports: [
     BrowserModule,
@@ -206,7 +207,7 @@ const appRoute:Routes = [
     RouterModule.forRoot(appRoute)
   ],
 
-  entryComponents: [SearchPlayerComponent, DialogFriendRequestMessages,DialogDeleteFriendConfirm],
+  entryComponents: [SearchPlayerComponent, DialogFriendRequestMessages,DialogDeleteFriendConfirm,DialogDeleteMemberConfirm],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthenGuard,LoggedGuard,AccountService,PositionService,{
     provide: ErrorHandler,
