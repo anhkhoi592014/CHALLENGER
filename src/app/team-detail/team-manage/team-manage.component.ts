@@ -69,7 +69,6 @@ export class TeamManageComponent implements OnInit {
       if(data.length != 0){
         this.listFriends = data;   
         this.teamServices.Invitations.subscribe(res => {
-          if(res.length != 0){
             this.listInvitations = res;
             this.countInvitation = this.listInvitations.length;
             this.listInvitations.forEach(i => {
@@ -108,11 +107,10 @@ export class TeamManageComponent implements OnInit {
                 this.showListFriendSpinner = false;
               })
             });
-            this.showListFriendSpinner = false;
-          }else{
-            this.teamServices.getInvitations(localStorage.getItem(SystemConstants.CURRENT_TEAM));
-          }
+            
         });
+        this.teamServices.getInvitations(localStorage.getItem(SystemConstants.CURRENT_TEAM));
+          
         this.showListInvitationSpinner = false;
       }else{
         this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER));
@@ -128,7 +126,6 @@ export class TeamManageComponent implements OnInit {
      this.teamServices.Members.subscribe(res =>{
       if(res.length != 0){
       this.teamMembers = <IMember[]>res;
-      this.showListMemberSpinner = false;
       this.teamServices.getTeamMembers(localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res =>{
         this.teamMembers.forEach(m =>{
           res.forEach(u => {
@@ -151,6 +148,7 @@ export class TeamManageComponent implements OnInit {
             m.imgRoleUrl ="../../../assets/team-member.png"
           }
         });
+        this.showListMemberSpinner = false;
       });
       }else{
         this.teamServices.getTeamMembersDetails(localStorage.getItem(SystemConstants.CURRENT_TEAM));  

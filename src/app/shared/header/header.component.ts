@@ -114,6 +114,7 @@ export class HeaderComponent implements OnInit {
   }
   accept(noti: showNotification){
     if(noti.typeName.length == 22){
+      console.log("test");
       this.accountServices.addFriend(localStorage.getItem(SystemConstants.CURRENT_USER),noti.idFrom,noti.idNoti);
       this.listFriends.push(this.listUserSendNotification.filter(p => p.id == noti.idFrom)[0]);
       this.filterPlayer = "";
