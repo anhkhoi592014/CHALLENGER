@@ -118,19 +118,11 @@ export class HeaderComponent implements OnInit {
       this.listFriends.push(this.listUserSendNotification.filter(p => p.id == noti.idFrom)[0]);
       this.filterPlayer = "";
     }else if(noti.typeName.length > 22){
-      this.teamServices.addMember(noti.idFrom, localStorage.getItem(SystemConstants.CURRENT_USER),noti.idNoti).subscribe(res =>{
-        if(res){
-          this.toastr.successToastr('Gia nhập đội bóng thành công', 'Thông báo',{
-            position: 'top-right',
-            animate: 'slideFromTop'
-          });
-        }else{
-          this.toastr.errorToastr('Gia nhập đội bóng thất bại', 'Thông báo',{
-            position: 'top-right',
-            animate: 'slideFromTop'
-          });
-        }
-      });
+      this.teamServices.addMember(noti.idFrom, localStorage.getItem(SystemConstants.CURRENT_USER),noti.idNoti);
+        this.toastr.successToastr('Gia nhập đội bóng thành công', 'Thông báo',{
+          position: 'top-right',
+          animate: 'slideFromTop'
+        });
     }
   }
   viewUser(noti: showNotification){
