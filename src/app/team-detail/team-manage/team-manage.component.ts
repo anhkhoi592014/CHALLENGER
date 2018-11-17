@@ -213,26 +213,30 @@ export class TeamManageComponent implements OnInit {
   }
   cancelInvited(invi: IInvitation){
     this.showListInvitationSpinner = true;
-    this.teamServices.cancelInvited(invi.id).subscribe(res =>{
-      if(res){  
-        this.listInvitations = this.listInvitations.filter(i => i.id != invi.id);
-        this.countInvitation--;
-        this.listFriends.forEach(f => {
-          if(f.id == invi.user_id){
-            f.Invited = false;
+    this.teamServices.deleteTeamInvitedNotification(invi.user_id,localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res =>{
+      if(res){
+        this.teamServices.cancelInvited(invi.id).subscribe(res =>{
+          if(res){  
+            this.listInvitations = this.listInvitations.filter(i => i.id != invi.id);
+            this.countInvitation--;
+            this.listFriends.forEach(f => {
+              if(f.id == invi.user_id){
+                f.Invited = false;
+              }
+            });
+            this.toastr.successToastr('Đã hủy lời mời', 'Thông báo',{
+              position: 'top-right',
+              animate: 'slideFromTop'
+            });
+            this.showListInvitationSpinner = false;
+          }else{
+            this.toastr.errorToastr('Hủy lời mời thất bại', 'Thông báo',{
+            position: 'top-right',
+            animate: 'slideFromTop'
+          });
+          this.showListInvitationSpinner = false;
           }
         });
-        this.toastr.successToastr('Đã hủy lời mời', 'Thông báo',{
-          position: 'top-right',
-          animate: 'slideFromTop'
-        });
-        this.showListInvitationSpinner = false;
-      }else{
-        this.toastr.errorToastr('Hủy lời mời thất bại', 'Thông báo',{
-        position: 'top-right',
-        animate: 'slideFromTop'
-      });
-      this.showListInvitationSpinner = false;
       }
     });
   }

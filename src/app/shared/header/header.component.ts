@@ -181,6 +181,19 @@ export class HeaderComponent implements OnInit {
       console.log("channel user friends");
       this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER)); 
     });
+    var echo3 = new Echo({
+      authEndpoint : 'http://127.0.0.1:8000/broadcasting/auth',
+      broadcaster: 'pusher',
+      key: 'adb004555d28bac39090',
+      cluster: 'ap1',
+      encrypted: true
+    });
+    echo3.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.deleteNotification')
+    .listen('DeleteNotification', (noti :INotification)=>{
+      console.log("deleted team request");
+      console.log(noti);
+      this.listShowNotification = this.listShowNotification.filter(noti => noti.idFrom == noti.idFrom);
+    });
   }
   toggleNtf(){
     this.showNotification = !this.showNotification;

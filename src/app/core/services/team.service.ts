@@ -127,6 +127,17 @@ export class TeamService {
       })  
     )
   }
+  deleteTeamInvitedNotification(idUser,idTeam): Observable<boolean>{
+    return this.http.delete(SystemConstants.BASE_API + 'user/'+idUser+'/notification/team/'+idTeam+'/delete',httpOptions).
+      pipe(
+        map((res) =>{
+          if(res){
+            return true;
+          }
+          return false;
+        })
+      );
+  }
   cancelInvited(id: number): Observable<Boolean>{
     return this.http.delete<Boolean>(SystemConstants.BASE_API + 'invitations/delete/'+id,httpOptions).pipe(
       map(res =>{
