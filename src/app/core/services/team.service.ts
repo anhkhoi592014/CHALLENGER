@@ -9,6 +9,7 @@ import { IRole } from 'src/app/interfaces/irole';
 import { map } from 'rxjs/operators';
 import { IInvitation } from 'src/app/interfaces/iinvitation';
 import { AnimationKeyframesSequenceMetadata } from '@angular/animations';
+import { AccountService } from './account.service';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -24,8 +25,11 @@ export class TeamService {
   private _members : BehaviorSubject<IMember[]> = new BehaviorSubject<IMember[]>([]);
   private _invitations : BehaviorSubject<IInvitation[]> = new BehaviorSubject<IInvitation[]>([]);
  constructor(
-    private http: HttpClient
-    ) { }
+    private http: HttpClient,
+    private accountService: AccountService
+    ) {
+
+     }
   
   get Teams(){
     return this._teams.asObservable();
@@ -85,6 +89,20 @@ export class TeamService {
       this._members.next(<IMember[]>data);
     });
   }
+
+  addMember(idTeam: any,idUser: any,idNoti: any){
+    return this.accountService.deleteNotification(idNoti).subscribe((res)=>{
+      if(res){
+        console.log("Delete notification success");
+        this.accountService.getUserNotifications(idUser);
+        this.http.post(SystemConstants.BASE_API + 'team/member/add',
+        JSON.stringify({idTeam,idUser}),httpOptions).subscribe(res =>{
+          return res;
+        });
+      }
+    });
+  }
+
   deleteMember(id: number): Observable<Boolean>{
     return this.http.delete<Boolean>(SystemConstants.BASE_API + 'members/delete/'+id,httpOptions).pipe(
       map(res =>{

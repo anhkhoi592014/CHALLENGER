@@ -12,10 +12,12 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { ConversationService } from 'src/app/core/services/conversation.service';
 import { IConversation } from 'src/app/interfaces/iconversation';
+import { ITeam } from 'src/app/interfaces/ITeam';
+import { TeamService } from 'src/app/core/services/team.service';
 export interface showNotification{
   idNoti: number,
   idFrom?: number,
-  imgUrl : string,
+  imgUrl : String,
   typeName?: string,
   timeSend?: string,
   timeFromNow? : string
@@ -28,6 +30,7 @@ export interface showNotification{
 export class HeaderComponent implements OnInit {
   showNotification: boolean = false;
   listUserSendNotification: IPlayer[] = [];
+  listTeamSendNotification: ITeam[] = [];
   notifications: INotification[] = [];
   listShowNotification: showNotification[] = [];
   updateStatus : boolean = false;
@@ -45,6 +48,7 @@ export class HeaderComponent implements OnInit {
     private accountServices: AccountService,
     private notificationServices: NotificationService,
     private conversationServices: ConversationService,
+    private teamServices: TeamService,
     private router: Router,
     private toastr: ToastrManager,
     public dialog: MatDialog
@@ -61,17 +65,32 @@ export class HeaderComponent implements OnInit {
         this.notifications = <INotification[]> res;
         this.notificationServices.Users.subscribe(res =>{
           this.listUserSendNotification = <IPlayer[]>res;
-          this.listShowNotification = [];
-          this.notifications.forEach(notification =>{
-            this.listShowNotification.push({
-              idNoti : notification.id,
-              idFrom: notification.from_id,
-              imgUrl: this.listUserSendNotification.filter(player => player.id == notification.from_id)[0].ImgUrl,
-              typeName: this.getNotifitionName(notification.notification_type_id),
-              timeFromNow: moment(notification.created_at).fromNow(),
-              timeSend: notification.created_at
-            });  
-          })
+          this.notificationServices.getListTeamSend(localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res => {
+            this.listTeamSendNotification = res;
+            this.listShowNotification = [];
+            this.notifications.forEach(notification =>{
+              if(notification.notification_type_id == 1){
+                this.listShowNotification.push({
+                  idNoti : notification.id,
+                  idFrom: notification.from_id,
+                  imgUrl: this.listUserSendNotification.filter(player => player.id == notification.from_id)[0].ImgUrl,
+                  typeName: this.getNotifitionName(notification.notification_type_id),
+                  timeFromNow: moment(notification.created_at).fromNow(),
+                  timeSend: notification.created_at
+                });
+              }else{
+                this.listShowNotification.push({
+                  idNoti : notification.id,
+                  idFrom: notification.from_id,
+                  imgUrl: this.listTeamSendNotification.filter(team => team.id == notification.from_id)[0].ImgUrl,
+                  typeName: this.getNotifitionName(notification.notification_type_id),
+                  timeFromNow: moment(notification.created_at).fromNow(),
+                  timeSend: notification.created_at
+                });
+              }         
+            })
+          });
+          
         });
         this.notificationServices.getListUserSend(localStorage.getItem(SystemConstants.CURRENT_USER));
     }); 
@@ -94,26 +113,50 @@ export class HeaderComponent implements OnInit {
     //this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
   }
   accept(noti: showNotification){
-    this.accountServices.addFriend(localStorage.getItem(SystemConstants.CURRENT_USER),noti.idFrom,noti.idNoti);
-    this.listFriends.push(this.listUserSendNotification.filter(p => p.id == noti.idFrom)[0]);
-    this.filterPlayer = "";
+    if(noti.typeName.length == 22){
+      this.accountServices.addFriend(localStorage.getItem(SystemConstants.CURRENT_USER),noti.idFrom,noti.idNoti);
+      this.listFriends.push(this.listUserSendNotification.filter(p => p.id == noti.idFrom)[0]);
+      this.filterPlayer = "";
+    }else if(noti.typeName.length > 22){
+      this.teamServices.addMember(noti.idFrom, localStorage.getItem(SystemConstants.CURRENT_USER),noti.idNoti).subscribe(res =>{
+        if(res){
+          this.toastr.successToastr('Gia nhập đội bóng thành công', 'Thông báo',{
+            position: 'top-right',
+            animate: 'slideFromTop'
+          });
+        }else{
+          this.toastr.errorToastr('Gia nhập đội bóng thất bại', 'Thông báo',{
+            position: 'top-right',
+            animate: 'slideFromTop'
+          });
+        }
+      });
+    }
   }
-  viewUser(id: any){
+  viewUser(noti: showNotification){
+    console.log(noti.typeName.length );
     this.showSpinnerViewUser = true;
-    this.accountServices.getViewUserById(id);
-    this.accountServices.getUserPowers(id);
-    this.accountServices.getUsersTeams(id); 
-    this.accountServices.getUserPositions(id);
-    setTimeout(()=>{
-      this.showSpinnerViewUser = false;
-      this.router.navigate([UrlConstants.PLAYER_DETAILS + '/' + id])
-    },2000);
+    if(noti.typeName.length == 22){
+      this.accountServices.getViewUserById(noti.idFrom);
+      this.accountServices.getUserPowers(noti.idFrom);
+      this.accountServices.getUsersTeams(noti.idFrom); 
+      this.accountServices.getUserPositions(noti.idFrom);
+      setTimeout(()=>{
+        this.showSpinnerViewUser = false;
+        this.router.navigate([UrlConstants.PLAYER_DETAILS + '/' + noti.idFrom])
+      },2000);
+    }else if(noti.typeName.length > 22){
+      setTimeout(()=>{
+        this.showSpinnerViewUser = false;
+        this.router.navigate([UrlConstants.TEAM_DETAILS + '/' + noti.idFrom])
+      },2000);
+    }
   }
   getNotifitionName(id: any): string{
     if(id == 1){
       return "Đã gửi lời mời kết bạn";
     }else if(id == 2){
-      return "Đã gửi lời mời vào đội";
+      return "Đã gửi lời mời gia nhập đội";
     }
   }
   resetFilter(){

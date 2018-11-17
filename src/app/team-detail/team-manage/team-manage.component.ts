@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { IMenu } from 'src/app/interfaces/IMenu';
 import { AccountService } from 'src/app/core/services/account.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { IPlayer } from 'src/app/interfaces/IPlayer';
 import { SystemConstants } from 'src/app/core/common/system.constants';
 import { TeamService } from 'src/app/core/services/team.service';
@@ -57,59 +57,67 @@ export class TeamManageComponent implements OnInit {
   ngOnInit() {
     this.teamServices.Teams.subscribe(res =>{
       if(res.length==0){
-        this.teamServices.getTeamById(localStorage.getItem(SystemConstants.CURRENT_TEAM))
+        this.teamServices.getTeamById(localStorage.getItem(SystemConstants.CURRENT_TEAM));
       }else{
         this.team = res;
         console.log(this.team);
         this.newName = this.team.Fullname;
       }
     });
+    // Lấy danh sách bạn
     this.accountServices.Friends.subscribe(data => {
-      this.listFriends = data;   
-      this.teamServices.Invitations.subscribe(res => {
-        if(res.length != 0){
-          this.listInvitations = res;
-          this.countInvitation = this.listInvitations.length;
-          this.listInvitations.forEach(i => {
-            i.user = this.listFriends.filter(u => u.id == i.user_id)[0];
-          });
-          this.listFriends.forEach(u => {
-            this.listInvitations.forEach(i =>{
-              if(i.user_id == u.id){
-                u.Invited = true;
-              }
+      if(data.length != 0){
+        this.listFriends = data;   
+        this.teamServices.Invitations.subscribe(res => {
+          if(res.length != 0){
+            this.listInvitations = res;
+            this.countInvitation = this.listInvitations.length;
+            this.listInvitations.forEach(i => {
+              i.user = this.listFriends.filter(u => u.id == i.user_id)[0];
             });
-            this.teamServices.getTeamMembers(localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res =>{
-              res.forEach(p =>{
-                if(p.id == u.id){
+            this.listFriends.forEach(u => {
+              this.listInvitations.forEach(i =>{
+                if(i.user_id == u.id){
                   u.Invited = true;
                 }
-              })
-              if(!u.Invited){
-                u.Invited = false;
-              } 
-            });
-          });
-          this.teamServices.getTeamMembers(localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res =>{
-            this.countMember = res.length;
-            this.listFriends.forEach(f => {
-              res.forEach(p => {
-                if(p.id == f.id){
-                  f.Invited = true;
-                }
               });
-              if(!f.Invited){
-                f.Invited = false;
-              } 
-              this.showListFriendSpinner = false;
-            })
-          });
-        }else{
-          this.teamServices.getInvitations(localStorage.getItem(SystemConstants.CURRENT_TEAM));
-        }
+            });
+            this.teamServices.getTeamMembers(localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res =>{
+              this.listFriends.forEach(u => {
+                res.forEach(p =>{
+                  if(p.id == u.id){
+                    u.Invited = true;
+                  }
+                })
+                if(!u.Invited){
+                  u.Invited = false;
+                } 
+              });
+            });
+            this.teamServices.getTeamMembers(localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res =>{
+              this.countMember = res.length;
+              this.listFriends.forEach(f => {
+                res.forEach(p => {
+                  if(p.id == f.id){
+                    f.Invited = true;
+                  }
+                });
+                if(!f.Invited){
+                  f.Invited = false;
+                } 
+                this.showListFriendSpinner = false;
+              })
+            });
+            this.showListFriendSpinner = false;
+          }else{
+            this.teamServices.getInvitations(localStorage.getItem(SystemConstants.CURRENT_TEAM));
+          }
+        });
         this.showListInvitationSpinner = false;
+      }else{
+        this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER));
+      }
       });
-    });
     this.positionServices.listPositions.subscribe(res =>{
       if(res.length == 0){
         this.positionServices.getPositionsFromServer();
@@ -117,9 +125,9 @@ export class TeamManageComponent implements OnInit {
         this.positionData = res;
       }
     });
-    this.teamServices.Members.subscribe(res =>{
+     this.teamServices.Members.subscribe(res =>{
       if(res.length != 0){
-        this.teamMembers = <IMember[]>res;
+      this.teamMembers = <IMember[]>res;
       this.showListMemberSpinner = false;
       this.teamServices.getTeamMembers(localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res =>{
         this.teamMembers.forEach(m =>{
@@ -148,7 +156,6 @@ export class TeamManageComponent implements OnInit {
         this.teamServices.getTeamMembersDetails(localStorage.getItem(SystemConstants.CURRENT_TEAM));  
       }      
     });
-    this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER));
   }
   deleteMember(member: IMember){
     const dialogRef = this.dialog.open(DialogDeleteMemberConfirm, {
