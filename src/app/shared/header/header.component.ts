@@ -189,10 +189,10 @@ export class HeaderComponent implements OnInit {
       encrypted: true
     });
     echo3.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.deleteNotification')
-    .listen('DeleteNotification', (noti :INotification)=>{
+    .listen('DeleteNotification', (notification :any)=>{
       console.log("deleted team request");
-      console.log(noti);
-      this.listShowNotification = this.listShowNotification.filter(noti => noti.idFrom == noti.idFrom);
+      console.log(notification.from_id);
+      this.listShowNotification = this.listShowNotification.filter(noti => noti.idFrom == notification.from_id);
     });
   }
   toggleNtf(){
