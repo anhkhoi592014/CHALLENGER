@@ -2,13 +2,12 @@
 <app-header [title]="page_title"></app-header>
 <div class="content">
     <loading-spinner *ngIf="spinnerLoading"></loading-spinner>
-    <div class="info-section">
+    <div class="info-section" *ngIf="!spinnerLoading">
       <div class="box">
         <div class="img-box">
           <div class="img-container">
               <img src="{{ player.ImgUrl }}">
           </div>
-          <button (click)="log()">test</button>
         </div>
         <div class="content-box">
           <div class="info">

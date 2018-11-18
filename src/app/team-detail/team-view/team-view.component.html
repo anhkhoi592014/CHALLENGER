@@ -1,5 +1,6 @@
 <div class="container">
   <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
+  <loading-spinner *ngIf="showSpinner"></loading-spinner>
   <div class="overlay">
     <div class="box">
       <img src="../../assets/swords.png">
@@ -7,6 +8,7 @@
     </div>
   </div>
   <div class="content">
+    <app-header [title]="page_title"></app-header>
     <div class="row logorow">
       <div class="logo">
         <div class="img-container">

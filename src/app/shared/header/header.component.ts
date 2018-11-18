@@ -62,39 +62,46 @@ export class HeaderComponent implements OnInit {
     }); 
     this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
     this.accountServices.Notifications.subscribe(res =>{
+      if(res.length != 0){
         this.notifications = <INotification[]> res;
         this.notificationServices.Users.subscribe(res =>{
-          this.listUserSendNotification = <IPlayer[]>res;
-          this.notificationServices.getListTeamSend(localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res => {
-            this.listTeamSendNotification = res;
-            this.listShowNotification = [];
-            this.notifications.forEach(notification =>{
-              if(notification.notification_type_id == 1){
-                this.listShowNotification.push({
-                  idNoti : notification.id,
-                  idFrom: notification.from_id,
-                  imgUrl: this.listUserSendNotification.filter(player => player.id == notification.from_id)[0].ImgUrl,
-                  typeName: this.getNotifitionName(notification.notification_type_id),
-                  timeFromNow: moment(notification.created_at).fromNow(),
-                  timeSend: notification.created_at
-                });
-              }else{
-                this.listShowNotification.push({
-                  idNoti : notification.id,
-                  idFrom: notification.from_id,
-                  imgUrl: this.listTeamSendNotification.filter(team => team.id == notification.from_id)[0].ImgUrl,
-                  typeName: this.getNotifitionName(notification.notification_type_id),
-                  timeFromNow: moment(notification.created_at).fromNow(),
-                  timeSend: notification.created_at
-                });
-              }         
-            })
+          if(res.length != 0){
+            this.listUserSendNotification = <IPlayer[]>res;
+            this.notificationServices.getListTeamSend(localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res => {
+            if(res){
+              this.listTeamSendNotification = res;
+              this.listShowNotification = [];
+              this.notifications.forEach(notification =>{
+                if(notification.notification_type_id == 1){
+                  this.listShowNotification.push({
+                    idNoti : notification.id,
+                    idFrom: notification.from_id,
+                    imgUrl: this.listUserSendNotification.filter(player => player.id == notification.from_id)[0].ImgUrl,
+                    typeName: this.getNotifitionName(notification.notification_type_id),
+                    timeFromNow: moment(notification.created_at).fromNow(),
+                    timeSend: notification.created_at
+                  });
+                }else{
+                  this.listShowNotification.push({
+                    idNoti : notification.id,
+                    idFrom: notification.from_id,
+                    imgUrl: this.listTeamSendNotification.filter(team => team.id == notification.from_id)[0].ImgUrl,
+                    typeName: this.getNotifitionName(notification.notification_type_id),
+                    timeFromNow: moment(notification.created_at).fromNow(),
+                    timeSend: notification.created_at
+                  });
+                }         
+              })
+            } 
           });
-          
+          }else{
+            this.notificationServices.getListUserSend(localStorage.getItem(SystemConstants.CURRENT_USER));
+          }                 
         });
-        this.notificationServices.getListUserSend(localStorage.getItem(SystemConstants.CURRENT_USER));
+      }else{
+        // this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
+      }  
     }); 
-    this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
     this.accountServices.Friends.subscribe(data => {
       if(data.length == 0){
         this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER));
@@ -166,7 +173,7 @@ export class HeaderComponent implements OnInit {
     echo.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.notifications')
       .listen('NewRequest', (e:INotification[])=>{
         console.log("channel new request");
-        this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
+        //this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
         //this.notifications = e
       });
     var echo2 = new Echo({
@@ -191,8 +198,8 @@ export class HeaderComponent implements OnInit {
     echo3.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.deleteNotification')
     .listen('DeleteNotification', (notification :any)=>{
       console.log("deleted team request");
-      console.log(notification.from_id);
-      this.listShowNotification = this.listShowNotification.filter(noti => noti.idFrom == notification.from_id);
+      console.log(notification.notification.from_id);
+      this.listShowNotification = this.listShowNotification.filter(noti => noti.idNoti != notification.notification.id);
     });
   }
   toggleNtf(){

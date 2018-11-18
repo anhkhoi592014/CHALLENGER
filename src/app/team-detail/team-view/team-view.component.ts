@@ -24,7 +24,7 @@ export class TeamViewComponent implements OnInit {
     { id:4,code:'qld',title : 'Quản lý đội',imgUrl : '../../assets/thongtincanhan.png' },
     { id:5,code:'back',title : 'Quay lại',imgUrl : '../../assets/dangxuat.png' },
   ];
-
+  page_title: string ="Thông tin đội";
   selectedMenu : number = 1;
   listUserTeam : ITeam[] = [];
   team: ITeam = {};
@@ -36,7 +36,7 @@ export class TeamViewComponent implements OnInit {
   totalMember: number = 0;
   teamMembersDetails: IMember[] = [];
   teamAdmin: IPlayer = {};
-  showSpinner = true;
+  showSpinner:boolean = true;
   constructor(
     private teamServices : TeamService,
     private accountServices : AccountService,

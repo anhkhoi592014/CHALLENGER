@@ -122,7 +122,6 @@ export class PlayerViewComponent implements OnInit {
         this.accountServices.getUserPositions(localStorage.getItem(SystemConstants.CURRENT_USER));
         this.positionServices.getPositionsFromServer(); 
       }
-      this.spinnerLoading = false;
     });
   } 
   log(){

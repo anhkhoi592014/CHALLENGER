@@ -10,7 +10,6 @@
         display: flex;
         flex-flow: row;
         position: relative;
-        overflow: scroll;
         app-menu{       
             width: 8%;
             font-size:0.9em;
@@ -48,32 +47,36 @@
         .overlay:hover .box img{
             transform: scale(1);
         }
-        .content{                    
+        .content{                 
             min-height: 100%;
             display: flex;
+            padding-left: 1%;
             flex-flow: column;
             min-width: 80%;
             max-width: 100%;
-            padding: 2%;
+            overflow-x: hidden;
+            overflow-y: scroll;
             .row{
                 width: 100%;
                 display: flex;
                 flex-flow: row;
                 .logo{
-                    width: 40%;
+                    width: 30%;
                     align-self: center;
                     display: flex;
                     justify-content: space-around;
                     .img-container{    
                         height: 100%;
-                        max-width: 80%;
+                        display: flex;
+                        width: 70%;
                         overflow: hidden;
                         -ms-grid-row-align: center;
                         align-self: center;
                         border-radius: 18%;
-                        img{
-                            width: 100%;
-                            height: 100%;
+                        flex-flow: column;
+                        img{    
+                            width: 80%;
+                            align-self: center;
                         }                    
                     }
                 }
@@ -101,6 +104,7 @@
                 }
             }
             .logorow{   
+                padding:2%;
                 box-sizing: border-box;
                 box-shadow: 0 6px 6px rgba(10, 16, 20, 0.15), 0 0 52px rgba(10, 16, 20, 0.12);
             }   

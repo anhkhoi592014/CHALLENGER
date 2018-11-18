@@ -27,6 +27,7 @@ export class TeamManageComponent implements OnInit {
     { id:4,code:'qld',title : 'Quản lý đội',imgUrl : '../../assets/thongtincanhan.png' },
     { id:5,code:'back',title : 'Quay lại',imgUrl : '../../assets/dangxuat.png' },
   ];
+  page_title : string = "Quản lý đội";
   selectedMenu : number = 4;
   imgX: string = "../../../assets/x.png";
   listFriends: IPlayer[] = [];
@@ -44,6 +45,7 @@ export class TeamManageComponent implements OnInit {
   showEditFullName: boolean = false;
   showEditCity: boolean = false;
   newName : string = "";
+  loaded: boolean = false;
   constructor(
     private accountServices : AccountService,
     private teamServices: TeamService,
@@ -60,8 +62,14 @@ export class TeamManageComponent implements OnInit {
         this.teamServices.getTeamById(localStorage.getItem(SystemConstants.CURRENT_TEAM));
       }else{
         this.team = res;
-        console.log(this.team);
         this.newName = this.team.Fullname;
+      }
+    });
+    this.positionServices.listPositions.subscribe(res =>{
+      if(res.length == 0){
+        this.positionServices.getPositionsFromServer();
+      }else{
+        this.positionData = res;
       }
     });
     // Lấy danh sách bạn
@@ -69,6 +77,7 @@ export class TeamManageComponent implements OnInit {
       if(data.length != 0){
         this.listFriends = data;   
         this.teamServices.Invitations.subscribe(res => {
+          if(res.length != 0){
             this.listInvitations = res;
             this.countInvitation = this.listInvitations.length;
             this.listInvitations.forEach(i => {
@@ -82,6 +91,8 @@ export class TeamManageComponent implements OnInit {
               });
             });
             this.teamServices.getTeamMembers(localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res =>{
+              console.log(res);
+              this.countMember = res.length;
               this.listFriends.forEach(u => {
                 res.forEach(p =>{
                   if(p.id == u.id){
@@ -93,36 +104,30 @@ export class TeamManageComponent implements OnInit {
                 } 
               });
             });
+          }else if(res.length == 0){
             this.teamServices.getTeamMembers(localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res =>{
+              console.log(res);
               this.countMember = res.length;
-              this.listFriends.forEach(f => {
-                res.forEach(p => {
-                  if(p.id == f.id){
-                    f.Invited = true;
+              this.listFriends.forEach(u => {
+                res.forEach(p =>{
+                  if(p.id == u.id){
+                    u.Invited = true;
                   }
-                });
-                if(!f.Invited){
-                  f.Invited = false;
+                })
+                if(!u.Invited){
+                  u.Invited = false;
                 } 
-                this.showListFriendSpinner = false;
-              })
+              });
             });
-            
+            this.showListInvitationSpinner = false;
+          }   
         });
-        this.teamServices.getInvitations(localStorage.getItem(SystemConstants.CURRENT_TEAM));
-          
-        this.showListInvitationSpinner = false;
       }else{
-        this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER));
+       // this.showListFriendSpinner = false;
       }
       });
-    this.positionServices.listPositions.subscribe(res =>{
-      if(res.length == 0){
-        this.positionServices.getPositionsFromServer();
-      }else{
-        this.positionData = res;
-      }
-    });
+      this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER)); 
+    
      this.teamServices.Members.subscribe(res =>{
       if(res.length != 0){
       this.teamMembers = <IMember[]>res;
@@ -149,11 +154,11 @@ export class TeamManageComponent implements OnInit {
           }
         });
         this.showListMemberSpinner = false;
+        this.showListFriendSpinner = false;
       });
-      }else{
-        this.teamServices.getTeamMembersDetails(localStorage.getItem(SystemConstants.CURRENT_TEAM));  
-      }      
+      }       
     });
+    this.teamServices.getTeamMembersDetails(localStorage.getItem(SystemConstants.CURRENT_TEAM)); 
   }
   deleteMember(member: IMember){
     const dialogRef = this.dialog.open(DialogDeleteMemberConfirm, {
