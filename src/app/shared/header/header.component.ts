@@ -94,12 +94,12 @@ export class HeaderComponent implements OnInit {
               })
             } 
           });
-          }else{
-            this.notificationServices.getListUserSend(localStorage.getItem(SystemConstants.CURRENT_USER));
-          }                 
-        });
+          }
+            
+                       
+        });this.notificationServices.getListUserSend(localStorage.getItem(SystemConstants.CURRENT_USER));
       }else{
-        // this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
+        this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
       }  
     }); 
     this.accountServices.Friends.subscribe(data => {
