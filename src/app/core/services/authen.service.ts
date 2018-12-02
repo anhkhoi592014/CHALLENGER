@@ -29,6 +29,7 @@ export class AuthenService {
         if(res){
           localStorage.removeItem(SystemConstants.CURRENT_USER);
           localStorage.setItem(SystemConstants.CURRENT_USER,<string>res);
+          console.log(localStorage.getItem(SystemConstants.CURRENT_USER));
           localStorage.setItem(SystemConstants.ViewDetailUserId , <string>res);
           return true;
         }
@@ -38,7 +39,7 @@ export class AuthenService {
   }
   logout():Observable<Boolean>{
     let userId = localStorage.getItem(SystemConstants.CURRENT_USER);
-    console.log(JSON.stringify({userId}));
+    console.log(localStorage.getItem(SystemConstants.CURRENT_USER));
     return this.http.put(SystemConstants.BASE_API + 'logout',{userId},httpOptions)
     .pipe( 
       map((res) => {

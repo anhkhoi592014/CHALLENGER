@@ -136,11 +136,15 @@ export class SearchPlayerComponent implements OnInit {
       encrypted: true
     }); 
     echo.channel('user-login')
-      .listen('Login', (e:IPlayer[])=>{
+      .listen('Login', (e:any)=>{
         console.log("get from channel login");
-        console.log(e);
-        // this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
-        //this.notifications = e
+        // this.listPlayerResult = this.listPlayerResult.filter(p => p.id != e.user.id);
+        this.listPlayerResult.forEach(p =>{
+          if(p.id == e.user.id){
+            p.status = 1;
+          }
+        });
+        console.log(this.listPlayerResult);
     });
     var echo2 = new Echo({
       authEndpoint : 'http://127.0.0.1:8000/broadcasting/auth',
@@ -150,11 +154,14 @@ export class SearchPlayerComponent implements OnInit {
       encrypted: true
     }); 
     echo2.channel('user-logout')
-      .listen('Logout', (e:IPlayer[])=>{
+      .listen('Logout', (e:any)=>{
         console.log("get from channel logout");
         console.log(e);
-        // this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
-        //this.notifications = e
+        this.listPlayerResult.forEach(p =>{
+          if(p.id == e.user.id){
+            p.status = 0;
+          }
+        })
     });
   }
   changeSelection(ply: IPlayer){

@@ -18,7 +18,7 @@ export interface IPlayer {
     MainPosition?: String;
     ExtraPosition?: String;
     DateCreated?: String;
-    Status?: number;
+    status?: number;
     IsFriend?: boolean;
     TeamRole?: string;
     Invited?: boolean;
