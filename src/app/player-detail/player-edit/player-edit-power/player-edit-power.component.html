@@ -3,12 +3,11 @@
     <app-header [title] = "pageTitle"></app-header>
     <div class="content">
         <loading-spinner *ngIf="showSpinner"></loading-spinner>
-        
         <div class="row">
             <p>Chọn vị trí: </p>
             <ul>
-                <li [ngClass] = "isMPView ? 'active' : ''" (click) ="changePositionView('MP')"  *ngIf="showMainPosition">{{ mainPosition.PositionName }}</li>
-                <li [ngClass] = "!isMPView ? 'active' : ''" (click) ="changePositionView('EP')" *ngIf="showExtraPosition">{{ extraPosition.PositionName }}</li>
+                <button mat-raised-button [ngClass] = "isMPView ? 'active' : ''" (click) ="changePositionView('MP')"  *ngIf="showMainPosition">{{ mainPosition.PositionName }}</button>
+                <button mat-raised-button [ngClass] = "!isMPView ? 'active' : ''" (click) ="changePositionView('EP')" *ngIf="showExtraPosition">{{ extraPosition.PositionName }}</button>
             </ul>
         </div>    
         <div class="list-power">
@@ -28,8 +27,8 @@
             </div>
         </div>
         <div class="actions">
-            <button class="abortBtn" (click)="abort();">Hủy</button>
-            <button class="saveBtn" (click)="save();">Lưu</button>
+            <button mat-stroked-button class="abortBtn" (click)="abort();">Hủy</button>
+            <button mat-stroked-button class="saveBtn" (click)="save();">Lưu</button>
         </div>
     </div>
 </div>

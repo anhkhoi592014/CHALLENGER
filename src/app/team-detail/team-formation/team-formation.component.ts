@@ -44,6 +44,29 @@ export class TeamFormationComponent implements OnInit {
     //     this.playerChoicedAge = (new Date().getFullYear() - new Date(this.listPlayer[0].DateOfBirth).getFullYear());
     //   }
     // });
+    if(localStorage.getItem(SystemConstants.MEMBER_ROLE)){
+      if(localStorage.getItem(SystemConstants.MEMBER_ROLE) != "3"){
+        this.listMenu = [
+          { id:1,code:'ttdb',title : 'Thông tin đội',imgUrl : '../../assets/timcauthu.png' },
+          { id:2,code:'tlsd',title : 'Lịch sữ đấu',imgUrl : '../../assets/map.png' },
+          { id:3,code:'tdh',title : 'Đội hình',imgUrl : '../../assets/doibong.png' },
+          { id:5,code:'back',title : 'Quay lại',imgUrl : '../../assets/dangxuat.png' },
+        ];
+      }
+    }else{
+      this.teamServices.getRole(localStorage.getItem(SystemConstants.CURRENT_TEAM),localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res =>{
+        localStorage.removeItem(SystemConstants.MEMBER_ROLE);
+        localStorage.setItem(SystemConstants.MEMBER_ROLE,res[0].role_id.toString());
+        if(res[0].role_id != 3){
+          this.listMenu = [
+            { id:1,code:'ttdb',title : 'Thông tin đội',imgUrl : '../../assets/timcauthu.png' },
+            { id:2,code:'tlsd',title : 'Lịch sữ đấu',imgUrl : '../../assets/map.png' },
+            { id:3,code:'tdh',title : 'Đội hình',imgUrl : '../../assets/doibong.png' },
+            { id:5,code:'back',title : 'Quay lại',imgUrl : '../../assets/dangxuat.png' },
+          ];
+        }
+      });
+    }
     this.positionServices.listPositions.subscribe(res =>{
       if(res.length == 0){
         this.positionServices.getPositionsFromServer();

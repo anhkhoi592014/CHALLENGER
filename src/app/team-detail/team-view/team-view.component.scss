@@ -4,147 +4,147 @@
     position: absolute;
     top: 0;
     left: 0;
-    .container{
-        font-size: 1.1em;
-        font-family: 'Open Sans', sans-serif;
+}
+.container{
+    font-size: 1.1em;
+    font-family: 'Open Sans', sans-serif;
+    display: flex;
+    flex-flow: row;
+    position: relative;
+    app-menu{       
+        width: 8%;
+        font-size:0.9em;
+    }
+    .overlay{
+        height: 20%;
+        background: #232323;
+        width: 7.9%;
+        position: fixed;
         display: flex;
-        flex-flow: row;
-        position: relative;
-        app-menu{       
-            width: 8%;
-            font-size:0.9em;
-        }
-        .overlay{
-            height: 20%;
-            background: #232323;
-            width: 7.9%;
-            position: fixed;
-            display: flex;
-            flex-flow: column;
-            cursor: pointer;
-            .box{    
-                width: 75%;
-                align-self: center;
-                margin-top: 10px;
-                img{
-                    width: 100%;
-                    transform: scale(0.85);
-                    transition: 0.2s;
-                }
-                p{
-                    font-family: 'Open Sans', sans-serif;
-                    color: white;
-                    padding-top: 5px;
-                    text-align: center;
-                    font-size:0.9em!important;
-                }
-            }
-        }
-        .overlay:hover .box p{
-            color: red;
-            font-weight: bold;
-        }
-        .overlay:hover .box img{
-            transform: scale(1);
-        }
-        .content{                 
-            min-height: 100%;
-            display: flex;
-            padding-left: 1%;
-            flex-flow: column;
-            min-width: 80%;
-            max-width: 100%;
-            overflow-x: hidden;
-            overflow-y: scroll;
-            .row{
+        flex-flow: column;
+        cursor: pointer;
+        z-index: 20;
+        .box{    
+            width: 75%;
+            align-self: center;
+            margin-top: 10px;
+            img{
                 width: 100%;
+                transform: scale(0.85);
+                transition: 0.2s;
+            }
+            p{
+                font-family: 'Open Sans', sans-serif;
+                color: white;
+                padding-top: 5px;
+                text-align: center;
+                font-size:0.9em!important;
+            }
+        }
+    }
+    .overlay:hover .box p{
+        color: red;
+        font-weight: bold;
+    }
+    .overlay:hover .box img{
+        transform: scale(1);
+    }
+    .content{                 
+        min-height: 100%;
+        display: flex;
+        padding-left: 1%;
+        flex-flow: column;
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        .row{
+            width: 100%;
+            display: flex;
+            flex-flow: row;
+            .logo{
+                width: 30%;
+                align-self: center;
                 display: flex;
-                flex-flow: row;
-                .logo{
-                    width: 30%;
+                justify-content: space-around;
+                .img-container{    
+                    height: 100%;
+                    display: flex;
+                    width: 70%;
+                    overflow: hidden;
+                    -ms-grid-row-align: center;
                     align-self: center;
-                    display: flex;
-                    justify-content: space-around;
-                    .img-container{    
-                        height: 100%;
-                        display: flex;
-                        width: 70%;
-                        overflow: hidden;
-                        -ms-grid-row-align: center;
-                        align-self: center;
-                        border-radius: 18%;
-                        flex-flow: column;
-                        img{    
-                            width: 80%;
-                            align-self: center;
-                        }                    
-                    }
-                }
-                .team-info{
-                    display: flex;
+                    border-radius: 18%;
                     flex-flow: column;
-                    justify-content: space-around;
-                    flex-grow: 1;
-                    padding: 2.5%;
-                    .row{
-                        width: 100%;
-                        display: flex;
-                        flex-flow: row;
-                        margin: 0.5em 0;
-                        p{
-                            font-size:1.1em;
-                            align-self: center;
-                            width: 35%;
-                        }
-                        span{
-                            font-weight: bold;
-                            align-self: center;
-                        }
-                    }
+                    img{    
+                        width: 80%;
+                        align-self: center;
+                    }                    
                 }
             }
-            .logorow{   
-                padding:2%;
-                box-sizing: border-box;
-                box-shadow: 0 6px 6px rgba(10, 16, 20, 0.15), 0 0 52px rgba(10, 16, 20, 0.12);
-            }   
-            .statsrow{
-                flex-flow: row;
+            .team-info{
                 display: flex;
-                margin-top: 50px;
-                .win-rate-container{
-                    width: 40%;
-                    p{
-                        text-align: center;
-                        font-weight: bold;
-                        margin-bottom: 1.5em;
-                        font-size: 1.5em;
-                    }
-                }
-                .team-stat{
+                flex-flow: column;
+                justify-content: space-around;
+                flex-grow: 1;
+                padding: 2.5%;
+                .row{
+                    width: 100%;
                     display: flex;
                     flex-flow: row;
-                    justify-content: flex-start;
-                    flex-wrap: wrap;
-                    width: 60%;
-                    .box{
-                        margin-right:50px;
-                        margin-top: 10px;
-                        width: 34%;
-                        display: flex;
-                        flex-flow: column;
-                        .img-container{
-                            align-self: center;
-                        }
-                        p,span{
-                            text-align: center;
-                        }
-                        span{
-                            color:red;
-                        }
+                    margin: 0.5em 0;
+                    p{
+                        font-size:1.1em;
+                        align-self: center;
+                        width: 35%;
+                    }
+                    span{
+                        font-weight: bold;
+                        align-self: center;
                     }
                 }
-            }  
+            }
         }
+        .logorow{   
+            padding:2%;
+            box-sizing: border-box;
+            box-shadow: 0 6px 6px rgba(10, 16, 20, 0.15), 0 0 52px rgba(10, 16, 20, 0.12);
+        }   
+        .statsrow{
+            flex-flow: row;
+            display: flex;
+            margin-top: 50px;
+            .win-rate-container{
+                width: 40%;
+                p{
+                    text-align: center;
+                    font-weight: bold;
+                    margin-bottom: 1.5em;
+                    font-size: 1.5em;
+                }
+            }
+            .team-stat{
+                display: flex;
+                flex-flow: row;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                width: 60%;
+                .box{
+                    margin-right:50px;
+                    margin-top: 10px;
+                    width: 34%;
+                    display: flex;
+                    flex-flow: column;
+                    .img-container{
+                        align-self: center;
+                    }
+                    p,span{
+                        text-align: center;
+                    }
+                    span{
+                        color:red;
+                    }
+                }
+            }
+        }  
     }
 }

@@ -1,0 +1,52 @@
+<div class="container">
+    <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
+    <div class="content">
+        <loading-spinner *ngIf="showSpinner"></loading-spinner>
+        <h1>Tạo đội bóng</h1>
+      <form action="#" method="POST" id="register">
+        <div class="input">
+          <input type="text" placeholder="" name="">
+        </div>
+          <!-- <div class="img-container">
+            <img src="">
+            <div class="requires" *ngIf="showNameRq">
+                <ul>
+                  <li>Tên đăng nhập không được để trống</li>
+                  <li>Tên đăng nhập phải từ 4 đến 20 kí tự</li>
+                </ul>
+              </div>
+          </div> -->
+         <!--  
+        </div>
+        <div class="input">
+          <input type="text" placeholder="Họ và tên" name="fullname" formControlName="fullname">
+          <div class="img-container">
+            <img src="../../../assets/information.png">
+            <div class="requires" *ngIf="showFullnameRq">
+              <ul>
+                <li>Họ tên không được để trống</li>
+                <li>Họ tên phải từ 4 đến 20 kí tự</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="input">
+          <input type="email" placeholder="Email" name="email" formControlName="email">
+          <div class="img-container" >
+            <img src="../../../assets/information.png">
+            <div class="requires" *ngIf="showEmailRq">
+              <ul>
+                <li>Email phải đúng định dạnh</li>
+                <li>Email không được để trống</li>
+              </ul>
+            </div>
+            </div>
+        </div>
+        <div class="input">
+          <button type="submit">
+            <p>Tiếp tục</p>
+          </button>
+        </div> -->
+      </form>
+    </div> 
+</div>

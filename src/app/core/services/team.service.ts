@@ -61,6 +61,25 @@ export class TeamService {
      })
    )
   }
+  getRole(idTeam: any,idUser: any): Observable<IMember>{
+    return this.http.get(SystemConstants.BASE_API + 'team/' + idTeam + '/members/' + idUser +'/role').pipe(
+      map(res => {
+         if(res){
+           return res;
+         }
+         console.log("fails");
+      })
+    )
+  }
+  addTeam(imgName: string,teamName: string,teamDescription:string,teamCity: string,teamWard: string,latitude: number,longitude: number,idUser: any): Observable<ITeam>{
+    return this.http.post<ITeam>(SystemConstants.BASE_API + 'teams/add',
+    JSON.stringify({imgName,teamName,teamDescription,teamWard,teamCity,latitude,longitude,idUser}),httpOptions).pipe(
+      map(res =>{
+        console.log(res);
+        return res;
+      })  
+    )
+  }
   changeTeamName(newName: string,id: any): Observable<any>{
     return this.http.put(SystemConstants.BASE_API + 'team/' + id + '/changeName',JSON.stringify({newName}),httpOptions).pipe(
       map(res => {

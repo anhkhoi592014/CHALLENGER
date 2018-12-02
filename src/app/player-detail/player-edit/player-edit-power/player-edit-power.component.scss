@@ -12,16 +12,11 @@
             ul{
                 list-style: none;
                 display: inline-block;
-                li{
-                    display: inline-block;
+                
+                button{
                     margin-left: 1em;
-                    padding: 5px 10px;
-                    background: #e8e8e8;
-                    color: black;
-                    box-shadow: 0 3px 1px rgba(10, 16, 20, 0.15), 0 0 52px rgba(10, 16, 20, 0.12);
-                    cursor: pointer;
                 }
-                li.active{
+                button.active{
                     background: #565656;
                     color: white;
                 }
@@ -65,23 +60,14 @@
             height: 50px;
             display: flex;
             flex-flow: row;
-            button{
+            button{    
                 align-self: center;
-                height: 70%;
-            }
-            button.abortBtn{
-                width: 100px;
-                margin-right: 20px;
-                border: none;
-                cursor: pointer;
+                margin-left: 1em;
+                background: #dadada;
             }
             button.saveBtn{
-                background: #2020d4;
-                border: none;
-                color: white;
-                width: 100px;
-                margin-right: 20px;
-                cursor: pointer;
+                color:white;
+                background:blue;
             }
         }
     }

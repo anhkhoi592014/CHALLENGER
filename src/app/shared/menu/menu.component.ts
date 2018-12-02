@@ -23,8 +23,11 @@ export class MenuComponent implements OnInit {
 
   clickMenu(code:string,id?:number){ 
     if(code == 'dx'){
-      this.authenService.logout();
-      this.router.navigate([UrlConstants.LOGIN]);
+      this.authenService.logout().subscribe(res => {
+        if(res){
+          this.router.navigate([UrlConstants.LOGIN]);
+        }
+      });
     }
     else if(code =='back'){
       this.router.navigate([UrlConstants.DASHBOARD]);
@@ -35,7 +38,10 @@ export class MenuComponent implements OnInit {
     else if(code == 'tdb'){
       this.router.navigate([UrlConstants.SEARCH_TEAM]);
     }
-    else if(code == 'db'){
+    else if(code == 'taodb'){
+      this.router.navigate([UrlConstants.CREATE_TEAM]);
+    }
+    else if(code == 'chonbd'){
       this.router.navigate([UrlConstants.TEAMS]);
     }
     else if(code == 'ttcn'){

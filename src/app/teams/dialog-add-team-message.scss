@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+mat-dialog-title{
+    h1{
+        width: 70%;
+        padding-bottom: 2%;
+        margin: auto;
+        text-align: center;
+        border-bottom: 2px solid #3bc9ff;
+        font-family: 'Roboto', sans-serif;
+        box-sizing: border-box;
+        opacity: .6;
+        text-transform: uppercase;
+    }
+}
+mat-dialog-actions{
+    justify-content: flex-end;
+    button.confirm{
+        margin-right: 2%;
+        background: #ce2626;
+        color: white;
+    }
+}
+mat-dialog-content{ 
+    font-family: 'Roboto', sans-serif;
+    height: 65vh;
+    .map{
+        height: 70vh;
+        width: 80%;
+        margin: 2% auto;
+        agm-map{
+            height: 100%;
+            .img-container{
+                margin: 10px auto;
+                width: 5em;
+                cursor: pointer;
+                img{
+                    width:100%;
+                }
+            }
+            .name{
+                font-size: 0.75em;
+                width: 100%;
+                opacity: 0.8;
+            }
+        }
+    }
+    p.positionTitle{
+        margin: 5% auto;
+        text-align: center;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+    form{
+        display: flex;
+        flex-flow: row;
+        align-items: center;
+        justify-content: space-around;
+        .team-image{
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            p{
+                padding: 2% 0%;
+                opacity: 0.8;
+            }
+        }
+        .info{
+            display: flex;
+            flex-flow: row;
+            flex-wrap: wrap;
+            width: 50%;
+            p{
+                opacity: 0.8;
+            }
+            mat-form-field{
+                width:100%;
+                font-size: 1.5em;
+                margin-top: 1em; 
+            }
+            .form-select {
+                margin-top: 7%;
+                margin-right: 2%;
+                background: #ffffff;
+                overflow: hidden;
+                border: 1px solid #cbcbcb;
+                border-radius: 3px;
+                box-shadow: 0 0 1px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(0, 0, 0, 0.07); 
+                &:focus,
+                &:hover {
+                    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+                }
+
+                &:after {
+                    content: '▾';
+                    position: absolute;
+                    top: 0;
+                    right: 12px;
+                    z-index: 1;
+                    color: #bbbbbb;
+                    line-height: 40px;
+                    font-size: 14px;
+
+                    .ie & {
+                        display: none;
+                    }
+                }
+            }
+
+            select {
+                position: relative;
+                background: transparent;
+                background-image: none;
+                display: block;
+                width: 200px;
+                outline: none;
+                color: #888888;
+                cursor: pointer;
+                z-index: 2;
+                border: none;
+                padding: 10px 10px 10px 5px;
+                text-overflow: '';
+                text-indent: 5px;
+
+
+                &[multiple=multiple] {
+                    height: auto;
+                    border: 1px solid #cbcbcb;
+                    border-radius: 3px;
+                    box-shadow: 0 0 1px rgba(0, 0, 0, 0.1), inset 0 0 10px rgba(0, 0, 0, 0.07);
+                    &:hover {
+                        border-color: #cccccc;
+                        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+                    }
+                }
+
+                option[disabled] {
+                    color: #eeeeee;
+                    text-shadow: none;
+                    border: none;
+                }
+            }
+
+            select:-moz-focusring {
+                color: transparent;
+                text-shadow: 0 0 0 #888888;
+            }
+
+            select::-ms-expand {
+                display: none;
+            }
+        }
+    }
+}

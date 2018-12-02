@@ -8,7 +8,7 @@ import { UrlConstants } from '../common/url.constants';
 
 const httpOptions = {
   headers: new HttpHeaders({
-    'Content-Type':  'application/json'
+    'Content-Type': 'application/json',
   })
 };
 
@@ -36,7 +36,19 @@ export class AuthenService {
       )
     );
   }
-  logout(){
-    localStorage.removeItem(SystemConstants.CURRENT_USER);
+  logout():Observable<Boolean>{
+    let userId = localStorage.getItem(SystemConstants.CURRENT_USER);
+    console.log(JSON.stringify({userId}));
+    return this.http.put(SystemConstants.BASE_API + 'logout',{userId},httpOptions)
+    .pipe( 
+      map((res) => {
+        if(res){
+          localStorage.removeItem(SystemConstants.CURRENT_USER);
+          return true;
+        }
+        return false;
+      }
+      )
+    );
   }
 }

@@ -32,14 +32,14 @@ import { PlayerEditPowerComponent } from './player-detail/player-edit/player-edi
 import { PositionService } from './core/services/position.service';
 import { TeamViewComponent } from './team-detail/team-view/team-view.component';
 import { TeamManageComponent,DialogDeleteMemberConfirm } from './team-detail/team-manage/team-manage.component';
-import { TeamsComponent } from './teams/teams.component';
+import { TeamsComponent,DialogAddTeamRequest } from './teams/teams.component';
+import { CreateTeamComponent } from './teams/create-team/create-team.component';
 import { ChatRoomComponent } from './chat-room/chat-room.component';
 import { ErrorsHandler } from './shared/errors-handler';
 import { MaterialModule } from './material.module';
-import { MatNativeDateModule } from '@angular/material';
+import { MatNativeDateModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
 import {NgxPaginationModule} from 'ngx-pagination';
-
 const appRoute:Routes = [
   {
     path:'login',
@@ -75,6 +75,11 @@ const appRoute:Routes = [
     path:'teams',
     redirectTo: 'teams/select',
     pathMatch: 'full',
+    canActivate: [AuthenGuard]
+  },
+  {
+    path:'create-team',
+    component:CreateTeamComponent,
     canActivate: [AuthenGuard]
   },
   {
@@ -183,11 +188,13 @@ const appRoute:Routes = [
     ChangePasswordComponent,
     PlayerEditInfoComponent,
     PlayerEditPowerComponent,
+    CreateTeamComponent,
     TeamViewComponent,
     TeamManageComponent,
     TeamsComponent,ChatRoomComponent,
     DialogFriendRequestMessages,
     DialogDeleteFriendConfirm,
+    DialogAddTeamRequest,
     DialogDeleteMemberConfirm
   ],
   imports: [
@@ -207,11 +214,11 @@ const appRoute:Routes = [
     RouterModule.forRoot(appRoute)
   ],
 
-  entryComponents: [SearchPlayerComponent, DialogFriendRequestMessages,DialogDeleteFriendConfirm,DialogDeleteMemberConfirm],
+  entryComponents: [SearchPlayerComponent, DialogFriendRequestMessages,DialogDeleteFriendConfirm,DialogDeleteMemberConfirm,DialogAddTeamRequest],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthenGuard,LoggedGuard,AccountService,PositionService,{
     provide: ErrorHandler,
     useClass: ErrorsHandler}],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

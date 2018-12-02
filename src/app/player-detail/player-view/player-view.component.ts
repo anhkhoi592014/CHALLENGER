@@ -11,6 +11,7 @@ import { IUserPosition } from 'src/app/interfaces/iuser-position';
 import { UrlConstants } from 'src/app/core/common/url.constants';
 import { INotification } from 'src/app/interfaces/INotification';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import { TeamService } from 'src/app/core/services/team.service';
 
 @Component({
   selector: 'app-player-view',
@@ -45,6 +46,7 @@ export class PlayerViewComponent implements OnInit {
     private accountServices : AccountService,
     private positionServices : PositionService,
     private notificationServices: NotificationService,
+    private teamServices: TeamService,
     private route: ActivatedRoute,
     private router: Router,
   ) { 
@@ -124,8 +126,6 @@ export class PlayerViewComponent implements OnInit {
       }
     });
   } 
-  log(){
-  }
   changePositionView(po : String){
     po == "MP" ? this.isMPView = true : this.isMPView = false; 
     this.listPowers = this.powersData.filter(e => (e.TypeCode == po && e.ViewStatus == 1));
@@ -140,6 +140,13 @@ export class PlayerViewComponent implements OnInit {
     }
   }
   viewTeam(team: ITeam){
-    console.log(team);
+    this.spinnerLoading = true;
+    localStorage.removeItem(SystemConstants.CURRENT_TEAM);
+    localStorage.setItem(SystemConstants.CURRENT_TEAM,team.id.toString());
+    this.teamServices.getRole(team.id,localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res =>{
+        localStorage.removeItem(SystemConstants.MEMBER_ROLE);
+        localStorage.setItem(SystemConstants.MEMBER_ROLE,res[0].role_id.toString());
+        this.router.navigate([UrlConstants.TEAM_DETAILS + '/' + team.id]);  
+    });
   }
 }

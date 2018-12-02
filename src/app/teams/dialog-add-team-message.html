@@ -1,0 +1,71 @@
+<loading-spinner *ngIf="showSpinner"></loading-spinner>
+<mat-dialog-title><h1>Thêm đội bóng</h1></mat-dialog-title>
+<mat-dialog-content>
+    <form class="example-form">
+        <div class="team-image">
+            <p>Ảnh đại diện</p>
+            <div class="img-container">
+                <img [src]="imgUrl">
+            </div>
+            <div class="actions">
+                <input type="file" (change)="onFileSelected($event)" accept=".png,.jpg,.jpeg">
+                <button mat-stroked-button (click)="uploadFile()">Upload</button>
+            </div>
+        </div>
+        <div class="info">
+            <mat-form-field class="example-full-width input">
+                <input matInput placeholder="Tên đội bóng" name="teamName" [(ngModel)]="teamName">
+            </mat-form-field>
+            <mat-form-field>
+                <textarea matInput placeholder="Mô tả" name="teamDescription" [(ngModel)]="teamDescription"></textarea>
+            </mat-form-field>
+            <p>Địa điểm</p>
+            <div class="form-select">
+                <select name="" id="" (change)="changeCity(city.value)" #city>
+                    <option value="0" disabled="disabled" selected="selected">Chọn Tỉnh/Thành phố</option>
+                    <option value="28">TP.Hồ Chí Minh</option>
+                    <option value="24">Hà Nội</option>
+                </select>
+                </div>
+                <div class="form-select">
+                <select name="" id="ward" (change)="changeWard(ward.value)" #ward >
+                    <option value="" disabled="disabled" selected="selected">Chọn Quận/Huyện</option>
+                    <option value="{{ward}}" *ngFor="let ward of listWard">
+                    {{ ward }}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <p class="positionTitle">Chọn vị trí đội</p>
+    <div class="map">
+        <agm-map 
+        [longitude] = "longitude" 
+        [latitude] = "latitude"
+        [zoom]="zoom" 
+        (mapClick) = "locationChosen($event)">
+        <agm-marker [longitude] = "longitude" [latitude] = "latitude">
+
+        </agm-marker>
+            <agm-marker 
+            *ngFor="let m of markers; let i = index"
+            (markerClick)="clickedMarker(m.label, i)"
+            [latitude]="m.lat"
+            [longitude]="m.lng"
+            [iconUrl]="iconUrl">
+                <agm-info-window>
+                    <div class="img-container" (click) = "viewTeam(m.teamId);">
+                        <img src="{{ m.iconUrl }}">
+                    </div>  
+                    <div class="name">
+                        <h1>{{ m.name }}</h1>
+                    </div>
+                </agm-info-window>
+            </agm-marker>
+        </agm-map>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-stroked-button class="confirm" (click)="addTeam();">Xác nhận</button>
+    <button mat-stroked-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>

@@ -8,7 +8,7 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { SystemConstants } from '../core/common/system.constants';
 import { INotification } from '../interfaces/INotification';
-
+import * as Echo from 'laravel-echo' ;
 export interface message {
   to_user_id: number;
   message: string;
@@ -59,7 +59,7 @@ export class SearchPlayerComponent implements OnInit {
       { code:'tct' ,title: 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
       { code:'tdb',title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' }
     ]},
-    {id:3,code:'db', title : 'Đội bóng',imgUrl : '../../assets/doibong.png' },
+    {id:3,code:'chonbd', title : 'Đội bóng',imgUrl : '../../assets/doibong.png'},
     {id:4,code:'ttcn', title : 'Thông tin cá nhân',imgUrl : '../../assets/thongtincanhan.png' },
     {id:5,code:'dx', title : 'Đăng xuất',imgUrl : '../../assets/dangxuat.png' },
   ];
@@ -82,6 +82,7 @@ export class SearchPlayerComponent implements OnInit {
   ) { 
   }
   ngOnInit() {
+    this.subscribe();
     // this.chatService.message.subscribe(msg => {
     //   console.log("Respone from websocket server" + msg);
     // })
@@ -125,9 +126,36 @@ export class SearchPlayerComponent implements OnInit {
         });
       }
     });
-
-    
-    
+  }
+  subscribe(){
+    var echo = new Echo({
+      authEndpoint : 'http://127.0.0.1:8000/broadcasting/auth',
+      broadcaster: 'pusher',
+      key: 'adb004555d28bac39090',
+      cluster: 'ap1',
+      encrypted: true
+    }); 
+    echo.channel('user-login')
+      .listen('Login', (e:IPlayer[])=>{
+        console.log("get from channel login");
+        console.log(e);
+        // this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
+        //this.notifications = e
+    });
+    var echo2 = new Echo({
+      authEndpoint : 'http://127.0.0.1:8000/broadcasting/auth',
+      broadcaster: 'pusher',
+      key: 'adb004555d28bac39090',
+      cluster: 'ap1',
+      encrypted: true
+    }); 
+    echo2.channel('user-logout')
+      .listen('Logout', (e:IPlayer[])=>{
+        console.log("get from channel logout");
+        console.log(e);
+        // this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
+        //this.notifications = e
+    });
   }
   changeSelection(ply: IPlayer){
     this.playerFocusing = ply;
@@ -180,7 +208,8 @@ export class SearchPlayerComponent implements OnInit {
       });
     }else{
       const dialogRef = this.dialog.open(DialogFriendRequestMessages, {
-        width: '250px',
+        width: '500px',
+        height:'800px',
         data: {message: ""}
       });
       dialogRef.afterClosed().subscribe(result => {

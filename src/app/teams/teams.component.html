@@ -1,14 +1,42 @@
 <div class="container">
     <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
     <div class="content">
-        <div class="wrapper">
-            <loading-spinner *ngIf="showSpinner"></loading-spinner>
-            <div class="box" *ngIf="!showSpinner">
-                <div class="item" *ngFor="let team of listTeams" (click)="viewTeam(team);">
+        <loading-spinner *ngIf="showSpinner"></loading-spinner>
+        <div class="wrapper" *ngIf="!showSpinner">
+            <h1>Danh sách đội bóng</h1>
+            <div class="box">
+                <div class="item" (click)="viewTeam(firstTeam);" *ngIf="firstTeam">
                     <div class="img-container">
-                        <img src="{{team.ImgUrl}}">
-                        <p>{{team.Fullname}}</p>
+                        <img src="{{firstTeam.ImgUrl}}">
                     </div>
+                </div>
+                <div class="item" (click)="addTeam();" *ngIf="!firstTeam">
+                    <div class="img-container">
+                        <img src="../../assets/plus.png">
+                    </div>
+                    <button mat-raised-button>Add team</button>
+                </div>
+                <div class="item" (click)="viewTeam(secondTeam);" *ngIf="secondTeam">
+                    <div class="img-container">
+                        <img src="{{secondTeam.ImgUrl}}">
+                    </div>
+                </div>
+                <div class="item" (click)="addTeam();" *ngIf="!secondTeam">
+                    <div class="img-container">
+                        <img src="../../assets/plus.png">
+                    </div>
+                    <button mat-raised-button>Add team</button>
+                </div>
+                <div class="item" (click)="viewTeam(thirdTeam);" *ngIf="thirdTeam">
+                    <div class="img-container">
+                        <img src="{{thirdTeam.ImgUrl}}">
+                    </div>
+                </div>
+                <div class="item" (click)="addTeam();" *ngIf="!thirdTeam">
+                    <div class="img-container">
+                        <img src="../../assets/plus.png">
+                    </div>
+                    <button mat-raised-button>Add team</button>
                 </div>
             </div>
         </div>

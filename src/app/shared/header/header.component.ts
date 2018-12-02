@@ -94,14 +94,11 @@ export class HeaderComponent implements OnInit {
               })
             } 
           });
-          }
-            
-                       
+          }     
         });this.notificationServices.getListUserSend(localStorage.getItem(SystemConstants.CURRENT_USER));
-      }else{
-        this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
-      }  
+      }
     }); 
+    this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
     this.accountServices.Friends.subscribe(data => {
       if(data.length == 0){
         this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER));

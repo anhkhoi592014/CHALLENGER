@@ -11,6 +11,8 @@ export interface ITeam {
     City?: String;
     Description?: String;
     Status?: boolean;
+    latitude?: number;
+    longitude? : number;
     created_at?: Date;
     update_at?: Date;
 }

@@ -25,6 +25,7 @@
     "@angular/router": "^6.1.0",
     "angular-images-resizer": "^2.0.3",
     "angular-laravel-echo": "^2.0.10",
+    "angular2-google-map": "^0.1.8",
     "blueimp-canvas-to-blob": "^3.14.0",
     "chart.js": "^2.7.2",
     "core-js": "^2.5.4",

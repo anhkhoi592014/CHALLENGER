@@ -157,8 +157,8 @@ export class ChatRoomComponent implements OnInit {
               isReceived: true
             });
             con.lastMessage = e['message'].message;
-            var length = document.getElementById("box").offsetHeight;
-            document.getElementById("box").scrollBy(0,length*3);
+            var length = document.getElementById("box").scrollHeight;
+            document.getElementById("box").scrollBy(0,length);
           } 
         }); 
       }
@@ -183,8 +183,8 @@ export class ChatRoomComponent implements OnInit {
       this.conversationServices.addMessage(localStorage.getItem(SystemConstants.CURRENT_USER),
       this.userSelected,this.conversationSelected,this.messageString).subscribe(res =>{
         console.log("Gui message thanh cong");
-        var length = document.getElementById("box").offsetHeight;
-        document.getElementById("box").scrollBy(0,length*3);
+        var length = document.getElementById("box").scrollHeight;
+        document.getElementById("box").scrollBy(0,length);
       });
       this.messageString = "";
     }
@@ -203,6 +203,8 @@ export class ChatRoomComponent implements OnInit {
         }
       }
     });
+    var length = document.getElementById("box").scrollHeight;
+    document.getElementById("box").scrollBy(0,length);
   }
 }
 
