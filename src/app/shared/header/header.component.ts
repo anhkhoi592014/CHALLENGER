@@ -173,7 +173,7 @@ export class HeaderComponent implements OnInit {
     echo.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.notifications')
       .listen('NewRequest', (e:INotification[])=>{
         console.log("channel new request");
-        // this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
+        this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
         //this.notifications = e
       });
     var echo2 = new Echo({
