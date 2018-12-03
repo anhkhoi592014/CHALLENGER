@@ -10,6 +10,10 @@
   <div class="content">
     <app-header [title]="page_title"></app-header>
     <div class="row logorow">
+      <div class="actions">
+        <button mat-fab (click)="leaveTeam();" *ngIf="!isManager">Rời đội</button>
+        <button mat-flat-button (click)="giaitanTeam();" *ngIf="isManager">Giải tán đội</button>
+      </div>
       <div class="logo">
         <div class="img-container">
           <img src="{{ team.ImgUrl }}">

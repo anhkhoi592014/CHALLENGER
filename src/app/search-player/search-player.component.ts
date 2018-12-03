@@ -137,14 +137,13 @@ export class SearchPlayerComponent implements OnInit {
     }); 
     echo.channel('user-login')
       .listen('Login', (e:any)=>{
-        console.log("get from channel login");
+        console.log("signal from login channel");
         // this.listPlayerResult = this.listPlayerResult.filter(p => p.id != e.user.id);
         this.listPlayerResult.forEach(p =>{
           if(p.id == e.user.id){
             p.status = 1;
           }
         });
-        console.log(this.listPlayerResult);
     });
     var echo2 = new Echo({
       authEndpoint : 'http://127.0.0.1:8000/broadcasting/auth',
@@ -155,7 +154,7 @@ export class SearchPlayerComponent implements OnInit {
     }); 
     echo2.channel('user-logout')
       .listen('Logout', (e:any)=>{
-        console.log("get from channel logout");
+        console.log("signal from logout channel");
         console.log(e);
         this.listPlayerResult.forEach(p =>{
           if(p.id == e.user.id){

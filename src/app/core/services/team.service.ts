@@ -167,4 +167,14 @@ export class TeamService {
       })
     )
   }
+  leaveTeam(idUser: any,idTeam: any): Observable<Boolean>{
+    return this.http.delete<Boolean>(SystemConstants.BASE_API + 'teams/'+ idTeam +'/delete/'+idUser,httpOptions).pipe(
+      map(res =>{
+        if(res){
+          return true;
+        }
+        return false;
+      })
+    )
+  }
 }

@@ -10,6 +10,7 @@ import { TeamService } from 'src/app/core/services/team.service';
 import { UrlConstants } from 'src/app/core/common/url.constants';
 import { IPlayer } from 'src/app/interfaces/IPlayer';
 import { IMember } from 'src/app/interfaces/IMember';
+import { ToastrManager } from 'ng6-toastr-notifications';
 @Component({
   selector: 'app-team-view',
   templateUrl: './team-view.component.html',
@@ -36,12 +37,14 @@ export class TeamViewComponent implements OnInit {
   teamMembersDetails: IMember[] = [];
   teamAdmin: IPlayer = {};
   showSpinner:boolean = true;
+  isManager: boolean = false;
   myChart:any;
   constructor(
     private teamServices : TeamService,
     private accountServices : AccountService,
     private route: ActivatedRoute,
     private router: Router,
+    private toastr: ToastrManager,
     private elementRef: ElementRef
   ) { 
     this.route.params.subscribe(param => {
@@ -54,6 +57,7 @@ export class TeamViewComponent implements OnInit {
     }
     if(localStorage.getItem(SystemConstants.MEMBER_ROLE)){
       if(localStorage.getItem(SystemConstants.MEMBER_ROLE) != "1"){
+        this.isManager = true;
         this.listMenu = [
           { id:1,code:'ttdb',title : 'Thông tin đội',imgUrl : '../../assets/timcauthu.png' },
           { id:2,code:'tlsd',title : 'Lịch sữ đấu',imgUrl : '../../assets/map.png' },
@@ -63,6 +67,7 @@ export class TeamViewComponent implements OnInit {
         ];
       }
     }else{
+      this.isManager = false;
       this.teamServices.getRole(localStorage.getItem(SystemConstants.CURRENT_TEAM),localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res =>{
         localStorage.removeItem(SystemConstants.MEMBER_ROLE);
         localStorage.setItem(SystemConstants.MEMBER_ROLE,res[0].role_id.toString());
@@ -135,4 +140,19 @@ export class TeamViewComponent implements OnInit {
     });
   }
 
+  leaveTeam(){
+    this.showSpinner = true;
+    this.teamServices.leaveTeam(localStorage.getItem(SystemConstants.CURRENT_USER),this.teamId).subscribe(res =>{
+      if(res){
+        this.toastr.successToastr('Rời nhóm thành công', 'Thông báo',{
+          position: 'top-right',
+          animate: 'slideFromTop'
+        });
+        this.router.navigate([UrlConstants.TEAMS]);
+      }
+    })
+  }
+  giaitanTeam(){
+
+  }
 }

@@ -81,6 +81,12 @@
                     }                    
                 }
             }
+            .actions{
+                button{
+                    background: red;
+                    cursor: pointer;
+                }
+            }
             .team-info{
                 display: flex;
                 flex-flow: column;
