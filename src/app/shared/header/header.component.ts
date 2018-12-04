@@ -287,6 +287,12 @@ export class HeaderComponent implements OnInit {
             this.router.navigate([UrlConstants.CHAT]);
           });
         }
+      }else{
+        this.conversationServices.addConversations(localStorage.getItem(SystemConstants.CURRENT_USER),id).subscribe((res: IConversation) =>{
+          console.log(res);
+          localStorage.setItem(SystemConstants.CURRENT_CONVERSATION,res.id+"");
+          this.router.navigate([UrlConstants.CHAT]);
+        });
       }
     });
   }

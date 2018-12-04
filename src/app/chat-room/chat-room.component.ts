@@ -154,13 +154,20 @@ export class ChatRoomComponent implements OnInit {
       if(e['message'].to_user_id == localStorage.getItem(SystemConstants.CURRENT_USER)){  
         this.listConversations.map(con => {
           if(con.id == conversations.id){
-            console.log(con);
+            let isUrl = false;
+            var regex = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
+              if(regex.test(e['message'].message)){
+                isUrl = true;
+              }else{
+                isUrl = false;
+              }
             con.listMessage.unshift({
               from_user_id: e['message'].from_user_id,
               to_user_id: e['message'].to_user_id,
               conversation_id: e['message'].conversation_id,
               message: e['message'].message,
-              isReceived: true
+              isReceived: true,
+              isURLString: isUrl
             });
             con.lastMessage = e['message'].message;
             var length = document.getElementById("box").scrollHeight;
