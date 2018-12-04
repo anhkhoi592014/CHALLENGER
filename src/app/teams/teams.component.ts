@@ -10,6 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder } from '@angular/forms';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-teams',
@@ -42,10 +43,12 @@ export class TeamsComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+    this.firstTeam = null;
+    this.secondTeam = null;
+    this.thirdTeam = null;
+    this.accountServices.Teams = new BehaviorSubject<ITeam[]>([]);
     this.accountServices.Teams.subscribe(res => {
       if(res.length != 0){
-        console.log(res[0]);
-        console.log(res[1]);
         if(res.length == 1){
           this.firstTeam = res[0];
         }
@@ -58,14 +61,8 @@ export class TeamsComponent implements OnInit {
           this.secondTeam = res[1];
           this.thirdTeam = res[2];
         }
-        console.log(this.firstTeam);
-        console.log(this.secondTeam);
         this.showSpinner = false;
       }else{
-        console.log("Test");
-        this.firstTeam = null;
-        this.secondTeam = null;
-        this.thirdTeam = null;
         this.showSpinner = false;
       }
     });
@@ -221,13 +218,6 @@ export class DialogAddTeamRequest implements OnInit{
   }
   addTeam(){
     this.showSpinner = true;
-    console.log(this.imgName);
-    console.log(this.teamName);
-    console.log(this.teamDescription);
-    console.log(this.teamCity);
-    console.log(this.teamWard);
-    console.log(this.latitude);
-    console.log(this.longitude);
     this.teamServices.addTeam(this.imgName,this.teamName,this.teamDescription,this.teamCity,this.teamWard,this.latitude,this.longitude,localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res =>{
       if(res){
         this.dialogRef.close();

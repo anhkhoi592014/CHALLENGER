@@ -42,6 +42,7 @@ export class DashboardComponent implements OnInit {
     { id:7, Fullname : 'Manchester UNITED',ImgUrl : '../../assets/logo07.png',Status : true},
   ];
   iconUrl : string = 'http://maps.google.com/mapfiles/kml/pal2/icon49.png';
+  searchString : string = "";
   loadingMapSpinner: boolean = true;
   markers : marker[] = [];
   longitude = 106.658342;
@@ -82,6 +83,16 @@ export class DashboardComponent implements OnInit {
   locationChosen(event){
     this.latitude = event.coords.lat;
     this.longitude = event.coords.lng;
+    if(!event && this.searchString.trim() != ""){
+      this.listTeamsResult.forEach(t => {
+        if(t.Fullname.trim() === this.searchString.trim()){
+          console.log(t);
+          this.latitude = t.latitude;
+          this.longitude = t.longitude;
+          console.log(this.latitude); 
+        }
+      });
+    }
   }
   clickedMarker(label: string, index: number) {
     console.log(`clicked the marker: ${label || index}`)
@@ -94,5 +105,9 @@ export class DashboardComponent implements OnInit {
     setTimeout(() => {
       this.router.navigate([UrlConstants.TEAM_DETAILS + "/" + id]);
     }, 3500);
+  }
+  findTeam(){
+    console.log(this.searchString);
+    
   }
 }

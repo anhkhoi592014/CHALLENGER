@@ -110,7 +110,7 @@
             min-height: 89%;
             justify-content: flex-start;
             .message{
-                height: 35px;
+                height: auto;
                 .img-container{
                     width: 10%;
                     img{
@@ -124,7 +124,7 @@
                 flex-flow: row;
                 justify-content: flex-start;
                 color: black;
-                p{
+                p,a{
                     display: flex;
                     justify-content: space-around;
                     padding: 0.5em 1.5rem;
@@ -138,11 +138,11 @@
                 flex-flow: row;
                 justify-content: flex-end;
                 color:white;
-                p{
+                p,a{
                     display: flex;
                     justify-content: space-around;
                     padding: 0.5em 1.5rem;
-                    background: #2c19c3;
+                    background: #989494;
                     border-radius: 14px;
                 }
             }

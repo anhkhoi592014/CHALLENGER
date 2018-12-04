@@ -27,7 +27,7 @@ export class SearchTeamComponent implements OnInit {
       { code:'tct' ,title: 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
       { code:'tdb',title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' }
     ]},
-    {id:3,code:'chondb', title : 'Đội bóng',imgUrl : '../../assets/doibong.png'},
+    {id:3,code:'chonbd', title : 'Đội bóng',imgUrl : '../../assets/doibong.png'},
     {id:4,code:'ttcn', title : 'Thông tin cá nhân',imgUrl : '../../assets/thongtincanhan.png' },
     {id:5,code:'dx', title : 'Đăng xuất',imgUrl : '../../assets/dangxuat.png' },
   ];

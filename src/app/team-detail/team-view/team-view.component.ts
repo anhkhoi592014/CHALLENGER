@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef } from '@angular/core';
+import { Component, OnInit, ElementRef, Inject } from '@angular/core';
 import { IMenu } from 'src/app/interfaces/IMenu';
 
 import * as Chart from 'chart.js'
@@ -11,6 +11,10 @@ import { UrlConstants } from 'src/app/core/common/url.constants';
 import { IPlayer } from 'src/app/interfaces/IPlayer';
 import { IMember } from 'src/app/interfaces/IMember';
 import { ToastrManager } from 'ng6-toastr-notifications';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
+export interface DialogData {
+  message: string;
+}
 @Component({
   selector: 'app-team-view',
   templateUrl: './team-view.component.html',
@@ -45,7 +49,8 @@ export class TeamViewComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private toastr: ToastrManager,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    public dialog: MatDialog
   ) { 
     this.route.params.subscribe(param => {
       this.teamId = param['id'];  
@@ -141,18 +146,62 @@ export class TeamViewComponent implements OnInit {
   }
 
   leaveTeam(){
-    this.showSpinner = true;
-    this.teamServices.leaveTeam(localStorage.getItem(SystemConstants.CURRENT_USER),this.teamId).subscribe(res =>{
-      if(res){
-        this.toastr.successToastr('Rời nhóm thành công', 'Thông báo',{
-          position: 'top-right',
-          animate: 'slideFromTop'
+    let dialogRef = this.dialog.open(DialogConfirm, {
+      data: { name: "Xác nhận rời đội" },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.showSpinner = true;
+        this.teamServices.leaveTeam(localStorage.getItem(SystemConstants.CURRENT_USER),this.teamId).subscribe(res =>{
+          if(res){
+            this.toastr.successToastr('Rời nhóm thành công', 'Thông báo',{
+              position: 'top-right',
+              animate: 'slideFromTop'
+            });
+            this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
+            setTimeout(() => {
+              this.router.navigate([UrlConstants.TEAMS]);
+            }, 2000);
+          }
         });
-        this.router.navigate([UrlConstants.TEAMS]);
       }
-    })
+    });   
   }
   giaitanTeam(){
+    let dialogRef = this.dialog.open(DialogConfirm, {
+      data: { name: "Xác nhận giải tán đội" },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.showSpinner = true;
+        this.teamServices.deleteTeam(this.teamId).subscribe(res =>{
+          if(res){
+            this.toastr.successToastr('Giải tán đội thành công', 'Thông báo',{
+              position: 'top-right',
+              animate: 'slideFromTop'
+            });
+            this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
+            setTimeout(() => {
+              this.router.navigate([UrlConstants.TEAMS]);
+            }, 2000);
+          }
+        });
+      }
+    });   
+  }
+}
 
+@Component({
+  selector: 'dialog-confirm',
+  templateUrl: 'dialog-confirm.html',
+})
+export class DialogConfirm {
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogConfirm>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 }

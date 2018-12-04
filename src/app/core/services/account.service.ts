@@ -59,6 +59,9 @@ export class AccountService {
   get Teams(){
     return this._teams.asObservable();
   }
+  set Teams(team: any){
+    this._teams = team;
+  }
   get Positions(){
     return this._positions.asObservable();
   }

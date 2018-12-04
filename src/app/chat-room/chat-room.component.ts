@@ -75,6 +75,12 @@ export class ChatRoomComponent implements OnInit {
             con.listMessage = c;
             var gotLastMessage = false;
             con.listMessage.forEach(m => {
+              var regex = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
+              if(regex.test(m.message)){
+                m.isURLString = true;
+              }else{
+                m.isURLString = false;
+              }
               if(m.from_user_id + "" == localStorage.getItem(SystemConstants.CURRENT_USER)){
                 m.isReceived = false;
               }else{
@@ -168,12 +174,18 @@ export class ChatRoomComponent implements OnInit {
   sendMessage(){
     if(this.messageString != ""){
       const messageString = this.messageString;
+      let isUrl = false;
+      var regex = new RegExp("^(http[s]?:\\/\\/(www\\.)?|ftp:\\/\\/(www\\.)?|www\\.){1}([0-9A-Za-z-\\.@:%_\+~#=]+)+((\\.[a-zA-Z]{2,3})+)(/(.)*)?(\\?(.)*)?");
+      if(regex.test(messageString)){
+        isUrl = true;
+      }
       this.listMessages.unshift({
         from_user_id: this.userSelected,
         to_user_id: localStorage.getItem(SystemConstants.CURRENT_USER),
         conversation_id: this.conversationSelected,
         message: messageString,
-        isReceived: false
+        isReceived: false,
+        isURLString: isUrl
       });
       this.listConversations.forEach(con =>{
         if(con.id === this.conversationSelected){

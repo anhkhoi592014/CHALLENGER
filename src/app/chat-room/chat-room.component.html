@@ -37,7 +37,8 @@
             <div class="img-container" *ngIf=" m.isReceived ">
                 <img src="{{imgChat}}">
             </div>
-            <p>{{m.message}}</p>
+            <p *ngIf="!m.isURLString">{{m.message}}</p>
+            <a *ngIf="m.isURLString" href="m.message">{{m.message}}</a>
           </div>
         </div>
       </div>

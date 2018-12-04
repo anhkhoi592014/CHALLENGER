@@ -5,4 +5,5 @@ export interface IMessage {
     conversation_id: number;
     message: string;
     isReceived?: boolean;
+    isURLString?: boolean;
 }

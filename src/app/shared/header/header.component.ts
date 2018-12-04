@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit {
               this.listShowNotification = [];
               this.notifications.forEach(notification =>{
                 if(notification.notification_type_id == 1){
-                  this.listShowNotification.push({
+                  this.listShowNotification.push({  
                     idNoti : notification.id,
                     idFrom: notification.from_id,
                     imgUrl: this.listUserSendNotification.filter(player => player.id == notification.from_id)[0].ImgUrl,
@@ -90,9 +90,23 @@ export class HeaderComponent implements OnInit {
                     timeFromNow: moment(notification.created_at).fromNow(),
                     timeSend: notification.created_at
                   });
-                }         
+                }
               })
-            } 
+            }else{
+              console.log("2");
+              this.notifications.forEach(notification =>{
+                if(notification.notification_type_id == 1){
+                  this.listShowNotification.push({
+                    idNoti : notification.id,
+                    idFrom: notification.from_id,
+                    imgUrl: this.listUserSendNotification.filter(player => player.id == notification.from_id)[0].ImgUrl,
+                    typeName: this.getNotifitionName(notification.notification_type_id),
+                    timeFromNow: moment(notification.created_at).fromNow(),
+                    timeSend: notification.created_at
+                  });
+                }
+              });
+            }
           });
           }     
         });this.notificationServices.getListUserSend(localStorage.getItem(SystemConstants.CURRENT_USER));

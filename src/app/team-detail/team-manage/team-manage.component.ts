@@ -78,6 +78,7 @@ export class TeamManageComponent implements OnInit {
         this.listFriends = data;   
         this.teamServices.Invitations.subscribe(res => {
           if(res.length != 0){
+            console.log(res);
             this.listInvitations = res;
             this.countInvitation = this.listInvitations.length;
             this.listInvitations.forEach(i => {
@@ -122,6 +123,7 @@ export class TeamManageComponent implements OnInit {
             this.showListInvitationSpinner = false;
           }   
         });
+        this.teamServices.getInvitations(localStorage.getItem(SystemConstants.CURRENT_TEAM));
       }else{
        // this.showListFriendSpinner = false;
       }
@@ -174,6 +176,11 @@ export class TeamManageComponent implements OnInit {
             position: 'top-right',
             animate: 'slideFromTop'
           });
+          this.listFriends.forEach(f => {
+            if(f.id == member.user_id){
+              f.Invited = false;
+            }
+          });
             this.teamMembers = this.teamMembers.filter(m => m.id != member.id);
             this.countMember--;
           }else{
@@ -218,8 +225,10 @@ export class TeamManageComponent implements OnInit {
   }
   cancelInvited(invi: IInvitation){
     this.showListInvitationSpinner = true;
+    console.log(invi.user_id,localStorage.getItem(SystemConstants.CURRENT_TEAM));
     this.teamServices.deleteTeamInvitedNotification(invi.user_id,localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res =>{
       if(res){
+        console.log("delete success")
         this.teamServices.cancelInvited(invi.id).subscribe(res =>{
           if(res){  
             this.listInvitations = this.listInvitations.filter(i => i.id != invi.id);
@@ -242,6 +251,8 @@ export class TeamManageComponent implements OnInit {
           this.showListInvitationSpinner = false;
           }
         });
+      }else{
+        this.showListInvitationSpinner = false;
       }
     });
   }

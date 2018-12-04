@@ -1,10 +1,23 @@
 <div class="container">
     <app-menu [listMenu]= "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
     <div class="map">
+        <!-- <div class="search-box">
+            <p>
+                <mat-form-field appearance="outline">
+                    <mat-label>Tìm kiếm đội bóng</mat-label>
+                    <input matInput placeholder="Nhập tên đội bóng" [(ngModel)]="searchString">
+                </mat-form-field>
+            </p>
+            <div class="img-container" (click)="locationChosen()">
+                <img src="../../assets/search.png" >
+            </div>
+        </div> -->
         <loading-spinner *ngIf="loadingMapSpinner"></loading-spinner>
         <agm-map 
         [longitude] = "longitude" 
         [latitude] = "latitude"
+        [zoomControl] = "false"
+        [disableDoubleClickZoom] = "true"
         [zoom]="zoom" 
         (mapClick) = "locationChosen($event)">
             <agm-marker 
