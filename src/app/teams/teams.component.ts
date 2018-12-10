@@ -63,7 +63,6 @@ export class TeamsComponent implements OnInit {
         }
         this.showSpinner = false;
       }else{
-        this.showSpinner = false;
       }
     });
     this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));

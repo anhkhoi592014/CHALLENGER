@@ -30,7 +30,7 @@ import { ChangePasswordComponent } from './player-detail/change-password/change-
 import { PlayerEditInfoComponent } from './player-detail/player-edit/player-edit-info/player-edit-info.component';
 import { PlayerEditPowerComponent } from './player-detail/player-edit/player-edit-power/player-edit-power.component';
 import { PositionService } from './core/services/position.service';
-import { TeamViewComponent ,DialogConfirm} from './team-detail/team-view/team-view.component';
+import { TeamViewComponent ,DialogConfirm, DialogSelectTeam} from './team-detail/team-view/team-view.component';
 import { TeamManageComponent,DialogDeleteMemberConfirm } from './team-detail/team-manage/team-manage.component';
 import { TeamsComponent,DialogAddTeamRequest } from './teams/teams.component';
 import { CreateTeamComponent } from './teams/create-team/create-team.component';
@@ -189,7 +189,7 @@ const appRoute:Routes = [
     PlayerEditInfoComponent,
     PlayerEditPowerComponent,
     CreateTeamComponent,
-    TeamViewComponent,
+    TeamViewComponent,DialogSelectTeam,
     TeamManageComponent,
     TeamsComponent,ChatRoomComponent,
     DialogFriendRequestMessages,
@@ -214,7 +214,13 @@ const appRoute:Routes = [
     RouterModule.forRoot(appRoute)
   ],
 
-  entryComponents: [SearchPlayerComponent, DialogConfirm,DialogFriendRequestMessages,DialogDeleteFriendConfirm,DialogDeleteMemberConfirm,DialogAddTeamRequest],
+  entryComponents: [SearchPlayerComponent, 
+      DialogConfirm,
+      DialogFriendRequestMessages,
+      DialogDeleteFriendConfirm,
+      DialogDeleteMemberConfirm,
+      DialogAddTeamRequest,
+      DialogSelectTeam],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AuthenGuard,LoggedGuard,AccountService,PositionService,{
     provide: ErrorHandler,

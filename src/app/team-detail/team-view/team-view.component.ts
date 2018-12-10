@@ -41,7 +41,9 @@ export class TeamViewComponent implements OnInit {
   teamMembersDetails: IMember[] = [];
   teamAdmin: IPlayer = {};
   showSpinner:boolean = true;
+  showSpinnerMenu: boolean = true;
   isManager: boolean = false;
+  isNotUserTeam: boolean = true;
   myChart:any;
   constructor(
     private teamServices : TeamService,
@@ -77,6 +79,7 @@ export class TeamViewComponent implements OnInit {
         localStorage.removeItem(SystemConstants.MEMBER_ROLE);
         localStorage.setItem(SystemConstants.MEMBER_ROLE,res[0].role_id.toString());
         if(res[0].role_id != 1){
+          console.log("test")
           this.listMenu = [
             { id:1,code:'ttdb',title : 'Thông tin đội',imgUrl : '../../assets/timcauthu.png' },
             { id:2,code:'tlsd',title : 'Lịch sữ đấu',imgUrl : '../../assets/map.png' },
@@ -87,29 +90,44 @@ export class TeamViewComponent implements OnInit {
         }
       });
     }
-    this.teamServices.Teams.subscribe(res => {
+    this.teamServices.getTeamById(this.teamId).subscribe(res => {
       if(res.length != 0){ 
         console.log(res);
         this.team = <ITeam>res;
         this.showSpinner = false;    
         this.chartit(this.team.WinRate); 
-      }else{ 
-        this.teamServices.getTeamById(this.teamId);
       }
-    });
+    })
     this.accountServices.Teams.subscribe(res =>{
       if(res.length == 0){
-        this.teamServices.getTeamMembers(this.teamId);
+        this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
       }else{
         this.listUserTeam = <ITeam[]>res;
-        if(!this.listUserTeam.filter(team => team.id == this.teamId)){
-          this.listMenu = [{ id: 3,code:'back', title : 'Quay Lại',imgUrl : '../../assets/left-arrow.png' }];
+        console.log(this.listUserTeam);
+        console.log(this.teamId);
+        if(this.listUserTeam.filter(team => team.id == this.teamId).length == 0){
+          console.log("Khong phai thanh vien");
+          localStorage.removeItem(SystemConstants.IS_TEAM_MEMBER);
+          localStorage.setItem(SystemConstants.IS_TEAM_MEMBER,"NO");
+          this.isNotUserTeam = true;
+          this.listMenu = [
+            { id:1,code:'ttdb',title : 'Thông tin đội',imgUrl : '../../assets/timcauthu.png' },
+            { id:2,code:'tlsd',title : 'Lịch sữ đấu',imgUrl : '../../assets/map.png' },
+            { id:3,code:'tdh',title : 'Đội hình',imgUrl : '../../assets/doibong.png' },
+            { id:4,code:'back',title : 'Quay lại',imgUrl : '../../assets/dangxuat.png' },
+          ];
+          this.showSpinnerMenu = false;
+        }else{
+          localStorage.removeItem(SystemConstants.IS_TEAM_MEMBER);
+          localStorage.setItem(SystemConstants.IS_TEAM_MEMBER,"YES");
+          this.isNotUserTeam = false;
+          this.showSpinnerMenu = false;
         }
       }
     });
     this.teamServices.Users.subscribe(res => {
       if(res.length == 0){
-        this.accountServices.getUsersTeams(localStorage.getItem(SystemConstants.CURRENT_USER));
+        this.teamServices.getTeamMembers(this.teamId);
       }else{
         this.teamMembers = res;
         this.totalMember = this.teamMembers.length;
@@ -189,6 +207,18 @@ export class TeamViewComponent implements OnInit {
       }
     });   
   }
+  challenge(): void{
+    let dialogRef = this.dialog.open(DialogSelectTeam, {
+      data: { teams: this.listUserTeam },
+      width: '70%',
+      height: '400px'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        console.log(result)
+      }
+    }); 
+  }
 }
 
 @Component({
@@ -203,5 +233,37 @@ export class DialogConfirm {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+}
+
+@Component({
+  selector: 'dialog-select-team',
+  templateUrl: 'dialog-select-team.html',
+  styleUrls: ['./dialog-select-team.scss']
+})
+export class DialogSelectTeam implements OnInit{
+  listTeams: ITeam[] = [];
+  constructor(
+    public dialogRef: MatDialogRef<DialogSelectTeam>,
+    public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
+  ngOnInit(){
+    this.listTeams = this.data.teams;
+    console.log(this.listTeams);
+  }
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+  onchoice(team: ITeam){
+    console.log("Xác nhận chọn đội " + team.Fullname);
+    let dialogRef = this.dialog.open(DialogConfirm, {
+      data: { name: "Xác nhận chọn đội " + team.Fullname, team: team },
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        console.log(result);
+        this.dialogRef.close();
+      }
+    }); 
   }
 }

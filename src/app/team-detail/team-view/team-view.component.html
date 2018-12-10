@@ -1,8 +1,10 @@
 <div class="container">
-  <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
+  <loading-spinner *ngIf="showSpinnerMenu" style="width:8%;"></loading-spinner>
+  <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu">
+  </app-menu>
   <loading-spinner *ngIf="showSpinner"></loading-spinner>
-  <div class="overlay">
-    <div class="box">
+  <div class="overlay" *ngIf="isNotUserTeam">
+    <div class="box" (click)="challenge();">
       <img src="../../../assets/swords.png">
       <p>Thách Đấu</p>
     </div>
@@ -10,7 +12,7 @@
   <div class="content">
     <app-header [title]="page_title"></app-header>
     <div class="row logorow">
-      <div class="actions">
+      <div class="actions" *ngIf="!isNotUserTeam">
         <button mat-fab (click)="leaveTeam();" *ngIf="!isManager">Rời đội</button>
         <button mat-flat-button (click)="giaitanTeam();" *ngIf="isManager">Giải tán đội</button>
       </div>

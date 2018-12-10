@@ -19,7 +19,7 @@ interface marker {
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
-})
+})  
 export class DashboardComponent implements OnInit {
   listMenu : IMenu[] = [
     {id:1,code:'dashboard', title : 'Dashboard',imgUrl : '../../assets/mapView.png' },
@@ -84,7 +84,7 @@ export class DashboardComponent implements OnInit {
     this.latitude = event.coords.lat;
     this.longitude = event.coords.lng;
     if(!event && this.searchString.trim() != ""){
-      this.listTeamsResult.forEach(t => {
+      this.listTeamsResult.forEach(t => { 
         if(t.Fullname.trim() === this.searchString.trim()){
           console.log(t);
           this.latitude = t.latitude;

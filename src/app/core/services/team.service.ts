@@ -46,10 +46,14 @@ export class TeamService {
     return this._members.asObservable();
   }
 
-  getTeamById(id: any){
-    this.http.get(SystemConstants.BASE_API + 'team/' + id).subscribe(data => {
-      this._teams.next(<ITeam[]>data);
-    })
+  getTeamById(id: any): Observable<ITeam[]>{
+    return this.http.get<ITeam[]>(SystemConstants.BASE_API + 'team/' + id).pipe(
+      map(res => {
+         if(res){
+           return res;
+         }
+      })
+    )
   }
 
   getTeamMembers(id: any): Observable<IPlayer[]>{

@@ -1,4 +1,5 @@
 <div class="container">
+  <loading-spinner style="width:8%;" *ngIf="showSpinnerMenu"></loading-spinner>
   <app-menu [listMenu] = "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
   <div class="content">
     <div class="wrapper">

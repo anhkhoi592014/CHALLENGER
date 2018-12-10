@@ -1,6 +1,7 @@
 <div class="container">
     <app-menu [listMenu]= "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
     <div class="map">
+        <input (ngModel)="latitude" name="latitude">
         <!-- <div class="search-box">
             <p>
                 <mat-form-field appearance="outline">
