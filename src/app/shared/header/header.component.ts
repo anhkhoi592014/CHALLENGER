@@ -81,7 +81,16 @@ export class HeaderComponent implements OnInit {
                     timeFromNow: moment(notification.created_at).fromNow(),
                     timeSend: notification.created_at
                   });
-                }else{
+                }else if(notification.notification_type_id == 2){
+                  this.listShowNotification.push({
+                    idNoti : notification.id,
+                    idFrom: notification.from_id,
+                    imgUrl: this.listTeamSendNotification.filter(team => team.id == notification.from_id)[0].ImgUrl,
+                    typeName: this.getNotifitionName(notification.notification_type_id),
+                    timeFromNow: moment(notification.created_at).fromNow(),
+                    timeSend: notification.created_at
+                  });
+                }else if(notification.notification_type_id == 3){
                   this.listShowNotification.push({
                     idNoti : notification.id,
                     idFrom: notification.from_id,
@@ -171,6 +180,8 @@ export class HeaderComponent implements OnInit {
       return "Đã gửi lời mời kết bạn";
     }else if(id == 2){
       return "Đã gửi lời mời gia nhập đội";
+    }else if(id == 3){
+      return "Đã gửi lời mời thách đấu";
     }
   }
   resetFilter(){
@@ -212,6 +223,19 @@ export class HeaderComponent implements OnInit {
     echo3.channel('user.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.deleteNotification')
     .listen('DeleteNotification', (notification :any)=>{
       console.log("deleted team request");
+      console.log(notification.notification.from_id);
+      this.listShowNotification = this.listShowNotification.filter(noti => noti.idNoti != notification.notification.id);
+    });
+    var echo4 = new Echo({
+      authEndpoint : 'http://127.0.0.1:8000/broadcasting/auth',
+      broadcaster: 'pusher',
+      key: 'adb004555d28bac39090',
+      cluster: 'ap1',
+      encrypted: true
+    });
+    echo4.channel('team.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.notifications')
+    .listen('NewRequest', (notification :any)=>{
+      console.log("Challenge team request");
       console.log(notification.notification.from_id);
       this.listShowNotification = this.listShowNotification.filter(noti => noti.idNoti != notification.notification.id);
     });

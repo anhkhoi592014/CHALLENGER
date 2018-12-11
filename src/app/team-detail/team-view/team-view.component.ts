@@ -160,7 +160,7 @@ export class TeamViewComponent implements OnInit {
       type:'pie',
       data:this.data,
       options: {}
-    });
+    }); 
   }
 
   leaveTeam(){
@@ -246,6 +246,8 @@ export class DialogSelectTeam implements OnInit{
   constructor(
     public dialogRef: MatDialogRef<DialogSelectTeam>,
     public dialog: MatDialog,
+    private teamServices: TeamService,
+    private toastr: ToastrManager
     @Inject(MAT_DIALOG_DATA) public data: any) {}
   ngOnInit(){
     this.listTeams = this.data.teams;
@@ -261,8 +263,13 @@ export class DialogSelectTeam implements OnInit{
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        console.log(result);
-        this.dialogRef.close();
+        this.teamServices.addTeamChallengeRequest(localStorage.getItem(SystemConstants.CURRENT_TEAM),result.id).subscribe(res => {
+          this.toastr.successToastr('Đã gữi lời mời', 'Thông báo',{
+            position: 'top-right',
+            animate: 'slideFromTop'
+          });
+          this.dialogRef.close();
+        });
       }
     }); 
   }

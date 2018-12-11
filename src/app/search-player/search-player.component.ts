@@ -214,7 +214,7 @@ export class SearchPlayerComponent implements OnInit {
       });
     }else{
       const dialogRef = this.dialog.open(DialogFriendRequestMessages, {
-        width: '200px',
+        width: '250px',
         data: {message: ""}
       });
       dialogRef.afterClosed().subscribe(result => {

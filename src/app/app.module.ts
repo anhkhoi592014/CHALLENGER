@@ -153,16 +153,19 @@ const appRoute:Routes = [
       {
         path:'history-match',
         component: TeamHistoryMatchComponent,
+        pathMatch: 'full',
         canActivate: [AuthenGuard]
       },
       {
         path:'formation',
         component: TeamFormationComponent,
+        pathMatch: 'full',
         canActivate: [AuthenGuard]
       },
       {
         path:'manage',
         component: TeamManageComponent,
+        pathMatch: 'full',
         canActivate: [AuthenGuard]
       }
     ]

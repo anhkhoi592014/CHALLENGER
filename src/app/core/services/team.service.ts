@@ -161,6 +161,17 @@ export class TeamService {
         })
       );
   }
+  addTeamChallengeRequest(teamId: any,formTeamId: any): Observable<Boolean>{
+    return this.http.post(SystemConstants.BASE_API + 'team/notification/add',JSON.stringify({teamId,formTeamId}),httpOptions).pipe(
+      map(res => {
+        if(res){
+          console.log(res);
+          return true;
+        }
+        return false;
+      })
+    )
+  }
   cancelInvited(id: number): Observable<Boolean>{
     return this.http.delete<Boolean>(SystemConstants.BASE_API + 'invitations/delete/'+id,httpOptions).pipe(
       map(res =>{

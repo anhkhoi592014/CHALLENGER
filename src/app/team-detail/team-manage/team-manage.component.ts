@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { IMenu } from 'src/app/interfaces/IMenu';
 import { AccountService } from 'src/app/core/services/account.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { IPlayer } from 'src/app/interfaces/IPlayer';
 import { SystemConstants } from 'src/app/core/common/system.constants';
 import { TeamService } from 'src/app/core/services/team.service';
@@ -12,6 +12,7 @@ import { PositionService } from 'src/app/core/services/position.service';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material';
 import { IInvitation } from 'src/app/interfaces/iinvitation';
+import { UrlConstants } from 'src/app/core/common/url.constants';
 
 @Component({
   selector: 'app-team-manage',
@@ -52,17 +53,33 @@ export class TeamManageComponent implements OnInit {
     private positionServices: PositionService,
     private toastr: ToastrManager,
     private router: Router,
+    private route: ActivatedRoute,
     public dialog: MatDialog
     ) {
+      this.route.params.subscribe(param => {
+        console.log(param);
+        // if(param['id']){
+        //   this.teamId = param['id'];
+        // }  
+        // else{
+        //   this.router.navigate([UrlConstants.PLAYER_DETAILS]);
+        // }
+      })
     }
 
   ngOnInit() {
+    console.log(localStorage.getItem(SystemConstants.CURRENT_TEAM));
     this.teamServices.Teams.subscribe(res =>{
+      console.log(1)
       if(res.length==0){
-        this.teamServices.getTeamById(localStorage.getItem(SystemConstants.CURRENT_TEAM));
-      }else{
-        this.team = res;
-        this.newName = this.team.Fullname;
+        console.log(2)
+        this.teamServices.getTeamById(localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res => {
+          if(res){
+            this.team = res;
+            console.log(this.team);
+            this.newName = this.team.Fullname;
+          }
+        });
       }
     });
     this.positionServices.listPositions.subscribe(res =>{
@@ -126,6 +143,7 @@ export class TeamManageComponent implements OnInit {
         this.teamServices.getInvitations(localStorage.getItem(SystemConstants.CURRENT_TEAM));
       }else{
        // this.showListFriendSpinner = false;
+            this.showListInvitationSpinner = false;
       }
       });
       this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER)); 
@@ -227,33 +245,31 @@ export class TeamManageComponent implements OnInit {
     this.showListInvitationSpinner = true;
     console.log(invi.user_id,localStorage.getItem(SystemConstants.CURRENT_TEAM));
     this.teamServices.deleteTeamInvitedNotification(invi.user_id,localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res =>{
-      if(res){
-        console.log("delete success")
-        this.teamServices.cancelInvited(invi.id).subscribe(res =>{
-          if(res){  
-            this.listInvitations = this.listInvitations.filter(i => i.id != invi.id);
-            this.countInvitation--;
-            this.listFriends.forEach(f => {
-              if(f.id == invi.user_id){
-                f.Invited = false;
-              }
-            });
-            this.toastr.successToastr('Đã hủy lời mời', 'Thông báo',{
-              position: 'top-right',
-              animate: 'slideFromTop'
-            });
-            this.showListInvitationSpinner = false;
-          }else{
-            this.toastr.errorToastr('Hủy lời mời thất bại', 'Thông báo',{
+      (res)?
+        console.log("delete notification success") : 
+        console.log("delete notification not success");
+      this.teamServices.cancelInvited(invi.id).subscribe(res =>{
+        if(res){  
+          this.listInvitations = this.listInvitations.filter(i => i.id != invi.id);
+          this.countInvitation--;
+          this.listFriends.forEach(f => {
+            if(f.id == invi.user_id){
+              f.Invited = false;
+            }
+          });
+          this.toastr.successToastr('Đã hủy lời mời', 'Thông báo',{
             position: 'top-right',
             animate: 'slideFromTop'
           });
           this.showListInvitationSpinner = false;
-          }
+        }else{
+          this.toastr.errorToastr('Hủy lời mời thất bại', 'Thông báo',{
+          position: 'top-right',
+          animate: 'slideFromTop'
         });
-      }else{
         this.showListInvitationSpinner = false;
-      }
+        }
+      });
     });
   }
   test(){
