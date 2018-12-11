@@ -233,7 +233,7 @@ export class HeaderComponent implements OnInit {
       cluster: 'ap1',
       encrypted: true
     });
-    echo4.channel('team.'+localStorage.getItem(SystemConstants.CURRENT_USER) + '.notifications')
+    echo4.channel('team.'+localStorage.getItem(SystemConstants.CURRENT_TEAM) + '.notifications')
     .listen('NewRequest', (notification :any)=>{
       console.log("Challenge team request");
       console.log(notification.notification.from_id);
