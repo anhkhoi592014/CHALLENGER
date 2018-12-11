@@ -247,7 +247,7 @@ export class DialogSelectTeam implements OnInit{
     public dialogRef: MatDialogRef<DialogSelectTeam>,
     public dialog: MatDialog,
     private teamServices: TeamService,
-    private toastr: ToastrManager
+    private toastr: ToastrManager,
     @Inject(MAT_DIALOG_DATA) public data: any) {}
   ngOnInit(){
     this.listTeams = this.data.teams;
