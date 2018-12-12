@@ -18,6 +18,7 @@ const httpOptions = {
 export class NotificationService {
   private _users :BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
   private _teams :BehaviorSubject<ITeam[]> = new BehaviorSubject<ITeam[]>([]);
+  private _teamsChallenge:BehaviorSubject<ITeam[]> = new BehaviorSubject<ITeam[]>([]);
   constructor(
     private http : HttpClient
   ) { }
@@ -26,6 +27,9 @@ export class NotificationService {
   }
   get Teams(){
     return this._teams.asObservable();
+  }
+  get TeamsChallenge(){
+    return this._teamsChallenge.asObservable();
   }
 
   getListUserSend(id: any){
@@ -46,6 +50,17 @@ export class NotificationService {
       })
     );
   }
-
+  getListTeamChallenge(id: any): Observable<ITeam[]>{
+    return this.http.get<ITeam[]>(SystemConstants.BASE_API + 'team/' + id + '/ListTeamChallenge').
+    pipe(
+      map((res) =>{
+        if(res){
+          return res;
+        }else{
+          console.log("error: cann't get list team sen notifications")
+        }
+      })
+    );
+  }
   
 }

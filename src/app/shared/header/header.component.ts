@@ -22,6 +22,14 @@ export interface showNotification{
   timeSend?: string,
   timeFromNow? : string
 }
+export interface showChallenger{
+  idNoti: number,
+  idFrom?: number,
+  imgUrl : String,
+  typeName?: string,
+  timeSend?: string,
+  timeFromNow? : string
+}
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -29,10 +37,14 @@ export interface showNotification{
 })
 export class HeaderComponent implements OnInit {
   showNotification: boolean = false;
+  showChallenger: boolean = false;
   listUserSendNotification: IPlayer[] = [];
   listTeamSendNotification: ITeam[] = [];
+  listTeamSendChallenge: ITeam[] = [];
   notifications: INotification[] = [];
+  listChallengerNotification: INotification[] = [];
   listShowNotification: showNotification[] = [];
+  listShowChallenger: showChallenger[] = [];
   updateStatus : boolean = false;
   showSpinnerViewUser: boolean = false;
   toggleFL: boolean = false;
@@ -62,9 +74,12 @@ export class HeaderComponent implements OnInit {
     }); 
     this.accountServices.getUserById(localStorage.getItem(SystemConstants.CURRENT_USER));
     this.accountServices.Notifications.subscribe(res =>{
+      console.log("2");
       if(res.length != 0){
         this.notifications = <INotification[]> res;
+        console.log("2");
         this.notificationServices.Users.subscribe(res =>{
+          console.log("2");
           if(res.length != 0){
             this.listUserSendNotification = <IPlayer[]>res;
             this.notificationServices.getListTeamSend(localStorage.getItem(SystemConstants.CURRENT_USER)).subscribe(res => {
@@ -73,6 +88,7 @@ export class HeaderComponent implements OnInit {
               this.listShowNotification = [];
               this.notifications.forEach(notification =>{
                 if(notification.notification_type_id == 1){
+                  console.log(1)
                   this.listShowNotification.push({  
                     idNoti : notification.id,
                     idFrom: notification.from_id,
@@ -82,6 +98,7 @@ export class HeaderComponent implements OnInit {
                     timeSend: notification.created_at
                   });
                 }else if(notification.notification_type_id == 2){
+                  console.log(2)
                   this.listShowNotification.push({
                     idNoti : notification.id,
                     idFrom: notification.from_id,
@@ -91,14 +108,8 @@ export class HeaderComponent implements OnInit {
                     timeSend: notification.created_at
                   });
                 }else if(notification.notification_type_id == 3){
-                  this.listShowNotification.push({
-                    idNoti : notification.id,
-                    idFrom: notification.from_id,
-                    imgUrl: this.listTeamSendNotification.filter(team => team.id == notification.from_id)[0].ImgUrl,
-                    typeName: this.getNotifitionName(notification.notification_type_id),
-                    timeFromNow: moment(notification.created_at).fromNow(),
-                    timeSend: notification.created_at
-                  });
+                  console.log(3)
+                  
                 }
               })
             }else{
@@ -122,6 +133,31 @@ export class HeaderComponent implements OnInit {
       }
     }); 
     this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
+    this.teamServices.getTeamNotifications(localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(noti =>{
+      if(noti){
+        console.log(noti);
+        this.listChallengerNotification = noti;
+        this.notificationServices.getListTeamChallenge(localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(team =>{
+          
+          this.listTeamSendChallenge = team;
+          this.listShowChallenger = [];
+          this.listChallengerNotification.forEach(notification => {
+            console.log(notification);
+            console.log(this.listTeamSendChallenge);
+            this.listShowChallenger.push({
+              idNoti : notification.id,
+              idFrom: notification.from_id,
+              imgUrl: this.listTeamSendChallenge.filter(t => t.id == notification.from_id)[0].ImgUrl,
+              typeName: this.getNotifitionName(notification.notification_type_id),
+              timeFromNow: moment(notification.created_at).fromNow(),
+              timeSend: notification.created_at
+            });
+          })
+          console.log(this.listShowChallenger)
+        });
+      }
+    })
+    
     this.accountServices.Friends.subscribe(data => {
       if(data.length == 0){
         this.accountServices.getListFriend(localStorage.getItem(SystemConstants.CURRENT_USER));
@@ -140,12 +176,22 @@ export class HeaderComponent implements OnInit {
     //this.accountServices.getUserNotifications(localStorage.getItem(SystemConstants.CURRENT_USER));
   }
   accept(noti: showNotification){
+    console.log(noti.typeName.length);
     if(noti.typeName.length == 22){
       console.log("test");
       this.accountServices.addFriend(localStorage.getItem(SystemConstants.CURRENT_USER),noti.idFrom,noti.idNoti);
       this.listFriends.push(this.listUserSendNotification.filter(p => p.id == noti.idFrom)[0]);
       this.filterPlayer = "";
-    }else if(noti.typeName.length > 22){
+    }else if(noti.typeName.length == 24){
+      this.teamServices.addMatch(noti.idFrom,localStorage.getItem(SystemConstants.CURRENT_TEAM)).subscribe(res =>{
+        if(res){
+          this.toastr.successToastr('Chấp nhận lời mời thách đấu', 'Thông báo',{
+            position: 'top-right',
+            animate: 'slideFromTop'
+          });
+        }
+      })   
+    }else if(noti.typeName.length == 27){
       this.teamServices.addMember(noti.idFrom, localStorage.getItem(SystemConstants.CURRENT_USER),noti.idNoti);
         this.toastr.successToastr('Gia nhập đội bóng thành công', 'Thông báo',{
           position: 'top-right',
@@ -236,8 +282,8 @@ export class HeaderComponent implements OnInit {
     echo4.channel('team.'+localStorage.getItem(SystemConstants.CURRENT_TEAM) + '.notifications')
     .listen('NewRequest', (notification :any)=>{
       console.log("Challenge team request");
-      console.log(notification.notification.from_id);
-      this.listShowNotification = this.listShowNotification.filter(noti => noti.idNoti != notification.notification.id);
+      console.log(notification);
+      this.teamServices.getTeamNotifications(localStorage.getItem(SystemConstants.CURRENT_TEAM));
     });
   }
   toggleNtf(){
@@ -319,6 +365,13 @@ export class HeaderComponent implements OnInit {
         });
       }
     });
+  }
+  showThongBao(){
+    this.showChallenger = false;
+  }
+  showThachDau(){
+    this.showChallenger = true;
+
   }
 }
 

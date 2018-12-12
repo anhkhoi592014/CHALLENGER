@@ -8,10 +8,31 @@
         </div>
         <div [ngClass]="['tooltip',showNotification? 'show':'off']" >
             <div class="header">
-                <p>Thông báo</p>
+                <ul>
+                    <li [ngClass]="['listNoti',!showChallenger? 'active':'']" (click)="showThongBao();">Thông báo</li>
+                    <li [ngClass]="['listNoti',showChallenger? 'active':'']" (click)="showThachDau();" >Thách đấu</li>
+                </ul>
             </div>
-            <ul>
+            <ul *ngIf="!showChallenger">
                 <li *ngFor="let noti of listShowNotification">
+                    <div class="img-container" (click)="viewUser(noti);">
+                        <loading-spinner *ngIf="showSpinnerViewUser"></loading-spinner>
+                        <img src="{{ noti.imgUrl }}">
+                    </div>
+                    <div class="content">
+                        <p>{{ noti.typeName }}</p>
+                        <div class="time-actions">
+                            <span class="time">{{ noti.timeFromNow }}</span>
+                            <div class="actions">
+                                <button type="button" (click)="accept(noti)">Chấp nhận</button>
+                                <button type="button" (click)="delete(noti.idNoti)">Xóa</button>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ul *ngIf="showChallenger">
+                <li *ngFor="let noti of listShowChallenger">
                     <div class="img-container" (click)="viewUser(noti);">
                         <loading-spinner *ngIf="showSpinnerViewUser"></loading-spinner>
                         <img src="{{ noti.imgUrl }}">

@@ -1,0 +1,8 @@
+<div class="container">
+  <app-menu [listMenu]= "listMenu" [selectedMenu] = "selectedMenu"></app-menu>
+  <div class="content">
+    <div class="wrapper" *ngIf="loaded">
+        <app-history-match *ngFor="let match of listMatches" [match]="match"></app-history-match>  
+    </div>
+  </div>
+</div>

@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { IMenu } from '../../interfaces/IMenu';
 import { trigger,state,style,animate,transition } from '@angular/animations';
+import * as moment from 'moment';
+import { IMatch } from 'src/app/interfaces/imatch';
 
 @Component({
   selector: 'app-history-match',
@@ -27,13 +29,15 @@ import { trigger,state,style,animate,transition } from '@angular/animations';
   
 })
 export class HistoryMatchComponent implements OnInit {
- 
+  @Input() match: IMatch;
   isOVShow:boolean = true;
   isNoteShow:boolean = false;
   DetailShow:boolean = false;
+  timeFromNow: string = "";
   constructor() { }
 
   ngOnInit() {
+    this.timeFromNow = moment(this.match.created_at).fromNow();
   }
 
   toggleNote(name:string){

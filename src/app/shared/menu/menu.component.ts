@@ -45,6 +45,9 @@ export class MenuComponent implements OnInit {
       else if(code =='back'){
         this.router.navigate([UrlConstants.DASHBOARD]);
       }
+      else if(code == 'matches'){
+        this.router.navigate([UrlConstants.MATCHES]);
+      }
       else if(code == 'tct'){
         this.router.navigate([UrlConstants.SEARCH_PLAYER]);
       }

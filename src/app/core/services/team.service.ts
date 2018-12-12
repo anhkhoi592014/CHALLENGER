@@ -10,6 +10,8 @@ import { map } from 'rxjs/operators';
 import { IInvitation } from 'src/app/interfaces/iinvitation';
 import { AnimationKeyframesSequenceMetadata } from '@angular/animations';
 import { AccountService } from './account.service';
+import { INotification } from 'src/app/interfaces/INotification';
+import { IMatch } from 'src/app/interfaces/imatch';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -24,6 +26,7 @@ export class TeamService {
   private _users :BehaviorSubject<IPlayer[]> = new BehaviorSubject<IPlayer[]>([]);
   private _members : BehaviorSubject<IMember[]> = new BehaviorSubject<IMember[]>([]);
   private _invitations : BehaviorSubject<IInvitation[]> = new BehaviorSubject<IInvitation[]>([]);
+  private _matches : BehaviorSubject<IMatch[]> = new BehaviorSubject<IMatch[]>([]);
  constructor(
     private http: HttpClient,
     private accountService: AccountService
@@ -40,6 +43,9 @@ export class TeamService {
 
   get Users(){
     return this._users.asObservable();
+  }
+  get Matches(){
+    return this._matches.asObservable();
   }
 
   get Members(){
@@ -64,6 +70,35 @@ export class TeamService {
         }
      })
    )
+  }
+  addMatch(teamOne: any,teamSecond: any): Observable<boolean>{
+    return this.http.post(SystemConstants.BASE_API + 'matches/add',JSON.stringify({teamOne,teamSecond}),httpOptions).pipe(
+      map(res => {
+        console.log(res);
+         if(res){
+           return true;
+         }
+         return false;
+      })
+    )
+  }
+  getTeamNotifications(id: any): Observable<INotification[]>{
+    return this.http.get<INotification[]>(SystemConstants.BASE_API + 'team/' + id + '/notifications').pipe(
+      map(res => {
+         if(res){
+           return res;
+         }
+      })
+    )
+   }
+  getMatches(id: any): Observable<IMatch[]>{
+    return this.http.get<IMatch[]>(SystemConstants.BASE_API + 'team/' + id + '/matches').pipe(
+      map(res => {
+         if(res){
+           return res;
+         }
+      })
+    )
   }
   getRole(idTeam: any,idUser: any): Observable<IMember>{
     return this.http.get(SystemConstants.BASE_API + 'team/' + idTeam + '/members/' + idUser +'/role').pipe(

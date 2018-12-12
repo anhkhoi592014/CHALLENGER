@@ -3,12 +3,12 @@
         <div class="banner-content">
           <div class="team1">
             <div class="img-container">
-              <img src="../../assets/logo01.png"/>
+              <img src="{{ match.teamOne.ImgUrl }}"/>
             </div>
-            <p>Manchester United</p>
+            <p>{{ match.teamOne.Fullname }}</p>
           </div>
           <div class="versus">
-            <p>16/07/2017</p>
+            <p>{{timeFromNow}}</p>
             <div class="img-container">
                 <img src="../../assets/vs.png" />                    
             </div>
@@ -17,9 +17,9 @@
           </div>
           <div class="team2">
             <div class="img-container">
-              <img src="../../assets/logo02.png"/>
+              <img src="{{ match.teamSecond.ImgUrl }}"/>
             </div>
-            <p>Hutech United</p>
+            <p>{{ match.teamSecond.Fullname }}</p>
           </div>
         </div>
     </div>
@@ -54,7 +54,7 @@
           </div>
           <div class="score-row">
             <div class="t1-score">
-              <p>3</p>
+              <p>0</p>
             </div>
             <div class="blank"></div>
             <div class="t2-score">

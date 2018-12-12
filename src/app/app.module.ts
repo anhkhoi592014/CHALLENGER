@@ -6,6 +6,7 @@ import { ToastrModule } from 'ng6-toastr-notifications';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { MatchesComponent } from './matches/matches.component';
 import { AgmCoreModule } from '@agm/core';
 import { MenuComponent } from './shared/menu/menu.component';
 import { SearchPlayerComponent,DialogFriendRequestMessages } from './search-player/search-player.component';
@@ -54,6 +55,11 @@ const appRoute:Routes = [
   {
     path:'dashboard',
     component:DashboardComponent,
+    canActivate: [AuthenGuard]
+  },
+  {
+    path:'matches',
+    component:MatchesComponent,
     canActivate: [AuthenGuard]
   },
   {
@@ -184,7 +190,7 @@ const appRoute:Routes = [
     SearchTeamComponent,
     TeamDetailComponent,
     TeamHistoryMatchComponent,
-    HistoryMatchComponent,
+    HistoryMatchComponent,MatchesComponent,
     TeamFormationComponent,
     PlayerViewComponent,
     LoadingSpinnerComponent,
