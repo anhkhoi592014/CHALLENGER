@@ -23,14 +23,13 @@ interface marker {
 export class DashboardComponent implements OnInit {
   listMenu : IMenu[] = [
     {id:1,code:'dashboard', title : 'Dashboard',imgUrl : '../../assets/mapView.png' },
-    {id:2,code:'matches', title : 'Bảng đấu',imgUrl : '../../assets/mapView.png' },
-    {id:3,code:'tk', title : 'Tìm kiếm',imgUrl : '../../assets/loop.png',subMenu :[
+    {id:2,code:'tk', title : 'Tìm kiếm',imgUrl : '../../assets/loop.png',subMenu :[
       { code:'tct' ,title: 'Tìm cầu thủ',imgUrl : '../../assets/timcauthu.png' },
       { code:'tdb',title : 'Tìm đội bóng',imgUrl : '../../assets/map.png' }
     ]},
-    {id:4,code:'chonbd', title : 'Đội bóng',imgUrl : '../../assets/doibong.png'},
-    {id:5,code:'ttcn', title : 'Thông tin cá nhân',imgUrl : '../../assets/thongtincanhan.png' },
-    {id:6,code:'dx', title : 'Đăng xuất',imgUrl : '../../assets/dangxuat.png' },
+    {id:3,code:'chonbd', title : 'Đội bóng',imgUrl : '../../assets/doibong.png'},
+    {id:4,code:'ttcn', title : 'Thông tin cá nhân',imgUrl : '../../assets/thongtincanhan.png' },
+    {id:5,code:'dx', title : 'Đăng xuất',imgUrl : '../../assets/dangxuat.png' },
   ];
   selectedMenu : number = 1;
   listTopTeams : ITeam[] = [
